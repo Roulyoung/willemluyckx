@@ -8,7 +8,13 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sheet:info": "node scripts/google-sheets-admin.js info",
+    "sheet:read": "node scripts/google-sheets-admin.js read",
+    "sheet:write": "node scripts/google-sheets-admin.js write",
+    "sheet:append": "node scripts/google-sheets-admin.js append",
+    "sheet:bootstrap": "node scripts/google-sheets-admin.js bootstrap-topfit",
+    "sheet:seed": "node scripts/google-sheets-admin.js seed-topfit"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

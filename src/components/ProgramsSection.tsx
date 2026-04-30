@@ -1,56 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, ArrowRight } from "lucide-react";
-
-const programs = [
-  {
-    name: "The Foundation",
-    subtitle: "Techniek & Basis",
-    price: "149",
-    description:
-      "Bouw een solide technische basis. Leer lopen zoals de elite.",
-    features: [
-      "8-weken techniek programma",
-      "Video analyse van je loopvorm",
-      "Cadans & houding oefeningen",
-      "Mobiliteit routines",
-      "Toegang tot community",
-    ],
-    popular: false,
-  },
-  {
-    name: "Speed Evolution",
-    subtitle: "PR-Gericht",
-    price: "249",
-    description:
-      "Een volledig periodisatie plan gericht op je persoonlijk record.",
-    features: [
-      "12-weken trainingsschema",
-      "Gepersonaliseerde zones",
-      "Interval & tempo sessies",
-      "Race strategie",
-      "Wekelijkse feedback",
-      "1x video call",
-    ],
-    popular: true,
-  },
-  {
-    name: "Elite Mentorship",
-    subtitle: "1-op-1 Coaching",
-    price: "449",
-    description:
-      "Directe toegang tot Willem voor maximale persoonlijke begeleiding.",
-    features: [
-      "Volledig op maat programma",
-      "Wekelijkse 1-op-1 calls",
-      "Dagelijkse app ondersteuning",
-      "Live video analyse",
-      "Mentale coaching",
-      "Race-dag begeleiding",
-    ],
-    popular: false,
-  },
-];
+import { programsContent } from "@/content/siteContent";
 
 export const ProgramsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -83,22 +34,21 @@ export const ProgramsSection = () => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <p className="reveal text-primary font-medium uppercase tracking-[0.3em] text-sm mb-4 opacity-0">
-            Trainingsprogrammas
+            {programsContent.label}
           </p>
           <h2 className="reveal delay-100 font-display text-4xl md:text-5xl lg:text-6xl mb-6 opacity-0">
-            KIES JE PAD NAAR
+            {programsContent.heading.line1}
             <br />
-            <span className="text-primary">SNELHEID</span>
+            <span className="text-primary">{programsContent.heading.highlight}</span>
           </h2>
           <p className="reveal delay-200 text-muted-foreground text-lg opacity-0">
-            Van techniek-basis tot elite mentorship. Elk programma is gebouwd op
-            dezelfde principes die kampioenen maken.
+            {programsContent.description}
           </p>
         </div>
 
         {/* Programs Grid */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-          {programs.map((program, index) => (
+          {programsContent.plans.map((program, index) => (
             <div
               key={program.name}
               className={`reveal delay-${(index + 3) * 100} relative bg-card p-8 lg:p-10 flex flex-col opacity-0 ${
@@ -109,7 +59,7 @@ export const ProgramsSection = () => {
             >
               {program.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 text-xs uppercase tracking-widest font-semibold">
-                  Meest Gekozen
+                  {programsContent.popularLabel}
                 </div>
               )}
 
@@ -122,8 +72,8 @@ export const ProgramsSection = () => {
                   {program.description}
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-display">€{program.price}</span>
-                  <span className="text-muted-foreground text-sm">/maand</span>
+                  <span className="text-4xl font-display">{programsContent.pricePrefix}{program.price}</span>
+                  <span className="text-muted-foreground text-sm">{programsContent.priceSuffix}</span>
                 </div>
               </div>
 
@@ -140,7 +90,7 @@ export const ProgramsSection = () => {
                 variant={program.popular ? "hero" : "outline"}
                 className="w-full group"
               >
-                Start Nu
+                {programsContent.actionLabel}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>

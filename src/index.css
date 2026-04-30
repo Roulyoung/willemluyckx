@@ -1,83 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
-
 @layer base {
   :root {
-    /* Core palette - Raw Athleticism */
-    --background: 45 20% 97%;
-    --foreground: 0 0% 8%;
+    --background: 210 100% 99%;
+    --foreground: 220 62% 14%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 8%;
+    --card-foreground: 220 62% 14%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 8%;
+    --popover-foreground: 220 62% 14%;
 
-    /* Athletic Orange as primary */
-    --primary: 18 100% 50%;
+    --primary: 211 92% 52%;
     --primary-foreground: 0 0% 100%;
 
-    /* Warm neutrals */
-    --secondary: 40 15% 92%;
-    --secondary-foreground: 0 0% 15%;
+    --secondary: 215 80% 96%;
+    --secondary-foreground: 220 62% 18%;
 
-    --muted: 40 10% 90%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 215 50% 94%;
+    --muted-foreground: 220 18% 42%;
 
-    --accent: 18 100% 50%;
+    --accent: 204 100% 62%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 88%;
-    --input: 40 15% 88%;
-    --ring: 18 100% 50%;
+    --border: 214 35% 88%;
+    --input: 214 35% 88%;
+    --ring: 211 92% 52%;
 
-    --radius: 0px;
+    --radius: 1rem;
 
-    /* Custom tokens */
-    --orange-glow: 18 100% 50%;
-    --charcoal: 0 0% 12%;
-    --cream: 45 30% 96%;
-    --dust: 40 20% 94%;
+    --blue-deep: 220 62% 14%;
+    --blue-bright: 211 92% 52%;
+    --blue-soft: 215 80% 96%;
+    --sky: 204 100% 62%;
   }
 
   .dark {
-    --background: 0 0% 6%;
-    --foreground: 40 20% 95%;
+    --background: 220 62% 10%;
+    --foreground: 210 100% 98%;
 
-    --card: 0 0% 10%;
-    --card-foreground: 40 20% 95%;
+    --card: 220 50% 13%;
+    --card-foreground: 210 100% 98%;
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 40 20% 95%;
+    --popover: 220 50% 13%;
+    --popover-foreground: 210 100% 98%;
 
-    --primary: 18 100% 50%;
+    --primary: 211 92% 52%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 40 20% 95%;
+    --secondary: 220 35% 18%;
+    --secondary-foreground: 210 100% 98%;
 
-    --muted: 0 0% 18%;
-    --muted-foreground: 40 10% 60%;
+    --muted: 220 35% 18%;
+    --muted-foreground: 210 20% 70%;
 
-    --accent: 18 100% 50%;
+    --accent: 204 100% 62%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 18 100% 50%;
+    --border: 220 35% 22%;
+    --input: 220 35% 22%;
+    --ring: 211 92% 52%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
@@ -88,28 +82,36 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    background-image:
+      radial-gradient(circle at top left, rgba(23, 120, 242, 0.08), transparent 28%),
+      radial-gradient(circle at top right, rgba(79, 166, 255, 0.08), transparent 24%);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display tracking-tight;
   }
 }
 
 @layer components {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-orange-600;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-sky-500;
   }
 
   .section-padding {
-    @apply py-20 md:py-32 px-6 md:px-12 lg:px-20;
+    @apply py-16 px-6 md:py-24 md:px-12 lg:px-20;
   }
 
   .container-narrow {
-    @apply max-w-5xl mx-auto;
+    @apply mx-auto max-w-5xl;
   }
 
   .container-wide {
-    @apply max-w-7xl mx-auto;
+    @apply mx-auto max-w-7xl;
   }
 }
 
@@ -160,18 +162,27 @@
     }
   }
 
-  .delay-100 { animation-delay: 100ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-  .delay-400 { animation-delay: 400ms; }
-  .delay-500 { animation-delay: 500ms; }
-  .delay-600 { animation-delay: 600ms; }
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+  .delay-600 {
+    animation-delay: 600ms;
+  }
 
   .hover-lift {
     @apply transition-transform duration-300 hover:-translate-y-1;
   }
-
-  .border-accent-subtle {
-    border-color: hsl(var(--primary) / 0.2);
-  }
 }
+

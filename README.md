@@ -4,6 +4,14 @@
 
 **URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
+## Content Editing (Codex-friendly)
+
+Primary site copy is centralized in:
+
+- `src/content/siteContent.ts`
+
+Update text there first to keep sections consistent without changing layout components.
+
 ## How can I edit this code?
 
 There are several ways of editing your application.

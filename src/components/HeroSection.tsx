@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
 import heroImage from "@/assets/hero-kenya.jpg";
+import { heroContent } from "@/content/siteContent";
 
 export const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -44,26 +45,25 @@ export const HeroSection = () => {
         <div className="max-w-4xl mx-auto">
           {/* Subtitle */}
           <p className="reveal text-primary font-medium uppercase tracking-[0.3em] text-sm md:text-base mb-6 opacity-0">
-            Hardloopcoach · Voormalig Kampioen
+            {heroContent.subtitle}
           </p>
 
           {/* Main Headline */}
           <h1 className="reveal delay-100 font-display text-5xl md:text-7xl lg:text-8xl text-background leading-[0.9] mb-8 opacity-0">
-            TRAIN MET DE KENNIS
+            {heroContent.headline.line1}
             <br />
-            <span className="text-primary">VAN DE WERELDTOP</span>
+            <span className="text-primary">{heroContent.headline.highlight}</span>
           </h1>
 
           {/* Subheadline */}
           <p className="reveal delay-200 text-lg md:text-xl text-background/80 max-w-2xl mx-auto mb-12 font-light opacity-0">
-            Loop je sterkste PR ooit. Ontdek de trainingsmethodes van Iten, 
-            Kenia — nu beschikbaar voor de Nederlandse loper.
+            {heroContent.description}
           </p>
 
           {/* CTA Buttons */}
           <div className="reveal delay-300 flex flex-col sm:flex-row gap-4 justify-center opacity-0">
             <Button variant="hero" size="lg" asChild>
-              <a href="#programmas">Bekijk Programmas</a>
+              <a href={heroContent.primaryCta.href}>{heroContent.primaryCta.label}</a>
             </Button>
             <Button
               variant="heroOutline"
@@ -71,7 +71,7 @@ export const HeroSection = () => {
               className="border-background/30 text-background hover:border-background hover:bg-background/10"
               asChild
             >
-              <a href="#about">Over Willem</a>
+              <a href={heroContent.secondaryCta.href}>{heroContent.secondaryCta.label}</a>
             </Button>
           </div>
         </div>
@@ -80,7 +80,7 @@ export const HeroSection = () => {
       {/* Scroll Indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
         <a
-          href="#proof"
+          href={heroContent.scrollTarget}
           className="flex flex-col items-center gap-2 text-background/60 hover:text-primary transition-colors"
         >
           <span className="text-xs uppercase tracking-widest">Scroll</span>

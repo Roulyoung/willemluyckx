@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
+import { ctaContent } from "@/content/siteContent";
 
 export const CTASection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -31,7 +32,7 @@ export const CTASection = () => {
     e.preventDefault();
     if (email) {
       setIsSubmitted(true);
-      toast.success("Gelukt! Check je inbox voor de Gratis Techniek Check.");
+      toast.success(ctaContent.successToast);
       setEmail("");
     }
   };
@@ -61,16 +62,15 @@ export const CTASection = () => {
 
       <div className="container-narrow mx-auto relative z-10 text-center">
         <p className="reveal text-primary font-medium uppercase tracking-[0.3em] text-sm mb-4 opacity-0">
-          Gratis Techniek Check
+          {ctaContent.label}
         </p>
         <h2 className="reveal delay-100 font-display text-4xl md:text-5xl lg:text-6xl mb-6 opacity-0">
-          ONTDEK WAT JE
+          {ctaContent.heading.line1}
           <br />
-          <span className="text-primary">TEGENHOUDT</span>
+          <span className="text-primary">{ctaContent.heading.highlight}</span>
         </h2>
         <p className="reveal delay-200 text-background/70 text-lg max-w-xl mx-auto mb-10 opacity-0">
-          Ontvang een persoonlijke video-analyse van je looptechniek. Ik laat je
-          precies zien waar je energie lekt en hoe je sneller kunt worden.
+          {ctaContent.description}
         </p>
 
         {!isSubmitted ? (
@@ -80,7 +80,7 @@ export const CTASection = () => {
           >
             <Input
               type="email"
-              placeholder="je@email.nl"
+              placeholder={ctaContent.placeholder}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -92,7 +92,7 @@ export const CTASection = () => {
               size="lg"
               className="shrink-0 group"
             >
-              Verstuur
+              {ctaContent.buttonLabel}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
           </form>
@@ -100,13 +100,13 @@ export const CTASection = () => {
           <div className="reveal delay-300 flex items-center justify-center gap-3 text-primary opacity-0">
             <CheckCircle className="w-6 h-6" />
             <span className="text-lg font-medium">
-              Check je inbox voor de volgende stappen!
+              {ctaContent.successInline}
             </span>
           </div>
         )}
 
         <p className="reveal delay-400 text-background/40 text-sm mt-6 opacity-0">
-          Geen spam. Alleen waardevolle content over hardlopen.
+          {ctaContent.footnote}
         </p>
       </div>
     </section>

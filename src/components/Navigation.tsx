@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const navLinks = [
-  { name: "Methodiek", href: "#methodiek" },
-  { name: "Programmas", href: "#programmas" },
-  { name: "Over Willem", href: "#about" },
-  { name: "Contact", href: "#contact" },
-];
+import { navigationContent } from "@/content/siteContent";
 
 export const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,13 +28,15 @@ export const Navigation = () => {
           {/* Logo */}
           <a href="#" className="flex items-center gap-3">
             <span className="font-display text-2xl md:text-3xl tracking-wide text-foreground">
-              WILLEM<span className="text-primary">.</span>LUYCKX
+              {navigationContent.brandMain}
+              <span className="text-primary">.</span>
+              {navigationContent.brandLast}
             </span>
           </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {navigationContent.links.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
@@ -50,7 +46,7 @@ export const Navigation = () => {
               </a>
             ))}
             <Button variant="hero" size="sm" asChild>
-              <a href="#contact">Gratis Check</a>
+              <a href="#contact">{navigationContent.ctaLabel}</a>
             </Button>
           </div>
 
@@ -71,7 +67,7 @@ export const Navigation = () => {
           }`}
         >
           <div className="flex flex-col gap-4 pt-4">
-            {navLinks.map((link) => (
+            {navigationContent.links.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
@@ -82,7 +78,7 @@ export const Navigation = () => {
               </a>
             ))}
             <Button variant="hero" size="sm" className="mt-4 w-full" asChild>
-              <a href="#contact">Gratis Check</a>
+              <a href="#contact">{navigationContent.ctaLabel}</a>
             </Button>
           </div>
         </div>
