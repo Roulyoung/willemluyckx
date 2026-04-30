@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import darkRunImage from "@/assets/topfit/photos/willem-dark.jpg";
 import portraitImage from "@/assets/topfit/photos/willem-portrait.jpg";
 import runningImage from "@/assets/topfit/photos/willem-running.jpg";
 import { isLocale, isRtlLocale, normalizeLocale, type Locale } from "@/lib/i18n";
@@ -288,7 +289,7 @@ const PageView = ({
         <Card className="overflow-hidden border-slate-200 bg-white shadow-[0_30px_80px_rgba(13,46,102,0.16)]">
           <CardContent className="space-y-5 p-5 md:p-6">
             <div className="relative overflow-hidden rounded-[2rem] bg-slate-950 text-white">
-              <img src={runningImage} alt="Willem running" className="absolute inset-0 h-full w-full object-cover opacity-40" />
+              <img src={darkRunImage} alt="Willem running in the dark" className="absolute inset-0 h-full w-full object-cover opacity-45" />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,46,102,0.38)_0%,rgba(8,26,58,0.92)_100%)]" />
               <div className="relative p-6">
                 <div className="flex items-center justify-between gap-4">
