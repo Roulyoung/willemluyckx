@@ -36,8 +36,8 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex">
-          {content.nav.slice(0, 5).map((item) => (
+        <nav className="hidden items-center gap-4 xl:flex">
+          {content.nav.map((item) => (
             <Link key={item.href} to={item.href} className="text-sm font-medium text-slate-700 transition-colors hover:text-blue-600">
               {item.label}
             </Link>

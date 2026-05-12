@@ -10,6 +10,26 @@ type ApiResponse = {
 const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
+const mergeNav = (
+  base: LocaleContent["nav"],
+  patchNav: Partial<LocaleContent>["nav"],
+): LocaleContent["nav"] => {
+  if (!Array.isArray(patchNav) || patchNav.length === 0) return base;
+
+  const merged = new Map<string, { label: string; href: string }>();
+
+  for (const item of base) {
+    merged.set(item.href, item);
+  }
+
+  for (const item of patchNav) {
+    if (!item?.href || !item?.label) continue;
+    merged.set(item.href, item);
+  }
+
+  return Array.from(merged.values());
+};
+
 const mergeContent = (base: LocaleContent, patch?: Partial<LocaleContent> | null): LocaleContent => {
   if (!patch) return base;
 
@@ -21,7 +41,7 @@ const mergeContent = (base: LocaleContent, patch?: Partial<LocaleContent> | null
     about: { ...base.about, ...(patch.about ?? {}) },
     cta: { ...base.cta, ...(patch.cta ?? {}) },
     footer: { ...base.footer, ...(patch.footer ?? {}) },
-    nav: Array.isArray(patch.nav) && patch.nav.length > 0 ? patch.nav : base.nav,
+    nav: mergeNav(base.nav, patch.nav),
     offers: Array.isArray(patch.offers) && patch.offers.length > 0 ? patch.offers : base.offers,
     services: Array.isArray(patch.services) && patch.services.length > 0 ? patch.services : base.services,
     shop: Array.isArray(patch.shop) && patch.shop.length > 0 ? patch.shop : base.shop,
@@ -50,4 +70,3 @@ export const loadTopfitContent = async (locale: Locale, fallback: LocaleContent)
     return fallback;
   }
 };
-
