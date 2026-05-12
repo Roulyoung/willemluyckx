@@ -411,8 +411,8 @@ const MuktiPage = ({
 
         <Card className="overflow-hidden border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
           <CardContent className="p-0">
-            <div className="relative min-h-[24rem] bg-slate-950">
-              <img src={muktiLogo} alt="Mukti Running logo" className="h-full w-full object-cover" />
+            <div className="relative flex min-h-[24rem] items-center justify-center bg-slate-950 p-8">
+              <img src={muktiLogo} alt="Mukti Running logo" className="max-h-[18rem] w-auto max-w-full object-contain" />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,251,255,0.08)_0%,rgba(8,26,58,0.52)_100%)]" />
               <div className="absolute bottom-5 left-5 right-5 rounded-[1.75rem] border border-white/20 bg-slate-950/70 p-5 text-white backdrop-blur">
                 <div className="text-xs uppercase tracking-[0.35em] text-blue-300">Mukti</div>
@@ -1188,9 +1188,9 @@ const PageView = ({
       <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
         <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
           <CardContent className="p-0">
-            <img src={topFitSiteConfig.logoPath} alt={topFitSiteConfig.brandName} className="h-full w-full object-cover" />
-          </CardContent>
-        </Card>
+              <img src={topFitSiteConfig.logoPath} alt={topFitSiteConfig.brandName} className="mx-auto max-h-[18rem] w-auto max-w-full object-contain p-6" />
+            </CardContent>
+          </Card>
       </section>
       <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
         <Card className="border-slate-200 bg-white shadow-sm">

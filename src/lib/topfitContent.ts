@@ -201,7 +201,6 @@ const pageHighlights = {
 export const topFitContent: Record<Locale, LocaleContent> = {
   nl: {
     nav: [
-      { label: "Home", href: "/nl" },
       { label: "Over Willem", href: "/nl/over-willem" },
       { label: "Trainingsschema's", href: "/nl/trainingsschemas" },
       { label: "Looptechniek", href: "/nl/looptechniek" },
@@ -209,7 +208,6 @@ export const topFitContent: Record<Locale, LocaleContent> = {
       { label: "Clinics & Trainingskampen", href: "/nl/clinics-en-trainingskampen" },
       { label: "Online Coaching", href: "/nl/online-coaching" },
       { label: "Blog / Kennisbank", href: "/nl/blog" },
-      { label: "Contact", href: "/nl/contact" },
     ],
     hero: {
       eyebrow: "TopFit Running",
@@ -285,7 +283,6 @@ export const topFitContent: Record<Locale, LocaleContent> = {
   },
   en: {
     nav: [
-      { label: "Home", href: "/en" },
       { label: "About Willem", href: "/en/about-willem" },
       { label: "Training Plans", href: "/en/training-plans" },
       { label: "Running Technique", href: "/en/running-technique" },
@@ -293,7 +290,6 @@ export const topFitContent: Record<Locale, LocaleContent> = {
       { label: "Clinics & Training Camps", href: "/en/clinics-and-training-camps" },
       { label: "Online Coaching", href: "/en/online-coaching" },
       { label: "Blog / Knowledge Base", href: "/en/blog" },
-      { label: "Contact", href: "/en/contact" },
     ],
     hero: {
       eyebrow: "TopFit Running",
@@ -369,7 +365,6 @@ export const topFitContent: Record<Locale, LocaleContent> = {
   },
   he: {
     nav: [
-      { label: "Home", href: "/he" },
       { label: "About Willem", href: "/he/about-willem" },
       { label: "Training Plans", href: "/he/training-plans" },
       { label: "Running Technique", href: "/he/running-technique" },
@@ -377,7 +372,6 @@ export const topFitContent: Record<Locale, LocaleContent> = {
       { label: "Clinics & Training Camps", href: "/he/clinics-and-training-camps" },
       { label: "Online Coaching", href: "/he/online-coaching" },
       { label: "Blog / Knowledge Base", href: "/he/blog" },
-      { label: "Contact", href: "/he/contact" },
     ],
     hero: {
       eyebrow: "TopFit Running",
