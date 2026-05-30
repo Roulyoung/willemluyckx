@@ -36,6 +36,7 @@ const mergeContent = (base: LocaleContent, patch?: Partial<LocaleContent> | null
   return {
     ...base,
     ...patch,
+    menu: Array.isArray(patch.menu) && patch.menu.length > 0 ? patch.menu : base.menu,
     hero: { ...base.hero, ...(patch.hero ?? {}) },
     proof: { ...base.proof, ...(patch.proof ?? {}) },
     about: { ...base.about, ...(patch.about ?? {}) },

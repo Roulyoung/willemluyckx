@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n";
 
 export type LocaleContent = {
+  menu: Array<{ label: string; href: string; children?: Array<{ label: string; href: string }> }>;
   nav: Array<{ label: string; href: string }>;
   hero: { eyebrow: string; title: string; lead: string; primaryCta: string; secondaryCta: string };
   proof: { headline: string; description: string; stats: Array<{ value: string; label: string }> };
@@ -38,6 +39,33 @@ const services = {
     { title: "Mukti Running", summary: "Running as freedom, energy and mental space.", tag: "Philosophy" },
   ],
 } satisfies Record<Locale, LocaleContent["services"]>;
+
+const offerMenu = {
+  nl: [
+    { label: "Abonnementen", href: "/nl/abonnementen" },
+    { label: "Trainingsschema's", href: "/nl/trainingsschemas" },
+    { label: "Looptechniek", href: "/nl/looptechniek" },
+    { label: "Mukti Running", href: "/nl/mukti-running" },
+    { label: "Clinics & Trainingskampen", href: "/nl/clinics-en-trainingskampen" },
+    { label: "Online Coaching", href: "/nl/online-coaching" },
+  ],
+  en: [
+    { label: "Subscriptions", href: "/en/subscriptions" },
+    { label: "Training plans", href: "/en/training-plans" },
+    { label: "Running technique", href: "/en/running-technique" },
+    { label: "Mukti Running", href: "/en/mukti-running" },
+    { label: "Clinics & Training Camps", href: "/en/clinics-and-training-camps" },
+    { label: "Online Coaching", href: "/en/online-coaching" },
+  ],
+  he: [
+    { label: "Subscriptions", href: "/he/subscriptions" },
+    { label: "Training plans", href: "/he/training-plans" },
+    { label: "Running technique", href: "/he/running-technique" },
+    { label: "Mukti Running", href: "/he/mukti-running" },
+    { label: "Clinics & Training Camps", href: "/he/clinics-and-training-camps" },
+    { label: "Online Coaching", href: "/he/online-coaching" },
+  ],
+} satisfies Record<Locale, Array<{ label: string; href: string }>>;
 
 const pageHighlights = {
   nl: {
@@ -200,6 +228,11 @@ const pageHighlights = {
 
 export const topFitContent: Record<Locale, LocaleContent> = {
   nl: {
+    menu: [
+      { label: "Over Willem", href: "/nl/over-willem" },
+      { label: "Aanbod", href: "/nl/abonnementen", children: offerMenu.nl },
+      { label: "Blog / Kennisbank", href: "/nl/blog" },
+    ],
     nav: [
       { label: "Over Willem", href: "/nl/over-willem" },
       { label: "Trainingsschema's", href: "/nl/trainingsschemas" },
@@ -282,6 +315,11 @@ export const topFitContent: Record<Locale, LocaleContent> = {
     footer: { title: "TopFit Running", lead: "Hardlopen met vrijheid, plezier en kwaliteit." },
   },
   en: {
+    menu: [
+      { label: "About Willem", href: "/en/about-willem" },
+      { label: "Offerings", href: "/en/subscriptions", children: offerMenu.en },
+      { label: "Blog / Knowledge Base", href: "/en/blog" },
+    ],
     nav: [
       { label: "About Willem", href: "/en/about-willem" },
       { label: "Training Plans", href: "/en/training-plans" },
@@ -364,6 +402,11 @@ export const topFitContent: Record<Locale, LocaleContent> = {
     footer: { title: "TopFit Running", lead: "Run with freedom, pleasure and quality." },
   },
   he: {
+    menu: [
+      { label: "About Willem", href: "/he/about-willem" },
+      { label: "Offerings", href: "/he/subscriptions", children: offerMenu.he },
+      { label: "Blog / Knowledge Base", href: "/he/blog" },
+    ],
     nav: [
       { label: "About Willem", href: "/he/about-willem" },
       { label: "Training Plans", href: "/he/training-plans" },

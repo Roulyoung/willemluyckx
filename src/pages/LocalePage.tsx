@@ -15,7 +15,7 @@ import { topFitSiteConfig } from "@/lib/siteConfig";
 import { getLocaleContent, type LocaleContent } from "@/lib/topfitContent";
 import { loadTopfitContent } from "@/lib/topfitRemote";
 
-const fadeClass = (loaded: boolean) => (loaded ? "animate-fade-up" : "opacity-0");
+const fadeClass = (_loaded: boolean) => "animate-fade-up";
 
 const LocalePage = () => {
   const params = useParams();
@@ -58,7 +58,7 @@ const LocalePage = () => {
       className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(23,120,242,0.16),_transparent_36%),linear-gradient(180deg,#f8fbff_0%,#ffffff_22%,#f8fbff_100%)] text-slate-950"
     >
       <SiteHeader locale={locale} content={content} currentPath={location.pathname} />
-      <main className={loaded ? "animate-fade-in" : "opacity-0"}>
+      <main className="animate-fade-in">
         {section === "blog" && slug ? <BlogArticle locale={locale} slug={slug} /> : <PageView locale={locale} section={section} content={content} loaded={loaded} />}
       </main>
       <SiteFooter locale={locale} content={content} />
@@ -67,6 +67,309 @@ const LocalePage = () => {
 };
 
 export default LocalePage;
+
+const AboutWillemPage = ({
+  locale,
+  highlight,
+  loaded,
+}: {
+  locale: Locale;
+  highlight: { title: string; intro: string; bullets: string[] };
+  loaded: boolean;
+}) => {
+  const sections =
+    locale === "en"
+      ? [
+          {
+            title: "Performance without noise",
+            text: "Willem works with structure, rhythm and feedback so runners can improve without getting lost in unnecessary detail.",
+          },
+          {
+            title: "A coach with a teacher's eye",
+            text: "He does not only prescribe sessions. He explains why a choice matters and how it changes the way you run.",
+          },
+          {
+            title: "Freedom as the end goal",
+            text: "The method is serious, but the result should feel lighter: more confidence, more control and more pleasure.",
+          },
+        ]
+      : [
+          {
+            title: "Presteren zonder ruis",
+            text: "Willem werkt met structuur, ritme en feedback zodat lopers beter worden zonder te verdrinken in details.",
+          },
+          {
+            title: "Coach met het oog van een docent",
+            text: "Hij schrijft niet alleen trainingen uit. Hij legt uit waarom iets werkt en wat het met je loopstijl doet.",
+          },
+          {
+            title: "Vrijheid als einddoel",
+            text: "De methode is serieus, maar het gevoel moet lichter worden: meer vertrouwen, meer controle en meer plezier.",
+          },
+        ];
+
+  const profilePoints =
+    locale === "en"
+      ? ["Former Israeli champion", "Trained in Iten, Kenya", "Based in Amsterdam", "40+ years of experience"]
+      : ["Voormalig Israeelisch kampioen", "Getraind in Iten, Kenia", "Werkzaam vanuit Amsterdam", "40+ jaar ervaring"];
+
+  const photoCaption =
+    locale === "en"
+      ? "A coach who has seen the sport from the track, the dirt roads and the client side."
+      : "Een coach die de sport kent van de baan, de stofpaden en de praktijk met lopers.";
+
+  return (
+    <>
+      <section className="mx-auto max-w-7xl px-5 pb-10 pt-10 md:px-8">
+        <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/85 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-blue-700 shadow-sm shadow-blue-950/5">
+              <Users className="h-4 w-4" />
+              {highlight.title}
+            </div>
+            <div className="space-y-5">
+              <h1 className="max-w-4xl text-5xl font-black uppercase tracking-[0.04em] text-slate-950 md:text-7xl lg:text-[5.5rem] lg:leading-[0.92]">
+                {locale === "en" ? "Coach. teacher. guide." : "Coach. docent. gids."}
+              </h1>
+              <p className="max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">{highlight.intro}</p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {profilePoints.map((point) => (
+                <div key={point} className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="text-sm font-semibold uppercase tracking-[0.28em] text-blue-700">{point}</div>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button variant="hero" size="lg" asChild>
+                <Link to={`/${locale}/contact`}>{locale === "en" ? "Plan a call" : "Plan een gesprek"}</Link>
+              </Button>
+              <Button variant="heroOutline" size="lg" asChild>
+                <Link to={`/${locale}/abonnementen`}>{locale === "en" ? "View packages" : "Bekijk pakketten"}</Link>
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            <Card className="overflow-hidden border-slate-200 bg-white shadow-[0_30px_80px_rgba(13,46,102,0.16)]">
+              <CardContent className="p-0">
+                <div className="relative min-h-[22rem]">
+                  <img src={portraitImage} alt="Willem portrait" className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(8,26,58,0.26)_100%)]" />
+                  <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-blue-700 shadow-sm">
+                    {locale === "en" ? "Portrait" : "Portret"}
+                  </div>
+                  <div className="absolute bottom-5 left-5 right-5 rounded-[1.75rem] border border-white/20 bg-slate-950/70 p-5 text-white backdrop-blur">
+                    <div className="text-xs uppercase tracking-[0.35em] text-blue-300">{locale === "en" ? "The person behind the plan" : "De persoon achter het plan"}</div>
+                    <p className="mt-3 text-sm leading-7 text-slate-200">{photoCaption}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+                <CardContent className="p-0">
+                  <div className="relative min-h-[12rem]">
+                    <img src={darkRunImage} alt="Willem running in the dark" className="h-full w-full object-cover object-[center_30%]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,26,58,0.1)_0%,rgba(8,26,58,0.72)_100%)]" />
+                    <div className="absolute bottom-4 left-4 right-4 text-white">
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.35em] text-blue-200">{locale === "en" ? "Training background" : "Trainingsachtergrond"}</div>
+                      <div className="mt-2 text-lg font-black uppercase tracking-[0.04em]">Iten, Kenya</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+                <CardContent className="p-0">
+                  <div className="relative min-h-[12rem]">
+                    <img src={runningImage} alt="Willem running" className="h-full w-full object-cover" />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(8,26,58,0.34)_100%)]" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.35em] text-blue-100">{locale === "en" ? "Running style" : "Loopstijl"}</div>
+                      <div className="mt-2 rounded-2xl border border-white/20 bg-slate-950/70 px-3 py-2 text-sm font-semibold text-white backdrop-blur">
+                        {locale === "en" ? "Efficient, calm and purposeful" : "Efficient, rustig en doelgericht"}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-8 md:px-8">
+        <div className="grid gap-4 md:grid-cols-3">
+          {sections.map((item) => (
+            <Card key={item.title} className="border-slate-200 bg-white shadow-sm">
+              <CardContent className="space-y-3 p-6">
+                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Why it matters" : "Waarom dit telt"}</div>
+                <h2 className="text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{item.title}</h2>
+                <p className="text-sm leading-7 text-slate-600">{item.text}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-8 md:px-8">
+        <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+          <CardContent className="grid gap-6 p-6 md:grid-cols-[0.9fr_1.1fr] md:p-8">
+            <div className="space-y-3">
+              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
+                {locale === "en" ? "Experience" : "Ervaring"}
+              </div>
+              <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
+                {locale === "en" ? "Years in the sport, not just years on paper" : "Jaren in de sport, niet alleen op papier"}
+              </h2>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {content.about.paragraphs.map((paragraph) => (
+                <div key={paragraph} className="rounded-3xl bg-slate-50 p-5 text-sm leading-7 text-slate-600">
+                  {paragraph}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-8 md:px-8">
+        <div className="grid gap-4 md:grid-cols-4">
+          {highlight.bullets.map((bullet) => (
+            <Card key={bullet} className="border-slate-200 bg-white shadow-sm">
+              <CardContent className="space-y-3 p-5">
+                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">{locale === "en" ? "Focus" : "Focus"}</div>
+                <p className="text-sm leading-7 text-slate-700">{bullet}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-10 md:px-8">
+        <Card className="border-slate-200 bg-slate-950 text-white shadow-[0_30px_80px_rgba(8,26,58,0.25)]">
+          <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between md:p-8">
+            <div className="max-w-3xl space-y-3">
+              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-300">
+                {locale === "en" ? "Next step" : "Volgende stap"}
+              </div>
+              <p className="text-lg leading-8 text-slate-200">
+                {locale === "en"
+                  ? "If you want support from someone who combines performance, structure and calm, Willem is the conversation to start."
+                  : "Als je iemand zoekt die prestatie, structuur en rust combineert, is Willem het gesprek om mee te beginnen."}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button variant="hero" asChild>
+                <Link to={`/${locale}/contact`}>{locale === "en" ? "Contact" : "Contact"}</Link>
+              </Button>
+              <Button variant="heroOutline" asChild>
+                <Link to={`/${locale}/trainingsschemas`}>{locale === "en" ? "Training plans" : "Trainingsschema's"}</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+    </>
+  );
+};
+
+const BlogIndexPage = ({
+  locale,
+  content,
+  highlight,
+  loaded,
+}: {
+  locale: Locale;
+  content: LocaleContent;
+  highlight: { title: string; intro: string; bullets: string[] };
+  loaded: boolean;
+}) => {
+  return (
+    <>
+      <section className="mx-auto max-w-7xl px-5 pb-10 pt-10 md:px-8">
+        <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/85 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-blue-700 shadow-sm shadow-blue-950/5">
+              <Clock3 className="h-4 w-4" />
+              {highlight.title}
+            </div>
+            <h1 className="max-w-4xl text-5xl font-black uppercase tracking-[0.04em] text-slate-950 md:text-7xl lg:text-[5.5rem] lg:leading-[0.92]">
+              {locale === "en" ? "Blog / knowledge base" : "Blog / kennisbank"}
+            </h1>
+            <p className="max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">{highlight.intro}</p>
+            <div className="flex flex-wrap gap-3">
+              <Button variant="hero" asChild>
+                <Link to={`/${locale}/contact`}>{locale === "en" ? "Ask a question" : "Stel een vraag"}</Link>
+              </Button>
+              <Button variant="heroOutline" asChild>
+                <Link to={`/${locale}/abonnementen`}>{locale === "en" ? "View offers" : "Bekijk aanbod"}</Link>
+              </Button>
+            </div>
+          </div>
+
+          <Card className="border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
+            <CardContent className="space-y-4 p-6 md:p-8">
+              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
+                {locale === "en" ? "What the blog is for" : "Waar de blog voor is"}
+              </div>
+              <p className="text-sm leading-7 text-slate-600">
+                {locale === "en"
+                  ? "This is not the homepage hero. It is the knowledge layer: opinions, explanations and practical articles."
+                  : "Dit is niet de homepage-hero. Dit is de kennislaag: uitleg, visie en praktische artikelen."}
+              </p>
+              <div className="grid gap-3">
+                {highlight.bullets.map((bullet) => (
+                  <div key={bullet} className="flex items-start gap-3 rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
+                    <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
+                    <span>{bullet}</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-8 md:px-8">
+        <div className="grid gap-4 md:grid-cols-3">
+          {content.blog.map((post) => (
+            <Link key={post.slug} to={`/${locale}/blog/${post.slug}`} className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-blue-300 hover:shadow-md">
+              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">{post.category}</div>
+              <h2 className="mt-3 text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{post.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-slate-600">{post.excerpt}</p>
+              <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-blue-700">
+                {locale === "en" ? "Read article" : "Lees artikel"}
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-8 md:px-8">
+        <Card className="border-slate-200 bg-slate-950 text-white shadow-[0_30px_80px_rgba(8,26,58,0.25)]">
+          <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between md:p-8">
+            <div className="max-w-3xl space-y-3">
+              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-300">
+                {locale === "en" ? "Need a direct answer?" : "Direct antwoord nodig?"}
+              </div>
+              <p className="text-lg leading-8 text-slate-200">
+                {locale === "en"
+                  ? "Use the blog for depth and the contact route for the next step."
+                  : "Gebruik de blog voor verdieping en het contactkanaal voor de volgende stap."}
+              </p>
+            </div>
+            <Button variant="hero" asChild>
+              <Link to={`/${locale}/contact`}>{locale === "en" ? "Contact" : "Contact"}</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </section>
+    </>
+  );
+};
 
 const SubscriptionsPage = ({
   locale,
@@ -79,6 +382,9 @@ const SubscriptionsPage = ({
   highlight: { title: string; intro: string; bullets: string[] };
   loaded: boolean;
 }) => {
+  const featuredOffers = content.offers.slice(0, 2);
+  const addOnOffer = content.offers[2];
+
   return (
     <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
       <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
@@ -107,6 +413,52 @@ const SubscriptionsPage = ({
           </CardContent>
         </Card>
       </div>
+
+      <div className="mt-8 grid gap-4 lg:grid-cols-2">
+        {featuredOffers.map((offer) => (
+          <Card key={offer.title} className={`border-slate-200 bg-white shadow-sm ${offer.featured ? "ring-2 ring-blue-500/20" : ""}`}>
+            <CardContent className="space-y-4 p-6 md:p-7">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">{locale === "en" ? "Plan" : "Pakket"}</div>
+                  <h2 className="mt-2 text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{offer.title}</h2>
+                </div>
+                {offer.featured ? <span className="rounded-full bg-blue-600 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-white">Top</span> : null}
+              </div>
+              <div className="text-xl font-black text-blue-700">{offer.price}</div>
+              <p className="text-sm leading-7 text-slate-600">{offer.summary}</p>
+              <div className="grid gap-2">
+                {offer.bullets.map((bullet) => (
+                  <div key={bullet} className="flex items-start gap-3 text-sm text-slate-700">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
+                    <span>{bullet}</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {addOnOffer ? (
+        <section className="mt-8">
+          <Card className="border-slate-200 bg-slate-50 shadow-sm">
+            <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between md:p-8">
+              <div className="max-w-3xl space-y-2">
+                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
+                  {locale === "en" ? "Optional extra" : "Losse toevoeging"}
+                </div>
+                <h2 className="text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{addOnOffer.title}</h2>
+                <p className="text-sm leading-7 text-slate-600">{addOnOffer.summary}</p>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-black text-slate-950">{addOnOffer.price}</div>
+                <div className="mt-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">{addOnOffer.title}</div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+      ) : null}
     </section>
   );
 };
@@ -139,6 +491,18 @@ const TrainingPlansPage = ({
           { title: "Marathon", summary: "Een complete opbouw richting de marathon met slimme progressie.", bullets: ["Periodieke opbouw", "Herstel centraal", "Specifieke blokken"] },
           { title: "Trailrunning", summary: "Oneffen terrein, stabiliteit en tactisch lopen.", bullets: ["Heuveltraining", "Kracht als basis", "Technische pacing"] },
           { title: "Schema op maat", summary: "Een persoonlijk schema rond jouw agenda, doel en niveau.", bullets: ["Intake 1-op-1", "Aanpasbare belasting", "Flexibele begeleiding"] },
+        ];
+  const chooser =
+    locale === "en"
+      ? [
+          { title: "Pick your distance", text: "Choose the plan that fits your event and current level." },
+          { title: "Set your rhythm", text: "Decide how much support, feedback and structure you want." },
+          { title: "Move forward", text: "Book a call if you want the plan adjusted to your calendar." },
+        ]
+      : [
+          { title: "Kies je afstand", text: "Selecteer het schema dat past bij je doel en huidige niveau." },
+          { title: "Bepaal je ritme", text: "Kies hoeveel begeleiding, feedback en structuur je wilt." },
+          { title: "Ga verder", text: "Plan een gesprek als het schema op jouw agenda moet passen." },
         ];
 
   return (
@@ -183,6 +547,20 @@ const TrainingPlansPage = ({
             </div>
           </CardContent>
         </Card>
+      </section>
+
+      <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
+        <div className="grid gap-4 md:grid-cols-3">
+          {chooser.map((item) => (
+            <Card key={item.title} className="border-slate-200 bg-white shadow-sm">
+              <CardContent className="space-y-3 p-6">
+                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Step" : "Stap"}</div>
+                <h2 className="text-xl font-black uppercase tracking-[0.04em] text-slate-950">{item.title}</h2>
+                <p className="text-sm leading-7 text-slate-600">{item.text}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </section>
 
       <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
@@ -255,6 +633,18 @@ const TechniquePage = ({
           { step: "Ontvang de analyse", detail: "Willem bekijkt houding, pasfrequentie, landing en ritme." },
           { step: "Voer de oefeningen uit", detail: "Je krijgt gerichte drills en duidelijke aandachtspunten mee." },
         ];
+  const deliverables =
+    locale === "en"
+      ? [
+          "Short video review with clear feedback",
+          "Concrete drills for cadence, posture and landing",
+          "Priorities you can apply in the next training week",
+        ]
+      : [
+          "Korte videoreview met duidelijke feedback",
+          "Concrete drills voor cadans, houding en landing",
+          "Prioriteiten voor de eerstvolgende trainingsweek",
+        ];
 
   return (
     <>
@@ -293,6 +683,21 @@ const TechniquePage = ({
                     : "Techniek is de brug tussen talent en efficiëntie."}
                 </p>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
+        <Card className="border-slate-200 bg-white shadow-sm">
+          <CardContent className="space-y-5 p-6 md:p-8">
+            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "What you get" : "Wat je krijgt"}</div>
+            <div className="grid gap-3 md:grid-cols-3">
+              {deliverables.map((item) => (
+                <div key={item} className="rounded-3xl bg-slate-50 p-5">
+                  <div className="text-sm font-black uppercase tracking-[0.04em] text-slate-950">{item}</div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -843,6 +1248,7 @@ const PageView = ({
   loaded: boolean;
 }) => {
   const isHome = section === "home" || section === "";
+  const isAboutWillem = section === "over-willem" || section === "about-willem";
   const isTrainingPlans = section === "trainingsschemas" || section === "training-plans";
   const isTechnique = section === "looptechniek" || section === "running-technique";
   const isMukti = section === "mukti-running";
@@ -855,8 +1261,17 @@ const PageView = ({
   const planHref =
     locale === "en" ? "/en/training-plans" : locale === "he" ? "/he/training-plans" : "/nl/trainingsschemas";
 
+  if (isAboutWillem) {
+    return <AboutWillemPage locale={locale} highlight={highlight} loaded={loaded} />;
+  }
+
+  if (section === "blog") {
+    return <BlogIndexPage locale={locale} content={content} highlight={highlight} loaded={loaded} />;
+  }
+
   return (
     <>
+      {isHome ? (
       <section className={`mx-auto grid max-w-7xl gap-10 px-5 pb-16 pt-10 md:px-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:py-16 ${fadeClass(loaded)}`}>
         <div className="space-y-8">
           <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/85 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-blue-700 shadow-sm shadow-blue-950/5">
@@ -951,6 +1366,7 @@ const PageView = ({
           </CardContent>
         </Card>
       </section>
+      ) : null}
 
       {isHome ? (
         <>
@@ -986,31 +1402,68 @@ const PageView = ({
           </section>
 
           <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
-            <div className="mb-6 max-w-3xl">
-              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
-                {locale === "en" ? "Site structure" : "Website-opbouw"}
+            <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+              <div className="max-w-3xl space-y-4">
+                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
+                  {locale === "en" ? "Quick route" : "Snelle route"}
+                </div>
+                <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
+                  {locale === "en" ? "Start with the three things that matter most" : "Begin met de drie dingen die het meest tellen"}
+                </h2>
+                <p className="max-w-2xl text-lg leading-8 text-slate-600">
+                  {locale === "en"
+                    ? "The rest of the site stays available, but these are the main paths we want visitors to notice first."
+                    : "De rest van de site blijft beschikbaar, maar dit zijn de hoofdroutes die bezoekers eerst moeten zien."}
+                </p>
               </div>
-              <h2 className="mt-2 text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
-                {locale === "en" ? "The full journey in the right order" : "De volledige route in de juiste volgorde"}
-              </h2>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {content.nav.map((item, index) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-blue-300 hover:shadow-md"
-                >
-                  <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
-                    {String(index + 1).padStart(2, "0")}
-                  </div>
-                  <div className="mt-3 text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{item.label}</div>
-                  <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-blue-700">
-                    {locale === "en" ? "Open section" : "Open sectie"}
-                    <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </div>
-                </Link>
-              ))}
+
+              <div className="grid gap-4">
+                {content.menu.map((item) =>
+                  item.children?.length ? (
+                    <Card key={item.href} className="border-slate-200 bg-white shadow-sm">
+                      <CardContent className="space-y-4 p-5">
+                        <div className="flex items-center justify-between gap-3">
+                          <div>
+                            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
+                              {locale === "en" ? "Offer" : "Aanbod"}
+                            </div>
+                            <h3 className="mt-2 text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{item.label}</h3>
+                          </div>
+                          <Link to={item.href} className="text-sm font-semibold text-blue-700">
+                            {locale === "en" ? "Open" : "Bekijk"}
+                          </Link>
+                        </div>
+                        <div className="grid gap-2 sm:grid-cols-2">
+                          {item.children.slice(0, 4).map((child) => (
+                            <Link
+                              key={child.href}
+                              to={child.href}
+                              className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <Link
+                      key={item.href}
+                      to={item.href}
+                      className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-blue-300 hover:shadow-md"
+                    >
+                      <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
+                        {locale === "en" ? "Section" : "Sectie"}
+                      </div>
+                      <div className="mt-3 text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{item.label}</div>
+                      <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-blue-700">
+                        {locale === "en" ? "Open section" : "Open sectie"}
+                        <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </Link>
+                  ),
+                )}
+              </div>
             </div>
           </section>
 
