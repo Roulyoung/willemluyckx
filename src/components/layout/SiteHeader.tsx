@@ -84,7 +84,7 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
     <header className="sticky top-0 z-50 border-b border-white/60 bg-white/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 md:px-8">
         <Link to={`/${locale}`} className="flex items-center gap-3">
-          <img src={topFitSiteConfig.logoPath} alt={topFitSiteConfig.brandName} className="h-11 w-11 rounded-full object-cover shadow-sm" />
+          <img src={topFitSiteConfig.logoPath} alt={topFitSiteConfig.brandName} className="h-[3.3rem] w-[3.3rem] rounded-full object-cover shadow-sm" />
           <div className="leading-none">
             <div className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">TopFit</div>
             <div className="text-xl font-black uppercase tracking-[0.2em] text-slate-900">Running</div>
