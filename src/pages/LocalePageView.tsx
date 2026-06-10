@@ -419,7 +419,7 @@ export const LocalePageView = ({
       <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
         <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
           <CardContent className="p-0">
-              <img src={topFitSiteConfig.logoPath} alt={topFitSiteConfig.brandName} className="mx-auto max-h-[21.6rem] w-auto max-w-full object-contain p-6" />
+              <img src={topFitSiteConfig.logoPath} alt={topFitSiteConfig.brandName} className="mx-auto max-h-[25.92rem] w-auto max-w-full object-contain p-6" />
             </CardContent>
           </Card>
       </section>
