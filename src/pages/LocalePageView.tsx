@@ -12,8 +12,10 @@ import { topFitSiteConfig } from "@/lib/siteConfig";
 import type { LocaleContent } from "@/lib/topfitContent";
 import { AboutWillemPage as AboutWillemPageSection } from "@/pages/localeSections";
 import { BlogIndexPage, ClinicsPage, CoachingPage, MuktiPage, ShopPage, SubscriptionsPage, TechniquePage, TrainingPlansPage } from "@/pages/localeRoutePages";
+import { HomeHealthyRunningSection } from "@/pages/HomeHealthyRunningSection";
 
 const fadeClass = (_loaded: boolean) => "animate-fade-up";
+const SHOW_HOME_HEALTHY_RUNNING_SECTION = true;
 export const LocalePageView = ({
   locale,
   section,
@@ -144,6 +146,10 @@ export const LocalePageView = ({
           </CardContent>
         </Card>
       </section>
+      ) : null}
+
+      {isHome && SHOW_HOME_HEALTHY_RUNNING_SECTION ? (
+        <HomeHealthyRunningSection locale={locale} loaded={loaded} />
       ) : null}
 
       {isHome ? (
