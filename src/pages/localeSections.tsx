@@ -26,29 +26,29 @@ export const AboutWillemPage = ({
       ? [
           {
             title: "Performance without noise",
-            text: "Willem works with structure, rhythm and feedback so runners can improve without getting lost in unnecessary detail.",
+            text: "Je werkt met structuur, ritme en feedback zodat je beter wordt zonder te verdrinken in details.",
           },
           {
             title: "A coach with a teacher's eye",
-            text: "He does not only prescribe sessions. He explains why a choice matters and how it changes the way you run.",
+            text: "Je krijgt niet alleen trainingen. Je hoort ook waarom een keuze werkt en wat die doet met jouw loopstijl.",
           },
           {
             title: "Freedom as the end goal",
-            text: "The method is serious, but the result should feel lighter: more confidence, more control and more pleasure.",
+            text: "De methode is serieus, maar jij merkt vooral meer lichtheid: meer vertrouwen, meer controle en meer plezier.",
           },
         ]
       : [
           {
             title: "Presteren zonder ruis",
-            text: "Willem werkt met structuur, ritme en feedback zodat lopers beter worden zonder te verdrinken in details.",
+            text: "Je werkt met structuur, ritme en feedback zodat je beter wordt zonder te verdrinken in details.",
           },
           {
             title: "Coach met het oog van een docent",
-            text: "Hij schrijft niet alleen trainingen uit. Hij legt uit waarom iets werkt en wat het met je loopstijl doet.",
+            text: "Je krijgt niet alleen trainingen. Je hoort ook waarom iets werkt en wat het met je loopstijl doet.",
           },
           {
             title: "Vrijheid als einddoel",
-            text: "De methode is serieus, maar het gevoel moet lichter worden: meer vertrouwen, meer controle en meer plezier.",
+            text: "De methode is serieus, maar jij merkt vooral meer lichtheid: meer vertrouwen, meer controle en meer plezier.",
           },
         ];
 
@@ -99,7 +99,7 @@ export const AboutWillemPage = ({
             </div>
             <div className="space-y-5">
               <h1 className="max-w-4xl text-4xl font-black uppercase tracking-[0.04em] text-slate-950 sm:text-5xl md:text-7xl lg:text-[5.5rem] lg:leading-[0.92]">
-                {locale === "en" ? "Coach. teacher. guide." : "Coach. docent. gids."}
+                {locale === "en" ? "Your coach. teacher. guide." : "Jouw coach. docent. gids."}
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">{highlight.intro}</p>
             </div>
@@ -197,19 +197,19 @@ export const AboutWillemPage = ({
       <section className={`mx-auto max-w-7xl px-5 py-8 md:px-8 ${fadeClass(loaded)}`}>
         <div className="mb-5 max-w-2xl">
           <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
-            {locale === "en" ? "Why it matters" : "Waarom dit telt"}
+            {locale === "en" ? "Why it works for you" : "Waarom dit voor jou werkt"}
           </div>
           <p className="mt-3 text-lg leading-8 text-slate-600">
             {locale === "en"
-              ? "The page should tell the story fast: who Willem is, what he stands for and why the method feels different."
-              : "De pagina moet het verhaal snel laten landen: wie Willem is, waar hij voor staat en waarom de methode anders voelt."}
+              ? "On this page you quickly see who Willem is, what he stands for and why the method feels different."
+              : "Op deze pagina zie je snel wie Willem is, waar hij voor staat en waarom de methode anders voelt."}
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {sections.map((item) => (
             <Card key={item.title} className="border-slate-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md">
               <CardContent className="space-y-3 p-6">
-                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Why it matters" : "Waarom dit telt"}</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Why it works for you" : "Waarom dit voor jou werkt"}</div>
                 <h2 className="text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{item.title}</h2>
                 <p className="text-sm leading-7 text-slate-600">{item.text}</p>
               </CardContent>
@@ -300,7 +300,7 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
       <Card className="mt-8 border-slate-200 bg-white shadow-sm">
         <CardContent className="space-y-4 p-6 md:p-8">
           <p className="text-sm leading-7 text-slate-600">
-            De blog-architectuur staat nu klaar. De echte inhoud kan straks per post uit Google Sheets komen, met dezelfde locale structuur en SEO-velden.
+            De blog-architectuur staat klaar. Later vullen we elk artikel met echte inhoud uit Google Sheets, in dezelfde locale structuur.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button variant="hero" asChild>

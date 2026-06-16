@@ -71,7 +71,7 @@ const pageHighlights = {
   nl: {
     home: {
       title: "Home",
-      intro: "Rustige, professionele hardloopbegeleiding met duidelijke keuzes voor schema, techniek, coaching en inspiratie.",
+      intro: "Je vindt hier rustige, professionele hardloopbegeleiding met duidelijke keuzes voor schema, techniek, coaching en inspiratie.",
       bullets: ["Persoonlijke trainingsschema's", "Looptechniek analyse", "Online coaching", "Clinics en trainingskampen"],
     },
     abonnementen: {
@@ -81,7 +81,7 @@ const pageHighlights = {
     },
     trainingsschemas: {
       title: "Trainingsschema's",
-      intro: "Professionele schema's voor beginners, 5 km, 10 km, halve marathon, marathon en trailrunning.",
+      intro: "Je krijgt professionele schema's voor beginners, 5 km, 10 km, halve marathon, marathon en trailrunning.",
       bullets: ["Opbouw op maat", "Slimme belasting en herstel", "Schema op maat mogelijk"],
     },
     looptechniek: {
@@ -107,11 +107,11 @@ const pageHighlights = {
     blog: {
       title: "Blog / Kennisbank",
       intro: "Praktische artikelen over training, herstel, voeding, hartslagzones en marathonvoorbereiding.",
-      bullets: ["SEO en expertise", "Trainingsleer", "Mentale en fysieke ontwikkeling"],
+      bullets: ["Praktische trainingstips", "Trainingsleer", "Herstel en mindset"],
     },
     "over-willem": {
       title: "Over Willem",
-      intro: "Willem neerzetten als coach, docent en gids met 40+ jaar ervaring.",
+      intro: "Willem is jouw coach, docent en gids met 40+ jaar ervaring.",
       bullets: ["40+ jaar ervaring", "Internationaal perspectief", "Prestatie en plezier"],
     },
     contact: {
@@ -123,7 +123,7 @@ const pageHighlights = {
   en: {
     home: {
       title: "Home",
-      intro: "Clear, professional running guidance with a direct focus on plans, technique, coaching and inspiration.",
+      intro: "You will find clear, professional running guidance with a direct focus on plans, technique, coaching and inspiration.",
       bullets: ["Personal training plans", "Running technique analysis", "Online coaching", "Clinics and training camps"],
     },
     subscriptions: {
@@ -133,7 +133,7 @@ const pageHighlights = {
     },
     "training-plans": {
       title: "Training plans",
-      intro: "Professional plans for beginners, 5K, 10K, half marathon, marathon and trail running.",
+      intro: "You get professional plans for beginners, 5K, 10K, half marathon, marathon and trail running.",
       bullets: ["Tailored progression", "Smart load and recovery", "Custom plans available"],
     },
     "running-technique": {
@@ -159,11 +159,11 @@ const pageHighlights = {
     blog: {
       title: "Blog / Knowledge base",
       intro: "Practical articles on training, recovery, nutrition, heart rate zones and marathon prep.",
-      bullets: ["SEO and expertise", "Training principles", "Mental and physical development"],
+      bullets: ["Practical training tips", "Training principles", "Recovery and mindset"],
     },
     "about-willem": {
       title: "About Willem",
-      intro: "Position Willem as coach, teacher and guide with 40+ years of experience.",
+      intro: "Willem is your coach, teacher and guide with 40+ years of experience.",
       bullets: ["40+ years of experience", "International perspective", "Performance and pleasure"],
     },
     contact: {
@@ -175,7 +175,7 @@ const pageHighlights = {
   he: {
     home: {
       title: "Home",
-      intro: "Clear, professional running guidance with a direct focus on plans, technique, coaching and inspiration.",
+      intro: "You will find clear, professional running guidance with a direct focus on plans, technique, coaching and inspiration.",
       bullets: ["Personal training plans", "Running technique analysis", "Online coaching", "Clinics and training camps"],
     },
     subscriptions: {
@@ -185,7 +185,7 @@ const pageHighlights = {
     },
     "training-plans": {
       title: "Training plans",
-      intro: "Professional plans for beginners, 5K, 10K, half marathon, marathon and trail running.",
+      intro: "You get professional plans for beginners, 5K, 10K, half marathon, marathon and trail running.",
       bullets: ["Tailored progression", "Smart load and recovery", "Custom plans available"],
     },
     "running-technique": {
@@ -211,11 +211,11 @@ const pageHighlights = {
     blog: {
       title: "Blog / Knowledge base",
       intro: "Practical articles on training, recovery, nutrition, heart rate zones and marathon prep.",
-      bullets: ["SEO and expertise", "Training principles", "Mental and physical development"],
+      bullets: ["Practical training tips", "Training principles", "Recovery and mindset"],
     },
     "about-willem": {
       title: "About Willem",
-      intro: "Position Willem as coach, teacher and guide with 40+ years of experience.",
+      intro: "Willem is your coach, teacher and guide with 40+ years of experience.",
       bullets: ["40+ years of experience", "International perspective", "Performance and pleasure"],
     },
     contact: {
@@ -250,7 +250,7 @@ export const topFitContent: Record<Locale, LocaleContent> = {
       secondaryCta: "Ontdek de aanpak",
     },
     proof: {
-      headline: "Waar TopFit Running voor staat",
+      headline: "Wat je van TopFit Running merkt",
       description: "Rustige, professionele begeleiding met aandacht voor schema, techniek, herstel, plezier en mentale balans.",
       stats: [
         { value: "40+", label: "jaar ervaring" },
@@ -337,7 +337,7 @@ export const topFitContent: Record<Locale, LocaleContent> = {
       secondaryCta: "Explore the approach",
     },
     proof: {
-      headline: "What TopFit Running stands for",
+      headline: "What you notice from TopFit Running",
       description: "Calm, professional guidance with attention to plans, technique, recovery, enjoyment and mental balance.",
       stats: [
         { value: "40+", label: "years of experience" },
@@ -424,7 +424,7 @@ export const topFitContent: Record<Locale, LocaleContent> = {
       secondaryCta: "Explore the approach",
     },
     proof: {
-      headline: "What TopFit Running stands for",
+      headline: "What you notice from TopFit Running",
       description: "Calm, professional guidance with attention to plans, technique, recovery, enjoyment and mental balance.",
       stats: [
         { value: "40+", label: "years of experience" },

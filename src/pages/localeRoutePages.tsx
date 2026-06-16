@@ -54,8 +54,8 @@ export const BlogIndexPage = ({
               </div>
               <p className="text-sm leading-7 text-slate-600">
                 {locale === "en"
-                  ? "This is not the homepage hero. It is the knowledge layer: opinions, explanations and practical articles."
-                  : "Dit is niet de homepage-hero. Dit is de kennislaag: uitleg, visie en praktische artikelen."}
+                  ? "Here you get the deeper layer: opinions, explanations and practical articles."
+                  : "Hier krijg je de verdiepende laag: uitleg, visie en praktische artikelen."}
               </p>
               <div className="grid gap-3">
                 {highlight.bullets.map((bullet) => (
@@ -269,7 +269,7 @@ export const TrainingPlansPage = ({
 
         <Card className="border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
           <CardContent className="space-y-4 p-6 md:p-8">
-            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "What makes it strong" : "Waarom dit werkt"}</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Why it works for you" : "Waarom dit voor jou werkt"}</div>
             <p className="text-sm leading-7 text-slate-600">
               {locale === "en"
                 ? "Every plan is built around smart load, recovery moments and a clear progression path."
@@ -336,8 +336,8 @@ export const TrainingPlansPage = ({
               <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Custom route" : "Maatwerk route"}</div>
               <p className="text-lg leading-8 text-slate-600">
                 {locale === "en"
-                  ? "If your goal does not fit a standard distance, Willem can shape a custom plan around your schedule and ambition."
-                  : "Past jouw doel niet in een standaard afstand, dan kan Willem een schema op maat maken rond jouw agenda en ambitie."}
+                  ? "If your goal does not fit a standard distance, you can get a custom plan around your schedule and ambition."
+                  : "Past jouw doel niet in een standaard afstand, dan krijg je een schema op maat rond jouw agenda en ambitie."}
               </p>
             </div>
             <Button variant="hero" asChild>
@@ -363,12 +363,12 @@ export const TechniquePage = ({
     locale === "en"
       ? [
           { step: "Send a short video", detail: "Record a few minutes of running from the side and back." },
-          { step: "Receive the analysis", detail: "Willem reviews posture, cadence, foot strike and rhythm." },
+          { step: "Receive the analysis", detail: "You get feedback on posture, cadence, foot strike and rhythm." },
           { step: "Apply the drills", detail: "You get targeted exercises and points to improve in training." },
         ]
       : [
           { step: "Stuur een korte video", detail: "Film een paar minuten hardlopen van opzij en van achter." },
-          { step: "Ontvang de analyse", detail: "Willem bekijkt houding, pasfrequentie, landing en ritme." },
+          { step: "Ontvang de analyse", detail: "Je krijgt feedback op houding, pasfrequentie, landing en ritme." },
           { step: "Voer de oefeningen uit", detail: "Je krijgt gerichte drills en duidelijke aandachtspunten mee." },
         ];
   const deliverables =
@@ -443,7 +443,7 @@ export const TechniquePage = ({
 
       <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
         <div className="mb-6 max-w-3xl">
-          <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Why it matters" : "Waarom dit telt"}</div>
+          <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Why it helps you" : "Waarom dit jou helpt"}</div>
           <h2 className="mt-3 text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
             {locale === "en" ? "Small corrections, big gains" : "Kleine aanpassingen, grote winst"}
           </h2>
@@ -914,9 +914,9 @@ export const ShopPage = ({
           </div>
           <Card className="border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
             <CardContent className="space-y-4 p-6 md:p-8">
-              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">Waarom de shop werkt</div>
+              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">Wat je hier vindt</div>
               <p className="text-sm leading-7 text-slate-600">
-                De shop staat los van abonnementen, maar versterkt dezelfde sportieve autoriteit. Zo kun je digitale producten, service-items en fysieke sportvoeding naast elkaar verkopen.
+                Hier vind je digitale producten, service-items en fysieke sportvoeding die passen bij jouw training en herstel.
               </p>
               <div className="grid gap-3">
                 {highlight.bullets.map((bullet) => (

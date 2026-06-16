@@ -238,9 +238,9 @@ export const LocalePageView = ({
                   </div>
                   <div className="absolute bottom-5 left-5 right-5 rounded-[1.75rem] border border-white/20 bg-slate-950/65 p-5 text-white backdrop-blur">
                     <div className="text-xs uppercase tracking-[0.35em] text-blue-300">40+ years</div>
-                    <div className="mt-3 text-2xl font-black uppercase tracking-[0.04em]">Coach. docent. gids.</div>
+                    <div className="mt-3 text-2xl font-black uppercase tracking-[0.04em]">Jouw coach. docent. gids.</div>
                     <p className="mt-2 text-sm leading-7 text-slate-200">
-                      Willem zet prestatie, plezier en bewustzijn naast elkaar. Dat is de basis van de merkbeleving.
+                      Je krijgt begeleiding waarin prestatie, plezier en bewustzijn elkaar versterken.
                     </p>
                   </div>
                 </div>
@@ -252,7 +252,7 @@ export const LocalePageView = ({
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">Shop</div>
-                    <h2 className="text-3xl font-black uppercase tracking-[0.04em]">Webshop naast abonnementen</h2>
+                    <h2 className="text-3xl font-black uppercase tracking-[0.04em]">Shop en diensten</h2>
                   </div>
                   <BookOpen className="h-6 w-6 text-blue-600" />
                 </div>
@@ -280,7 +280,7 @@ export const LocalePageView = ({
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">Blog</div>
-                    <h2 className="text-3xl font-black uppercase tracking-[0.04em]">Autoriteit en SEO</h2>
+                    <h2 className="text-3xl font-black uppercase tracking-[0.04em]">Kennis en verdieping</h2>
                   </div>
                   <Clock3 className="h-6 w-6 text-blue-600" />
                 </div>
@@ -315,10 +315,10 @@ export const LocalePageView = ({
                     Training
                   </div>
                   <div className="absolute bottom-5 left-5 right-5 rounded-[1.75rem] border border-white/20 bg-slate-950/65 p-5 text-white backdrop-blur">
-                    <div className="text-xs uppercase tracking-[0.35em] text-blue-300">Visual proof</div>
-                    <div className="mt-3 text-2xl font-black uppercase tracking-[0.04em]">Beweging verkoopt</div>
+                    <div className="text-xs uppercase tracking-[0.35em] text-blue-300">Echte beelden</div>
+                    <div className="mt-3 text-2xl font-black uppercase tracking-[0.04em]">Beweging in beeld</div>
                     <p className="mt-2 text-sm leading-7 text-slate-200">
-                      Met echte fotografie voelt de website direct als een premium sportmerk, niet als een generieke template.
+                      Je ziet hier echte fotografie die de site direct persoonlijker en geloofwaardiger maakt.
                     </p>
                   </div>
                 </div>
