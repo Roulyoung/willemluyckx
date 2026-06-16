@@ -13,9 +13,11 @@ import type { LocaleContent } from "@/lib/topfitContent";
 import { AboutWillemPage as AboutWillemPageSection } from "@/pages/localeSections";
 import { BlogIndexPage, ClinicsPage, CoachingPage, MuktiPage, ShopPage, SubscriptionsPage, TechniquePage, TrainingPlansPage } from "@/pages/localeRoutePages";
 import { HomeHealthyRunningSection } from "@/pages/HomeHealthyRunningSection";
+import { HomeHeroBackgroundSection } from "@/pages/HomeHeroBackgroundSection";
 
 const fadeClass = (_loaded: boolean) => "animate-fade-up";
 const SHOW_HOME_HEALTHY_RUNNING_SECTION = true;
+const SHOW_HOME_HERO_BACKGROUND = true;
 export const LocalePageView = ({
   locale,
   section,
@@ -51,7 +53,11 @@ export const LocalePageView = ({
 
   return (
     <>
-      {isHome ? (
+      {isHome && SHOW_HOME_HERO_BACKGROUND ? (
+        <HomeHeroBackgroundSection locale={locale} content={content} planHref={planHref} loaded={loaded} />
+      ) : null}
+
+      {isHome && !SHOW_HOME_HERO_BACKGROUND ? (
       <section className={`mx-auto grid max-w-7xl gap-10 px-5 pb-16 pt-10 md:px-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:py-16 ${fadeClass(loaded)}`}>
         <div className="space-y-8">
           <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/85 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-blue-700 shadow-sm shadow-blue-950/5">
