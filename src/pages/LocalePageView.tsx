@@ -12,11 +12,9 @@ import { topFitSiteConfig } from "@/lib/siteConfig";
 import type { LocaleContent } from "@/lib/topfitContent";
 import { AboutWillemPage as AboutWillemPageSection } from "@/pages/localeSections";
 import { BlogIndexPage, ClinicsPage, CoachingPage, MuktiPage, ShopPage, SubscriptionsPage, TechniquePage, TrainingPlansPage } from "@/pages/localeRoutePages";
-import { HomeHealthyRunningSection } from "@/pages/HomeHealthyRunningSection";
 import { HomeHeroBackgroundSection } from "@/pages/HomeHeroBackgroundSection";
 
 const fadeClass = (_loaded: boolean) => "animate-fade-up";
-const SHOW_HOME_HEALTHY_RUNNING_SECTION = true;
 const SHOW_HOME_HERO_BACKGROUND = true;
 export const LocalePageView = ({
   locale,
@@ -154,16 +152,23 @@ export const LocalePageView = ({
       </section>
       ) : null}
 
-      {isHome && SHOW_HOME_HEALTHY_RUNNING_SECTION ? (
-        <HomeHealthyRunningSection locale={locale} loaded={loaded} />
-      ) : null}
-
       {isHome ? (
         <>
           <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
-            <div className="mb-6 max-w-2xl">
-              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{content.proof.headline}</div>
-              <p className="mt-3 text-lg leading-8 text-slate-600">{content.proof.description}</p>
+            <div className="mb-6 max-w-3xl space-y-3">
+              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
+                {locale === "en" ? "Choose your path" : "Kies je traject"}
+              </div>
+              <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
+                {locale === "en"
+                  ? "Pick the amount of support that fits your running life"
+                  : "Kies de begeleiding die past bij jouw manier van lopen"}
+              </h2>
+              <p className="max-w-2xl text-lg leading-8 text-slate-600">
+                {locale === "en"
+                  ? "Two clear packages, one philosophy. The difference is how much support and feedback you want."
+                  : "Twee duidelijke pakketten, één filosofie. Het verschil zit in de hoeveelheid begeleiding en feedback."}
+              </p>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               {content.offers.map((offer) => (
@@ -192,80 +197,20 @@ export const LocalePageView = ({
           </section>
 
           <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
-            <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-              <div className="max-w-3xl space-y-4">
-                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
-                  {locale === "en" ? "Quick route" : "Snelle route"}
-                </div>
-                <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
-                  {locale === "en" ? "Start with the three things that matter most" : "Begin met de drie dingen die het meest tellen"}
-                </h2>
-                <p className="max-w-2xl text-lg leading-8 text-slate-600">
-                  {locale === "en"
-                    ? "The rest of the site stays available, but these are the main paths we want visitors to notice first."
-                    : "De rest van de site blijft beschikbaar, maar dit zijn de hoofdroutes die bezoekers eerst moeten zien."}
-                </p>
+            <div className="mb-6 max-w-3xl space-y-3">
+              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
+                {locale === "en" ? "Services" : "Diensten"}
               </div>
-
-              <div className="grid gap-4">
-                {content.menu.map((item) =>
-                  item.children?.length ? (
-                    <Card key={item.href} className="border-slate-200 bg-white shadow-sm">
-                      <CardContent className="space-y-4 p-5">
-                        <div className="flex items-center justify-between gap-3">
-                          <div>
-                            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
-                              {locale === "en" ? "Offer" : "Aanbod"}
-                            </div>
-                            <h3 className="mt-2 text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{item.label}</h3>
-                          </div>
-                          <Link to={item.href} className="text-sm font-semibold text-blue-700">
-                            {locale === "en" ? "Open" : "Bekijk"}
-                          </Link>
-                        </div>
-                        <div className="grid gap-2 sm:grid-cols-2">
-                          {item.children.slice(0, 4).map((child) => (
-                            <Link
-                              key={child.href}
-                              to={child.href}
-                              className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
-                            >
-                              {child.label}
-                            </Link>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <Link
-                      key={item.href}
-                      to={item.href}
-                      className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-blue-300 hover:shadow-md"
-                    >
-                      <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
-                        {locale === "en" ? "Section" : "Sectie"}
-                      </div>
-                      <div className="mt-3 text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{item.label}</div>
-                      <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-blue-700">
-                        {locale === "en" ? "Open section" : "Open sectie"}
-                        <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </div>
-                    </Link>
-                  ),
-                )}
-              </div>
-            </div>
-          </section>
-
-          <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
-            <div className="mb-6 flex items-center justify-between gap-4">
-              <div>
-                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">Services</div>
-                <h2 className="mt-2 text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">{content.about.title}</h2>
-              </div>
-              <Button variant="minimal" asChild>
-                <Link to={`/${locale}/abonnementen`}>All offers</Link>
-              </Button>
+              <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
+                {locale === "en"
+                  ? "What you can do with TopFit Running"
+                  : "Wat je met TopFit Running kunt doen"}
+              </h2>
+              <p className="max-w-2xl text-lg leading-8 text-slate-600">
+                {locale === "en"
+                  ? "A clear route map for plans, technique, coaching, clinics and Mukti Running."
+                  : "Een duidelijke routekaart voor schema's, techniek, coaching, clinics en Mukti Running."}
+              </p>
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {content.services.map((item) => (

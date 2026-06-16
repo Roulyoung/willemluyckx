@@ -15,8 +15,8 @@ type HomeHeroBackgroundSectionProps = {
 
 export const HomeHeroBackgroundSection = ({ locale, content, planHref, loaded }: HomeHeroBackgroundSectionProps) => {
   return (
-    <section className={`mx-auto max-w-7xl px-5 pb-10 pt-10 md:px-8 lg:py-14 ${loaded ? "animate-fade-up" : "animate-fade-up"}`}>
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-slate-200 bg-slate-950 text-white shadow-[0_30px_80px_rgba(13,46,102,0.2)]">
+    <section className={`w-full px-0 pb-10 pt-0 md:pb-12 ${loaded ? "animate-fade-up" : "animate-fade-up"}`}>
+      <div className="relative min-h-[88vh] overflow-hidden bg-slate-950 text-white shadow-[0_30px_80px_rgba(13,46,102,0.2)] md:min-h-[92vh]">
         <img
           src={darkRunImage}
           alt="Willem running in the dark"
@@ -24,8 +24,8 @@ export const HomeHeroBackgroundSection = ({ locale, content, planHref, loaded }:
         />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(23,120,242,0.32),transparent_38%),linear-gradient(180deg,rgba(8,26,58,0.2)_0%,rgba(8,26,58,0.9)_100%)]" />
 
-        <div className="relative px-6 py-10 md:px-8 md:py-12 lg:px-10 lg:py-14">
-          <div className="max-w-4xl space-y-7">
+        <div className="relative mx-auto flex min-h-[88vh] max-w-7xl items-end px-5 py-10 md:min-h-[92vh] md:px-8 lg:py-14">
+          <div className="max-w-4xl space-y-7 pb-2 md:pb-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-blue-100 backdrop-blur">
               {content.hero.eyebrow}
             </div>
