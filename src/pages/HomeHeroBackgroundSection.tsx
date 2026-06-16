@@ -1,7 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import darkRunImage from "@/assets/topfit/photos/willem-dark.jpg";
 import { type Locale } from "@/lib/i18n";
 import { topFitSiteConfig } from "@/lib/siteConfig";
@@ -21,12 +20,12 @@ export const HomeHeroBackgroundSection = ({ locale, content, planHref, loaded }:
         <img
           src={darkRunImage}
           alt="Willem running in the dark"
-          className="absolute inset-0 h-full w-full object-cover object-[center_25%] opacity-55 brightness-[0.72] contrast-[1.06] sm:object-[center_20%]"
+          className="absolute inset-0 h-full w-full object-cover object-[center_22%] opacity-60 brightness-[0.68] contrast-[1.08] sm:object-[center_18%]"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(23,120,242,0.28),transparent_38%),linear-gradient(180deg,rgba(8,26,58,0.28)_0%,rgba(8,26,58,0.88)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(23,120,242,0.32),transparent_38%),linear-gradient(180deg,rgba(8,26,58,0.2)_0%,rgba(8,26,58,0.9)_100%)]" />
 
-        <div className="relative grid gap-8 px-6 py-10 md:px-8 md:py-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:px-10 lg:py-14">
-          <div className="space-y-8">
+        <div className="relative px-6 py-10 md:px-8 md:py-12 lg:px-10 lg:py-14">
+          <div className="max-w-4xl space-y-7">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-blue-100 backdrop-blur">
               {content.hero.eyebrow}
             </div>
@@ -40,45 +39,32 @@ export const HomeHeroBackgroundSection = ({ locale, content, planHref, loaded }:
               <Button variant="hero" size="lg" asChild>
                 <Link to={`/${locale}/contact`}>{content.hero.primaryCta}</Link>
               </Button>
-              <Button variant="heroOutline" size="lg" asChild>
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="border-white/35 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
+              >
                 <Link to={planHref}>{content.hero.secondaryCta}</Link>
               </Button>
-              <Button variant="heroOutline" size="lg" asChild>
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="border-white/35 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
+              >
                 <a href={topFitSiteConfig.contact.whatsappHref} target="_blank" rel="noreferrer">
                   <MessageCircle className="h-4 w-4" />
                   WhatsApp
                 </a>
               </Button>
             </div>
+            <p className="max-w-2xl text-sm leading-7 text-slate-200">
+              {locale === "nl"
+                ? "Gezondheid eerst, prestaties als gevolg."
+                : "Health first, performance as a result."}
+            </p>
           </div>
-
-          <Card className="border-white/10 bg-white/8 text-white shadow-none backdrop-blur-md">
-            <CardContent className="space-y-5 p-5 md:p-6">
-              <div className="grid gap-3 text-sm text-slate-100 sm:grid-cols-3">
-                {content.proof.stats.map((stat) => (
-                  <div key={stat.label} className="rounded-2xl border border-white/10 bg-black/15 px-4 py-4">
-                    <div className="text-2xl font-black text-white">{stat.value}</div>
-                    <div className="mt-1 uppercase tracking-[0.28em] text-blue-100">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="grid gap-3">
-                {content.offers.slice(0, 2).map((offer) => (
-                  <div key={offer.title} className="rounded-3xl border border-white/10 bg-black/20 p-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-200">{offer.price}</div>
-                        <div className="mt-1 text-lg font-bold text-white">{offer.title}</div>
-                      </div>
-                      {offer.featured ? <span className="rounded-full bg-blue-500 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-white">Top</span> : null}
-                    </div>
-                    <p className="mt-2 text-sm leading-7 text-slate-200">{offer.summary}</p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </section>
