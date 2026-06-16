@@ -157,17 +157,17 @@ export const LocalePageView = ({
           <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
             <div className="mb-6 max-w-3xl space-y-3">
               <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
-                {locale === "en" ? "Choose your path" : "Kies je traject"}
+                {locale === "en" ? "Choose what you need" : "Kies wat je nodig hebt"}
               </div>
               <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
                 {locale === "en"
-                  ? "Pick the amount of support that fits your running life"
+                  ? "Pick the support that fits your running life"
                   : "Kies de begeleiding die past bij jouw manier van lopen"}
               </h2>
               <p className="max-w-2xl text-lg leading-8 text-slate-600">
                 {locale === "en"
                   ? "Two clear packages, one philosophy. The difference is how much support and feedback you want."
-                  : "Twee duidelijke pakketten, één filosofie. Het verschil zit in de hoeveelheid begeleiding en feedback."}
+                  : "Twee duidelijke pakketten, één filosofie. Het verschil zit in hoeveel begeleiding en feedback je wilt."}
               </p>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
@@ -203,8 +203,8 @@ export const LocalePageView = ({
               </div>
               <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
                 {locale === "en"
-                  ? "What you can do with TopFit Running"
-                  : "Wat je met TopFit Running kunt doen"}
+                  ? "What you can do next"
+                  : "Wat je hierna kunt doen"}
               </h2>
               <p className="max-w-2xl text-lg leading-8 text-slate-600">
                 {locale === "en"
@@ -252,7 +252,7 @@ export const LocalePageView = ({
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">Shop</div>
-                    <h2 className="text-3xl font-black uppercase tracking-[0.04em]">Shop en diensten</h2>
+                    <h2 className="text-3xl font-black uppercase tracking-[0.04em]">Losse producten en services</h2>
                   </div>
                   <BookOpen className="h-6 w-6 text-blue-600" />
                 </div>
@@ -280,7 +280,7 @@ export const LocalePageView = ({
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">Blog</div>
-                    <h2 className="text-3xl font-black uppercase tracking-[0.04em]">Kennis en verdieping</h2>
+                    <h2 className="text-3xl font-black uppercase tracking-[0.04em]">Tips en uitleg</h2>
                   </div>
                   <Clock3 className="h-6 w-6 text-blue-600" />
                 </div>
