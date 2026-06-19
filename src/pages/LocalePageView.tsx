@@ -320,10 +320,11 @@ export const LocalePageView = ({
                     Training
                   </div>
                   <div className="absolute bottom-5 left-5 right-5 rounded-[1.75rem] border border-white/20 bg-slate-950/65 p-5 text-white backdrop-blur">
-                    <div className="text-xs uppercase tracking-[0.35em] text-blue-300">Echte beelden</div>
-                    <div className="mt-3 text-2xl font-black uppercase tracking-[0.04em]">Beweging in beeld</div>
+                    <div className="text-xs uppercase tracking-[0.35em] text-blue-300">Willem in actie</div>
+                    <div className="mt-3 text-2xl font-black uppercase tracking-[0.04em]">Ervaring op de weg</div>
                     <p className="mt-2 text-sm leading-7 text-slate-200">
-                      Je ziet hier echte fotografie die de site direct persoonlijker en geloofwaardiger maakt.
+                      Willem combineert 40+ jaar ervaring met een rustige, directe manier van coachen.
+                      Je ziet hier de coach achter de trainingen, techniek en persoonlijke begeleiding.
                     </p>
                   </div>
                 </div>
