@@ -284,8 +284,7 @@ export const topFitContent: Record<Locale, LocaleContent> = {
       { slug: "runningbook-pdf", title: "TopFit Runningbook PDF", summary: "De kennisbasis voor elke abonnee en loper.", price: "Inbegrepen", type: "digital" },
       { slug: "intake-call", title: "Persoonlijke intake", summary: "Kennismaking en startanalyse voor een passend plan.", price: "Op aanvraag", type: "service" },
       { slug: "clinic-ticket", title: "Clinic ticket", summary: "Toegang tot de maandelijkse clinic dag.", price: "EUR 125", type: "ticket" },
-      { slug: "sportrepen-pack", title: "Sportrepen pack", summary: "Fysieke energie-snacks voor training, wedstrijd en onderweg.", price: "Vanaf EUR 14,95", type: "physical" },
-      { slug: "recovery-shake", title: "Recovery shake", summary: "Herstelproduct voor na intensieve trainingen of lange duurlopen.", price: "Vanaf EUR 19,95", type: "physical" },
+      { slug: "physical-training-120", title: "120 euro fysieke training", summary: "Loop training of functionele kracht training. Fysieke coaching op locatie in persoonlijke gym.", price: "EUR 120", type: "physical" },
     ],
     blog: [
       { slug: "trainingsleer-in-de-praktijk", title: "Trainingsleer in de praktijk", excerpt: "Hoe je schema, herstel en progressie slim combineert.", category: "Training", readTime: "6 min" },
@@ -371,8 +370,7 @@ export const topFitContent: Record<Locale, LocaleContent> = {
       { slug: "runningbook-pdf", title: "TopFit Runningbook PDF", summary: "The knowledge base for every subscriber and runner.", price: "Included", type: "digital" },
       { slug: "intake-call", title: "Personal intake", summary: "Kickoff call and assessment for the right plan.", price: "On request", type: "service" },
       { slug: "clinic-ticket", title: "Clinic ticket", summary: "Access to the monthly clinic day.", price: "EUR 125", type: "ticket" },
-      { slug: "energy-bars-pack", title: "Energy bars pack", summary: "Physical energy snacks for training, racing and on the go.", price: "From EUR 14.95", type: "physical" },
-      { slug: "recovery-shake", title: "Recovery shake", summary: "Recovery product for after intense sessions or long runs.", price: "From EUR 19.95", type: "physical" },
+      { slug: "physical-training-120", title: "EUR 120 physical training", summary: "Running training or functional strength training. In-person coaching at a private gym.", price: "EUR 120", type: "physical" },
     ],
     blog: [
       { slug: "training-principles-in-practice", title: "Training principles in practice", excerpt: "How to combine training, recovery and progression.", category: "Training", readTime: "6 min" },
@@ -458,8 +456,7 @@ export const topFitContent: Record<Locale, LocaleContent> = {
       { slug: "runningbook-pdf", title: "TopFit Runningbook PDF", summary: "The knowledge base for every subscriber and runner.", price: "Included", type: "digital" },
       { slug: "intake-call", title: "Personal intake", summary: "Kickoff call and assessment for the right plan.", price: "On request", type: "service" },
       { slug: "clinic-ticket", title: "Clinic ticket", summary: "Access to the monthly clinic day.", price: "EUR 125", type: "ticket" },
-      { slug: "energy-bars-pack", title: "Energy bars pack", summary: "Physical energy snacks for training, racing and on the go.", price: "From EUR 14.95", type: "physical" },
-      { slug: "recovery-shake", title: "Recovery shake", summary: "Recovery product for after intense sessions or long runs.", price: "From EUR 19.95", type: "physical" },
+      { slug: "physical-training-120", title: "EUR 120 physical training", summary: "Running training or functional strength training. In-person coaching at a private gym.", price: "EUR 120", type: "physical" },
     ],
     blog: [
       { slug: "training-principles-in-practice", title: "Training principles in practice", excerpt: "How to combine training, recovery and progression.", category: "Training", readTime: "6 min" },

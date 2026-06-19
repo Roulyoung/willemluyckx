@@ -21,9 +21,9 @@ export const topFitSiteConfig = {
   },
   contact: {
     email: "info@topfitrunning.com",
-    phoneDisplay: "+31 6 47 ** ** 54",
-    phoneHref: "",
-    whatsappHref: "/wa",
+    phoneDisplay: "+31 6 47264454",
+    phoneHref: "tel:+31647264454",
+    whatsappHref: "https://wa.me/31647264454",
     instagramUrl: "",
   },
   social: {

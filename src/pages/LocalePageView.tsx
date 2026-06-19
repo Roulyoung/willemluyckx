@@ -11,6 +11,7 @@ import { type Locale } from "@/lib/i18n";
 import { topFitSiteConfig } from "@/lib/siteConfig";
 import type { LocaleContent } from "@/lib/topfitContent";
 import { AboutWillemPage as AboutWillemPageSection } from "@/pages/localeSections";
+import { ContactPage } from "@/pages/ContactPage";
 import { BlogIndexPage, ClinicsPage, CoachingPage, MuktiPage, ShopPage, SubscriptionsPage, TechniquePage, TrainingPlansPage } from "@/pages/localeRoutePages";
 import { HomeHeroBackgroundSection } from "@/pages/HomeHeroBackgroundSection";
 
@@ -47,6 +48,10 @@ export const LocalePageView = ({
 
   if (section === "blog") {
     return <BlogIndexPage locale={locale} content={content} highlight={highlight} loaded={loaded} />;
+  }
+
+  if (section === "contact") {
+    return <ContactPage locale={locale} loaded={loaded} />;
   }
 
   return (
