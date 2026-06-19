@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { toast } from "sonner";
 import { type Locale } from "@/lib/i18n";
 import { topFitSiteConfig } from "@/lib/siteConfig";
 
@@ -17,12 +18,34 @@ export const ContactPage = ({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const subject = encodeURIComponent(locale === "en" ? "Contact request" : "Contactverzoek");
-    const body = encodeURIComponent(`Naam: ${name}\nEmail: ${email}\n\nBoodschap:\n${message}`);
-    window.location.href = `mailto:${topFitSiteConfig.contact.email}?subject=${subject}&body=${body}`;
+    setSubmitting(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, message, locale }),
+      });
+
+      if (!response.ok) {
+        throw new Error("contact submission failed");
+      }
+
+      setName("");
+      setEmail("");
+      setMessage("");
+      toast.success(locale === "en" ? "Message sent" : "Bericht verstuurd");
+    } catch {
+      toast.error(locale === "en" ? "Message could not be sent" : "Bericht kon niet worden verstuurd");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -96,13 +119,13 @@ export const ContactPage = ({
               />
             </div>
             <Button type="submit" variant="hero" size="lg" className="w-full">
-              {locale === "en" ? "Send message" : "Verstuur bericht"}
+              {submitting ? (locale === "en" ? "Sending..." : "Versturen...") : locale === "en" ? "Send message" : "Verstuur bericht"}
             </Button>
           </form>
           <p className="mt-4 text-sm leading-7 text-slate-500">
             {locale === "en"
-              ? "Or send a WhatsApp message to the number above."
-              : "Of stuur een WhatsApp-bericht naar het nummer hierboven."}
+              ? "Or use WhatsApp if you want a quicker reply."
+              : "Of gebruik WhatsApp als je sneller antwoord wilt."}
           </p>
         </CardContent>
       </Card>
