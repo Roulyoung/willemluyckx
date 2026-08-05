@@ -14,7 +14,7 @@ type ReviewSnapshot = {
 };
 
 const ADMIN_KEY_STORAGE = "topfit-review-admin-key";
-const ADMIN_CACHE_STORAGE = "topfit-review-admin-cache";
+const ADMIN_CACHE_STORAGE = "topfit-review-admin-cache-v2";
 const ADMIN_CACHE_TTL_MS = 60_000;
 
 type ReviewAdminCache = {
