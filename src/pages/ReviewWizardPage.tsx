@@ -1,12 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, Navigate, useLocation, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, CheckCircle2, ClipboardList, CircleDot, Copy, ExternalLink, Loader2, PlayCircle } from "lucide-react";
+import { Navigate, useLocation, useParams, useSearchParams } from "react-router-dom";
+import { ArrowLeft, ArrowRight, CheckCircle2, ClipboardList, CircleDot, Copy, ExternalLink, Loader2, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { type Locale } from "@/lib/i18n";
 import {
   createInitialDraft,
-  createNextRoundDraft,
   getStorageKey,
   REVIEW_PAGES,
   statusOptions,
@@ -29,39 +27,6 @@ const safeParseDraft = (raw: string | null, token: string): ReviewDraft | null =
     };
   } catch {
     return null;
-  }
-};
-
-const REVIEW_CACHE_STORAGE = "topfit-review-server-cache";
-const REVIEW_CACHE_TTL_MS = 60_000;
-
-type ReviewServerCache = {
-  savedAt: string;
-  token: string;
-  payload: string;
-};
-
-const readCachedServerDraft = (token: string) => {
-  try {
-    const raw = window.sessionStorage.getItem(REVIEW_CACHE_STORAGE);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as ReviewServerCache;
-    if (!parsed?.savedAt || parsed.token !== token || !parsed.payload) return null;
-    if (Date.now() - new Date(parsed.savedAt).getTime() > REVIEW_CACHE_TTL_MS) return null;
-    return safeParseDraft(parsed.payload, token);
-  } catch {
-    return null;
-  }
-};
-
-const writeCachedServerDraft = (token: string, payload: string) => {
-  try {
-    window.sessionStorage.setItem(
-      REVIEW_CACHE_STORAGE,
-      JSON.stringify({ savedAt: new Date().toISOString(), token, payload }),
-    );
-  } catch {
-    // ignore cache write failures
   }
 };
 
@@ -117,6 +82,10 @@ const ReviewWizardPage = () => {
   const [syncError, setSyncError] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const [storedDraftLoaded, setStoredDraftLoaded] = useState(false);
+  const saveTimerRef = useRef<number | null>(null);
+  const saveInFlightRef = useRef(false);
+  const pendingSaveRef = useRef(false);
+  const lastSavedSignatureRef = useRef("");
 
   useEffect(() => {
     if (!token) return;
@@ -134,18 +103,6 @@ const ReviewWizardPage = () => {
 
   useEffect(() => {
     if (!token) return;
-
-    const cachedDraft = readCachedServerDraft(token);
-    if (cachedDraft) {
-      setDraft((current) => {
-        if (!current) return cachedDraft;
-        if (!storedDraftLoaded) return cachedDraft;
-        return current.updatedAt > cachedDraft.updatedAt ? current : cachedDraft;
-      });
-      setHydrated(true);
-      return;
-    }
-
     let active = true;
     void fetch(`/api/review?token=${encodeURIComponent(token)}&version=${encodeURIComponent(requestedVersion)}`)
       .then(async (response) => {
@@ -153,7 +110,6 @@ const ReviewWizardPage = () => {
         if (response.ok && payload.ok && payload.latest?.payload && active) {
           const serverDraft = safeParseDraft(payload.latest.payload, token);
           if (serverDraft) {
-            writeCachedServerDraft(token, payload.latest.payload);
             setDraft((current) => {
               if (!current) return serverDraft;
               if (!storedDraftLoaded) return serverDraft;
@@ -176,33 +132,71 @@ const ReviewWizardPage = () => {
   useEffect(() => {
     if (!token || !draft || !hydrated) return;
 
-    const timer = window.setTimeout(() => {
-      setSaving(true);
-      setSyncError("");
-      void fetch("/api/review", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          ...draft,
-          token,
-          version: requestedVersion,
-          mode: "needs_review",
-        }),
-      })
-        .then(async (response) => {
+    const signature = JSON.stringify({
+      token,
+      version: requestedVersion,
+      currentPageIndex: draft.currentPageIndex,
+      completedPages: draft.completedPages,
+      pageStatuses: draft.pageStatuses,
+      sectionStatuses: draft.sectionStatuses,
+      notes: draft.notes,
+      mode: "needs_review",
+    });
+
+    if (signature === lastSavedSignatureRef.current) return;
+
+    if (saveTimerRef.current) {
+      window.clearTimeout(saveTimerRef.current);
+    }
+
+    saveTimerRef.current = window.setTimeout(() => {
+      const runSave = async () => {
+        if (saveInFlightRef.current) {
+          pendingSaveRef.current = true;
+          return;
+        }
+
+        saveInFlightRef.current = true;
+        setSaving(true);
+        setSyncError("");
+        try {
+          const response = await fetch("/api/review", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({
+              ...draft,
+              token,
+              version: requestedVersion,
+              mode: "needs_review",
+            }),
+          });
           const payload = (await response.json().catch(() => ({}))) as { ok?: boolean; error?: string };
           if (!response.ok || !payload.ok) {
             throw new Error(payload.error || "Save failed");
           }
-        })
-        .catch(() => {
+          lastSavedSignatureRef.current = signature;
+        } catch {
           setSyncError("Autosave failed. Your changes are still in the browser draft.");
-        })
-        .finally(() => setSaving(false));
-    }, 500);
+        } finally {
+          saveInFlightRef.current = false;
+          setSaving(false);
+          if (pendingSaveRef.current) {
+            pendingSaveRef.current = false;
+            void runSave();
+          }
+        }
+      };
 
-    return () => window.clearTimeout(timer);
-  }, [draft, requestedVersion, token]);
+      void runSave();
+    }, 800);
+
+    return () => {
+      if (saveTimerRef.current) {
+        window.clearTimeout(saveTimerRef.current);
+        saveTimerRef.current = null;
+      }
+    };
+  }, [draft, hydrated, requestedVersion, token]);
 
   const currentPage = useMemo(() => {
     if (!draft) return REVIEW_PAGES[0];
@@ -318,7 +312,7 @@ const ReviewWizardPage = () => {
 
   const goNext = () => {
     if (isLastPage) {
-      window.location.href = `/review/${token}/summary`;
+      window.location.href = `/review/${token}/summary?version=${encodeURIComponent(requestedVersion)}`;
       return;
     }
     completePage();

@@ -31,6 +31,11 @@ const isAdminListRequest = (request: Request) => {
   return request.method === "GET" && !url.searchParams.get("token");
 };
 
+const normalizeVersion = (version?: unknown) => {
+  const value = String(version ?? "").trim();
+  return value || "V1";
+};
+
 const makeReviewKey = (token: string, version: string) => `${token}::${version}`;
 
 const readJson = async (request: Request): Promise<ReviewDraftPayload> => {
@@ -126,92 +131,23 @@ const appendRows = async (accessToken: string, range: string, values: string[][]
   return payload;
 };
 
-const clearRange = async (accessToken: string, range: string) => {
+const fetchRows = async (accessToken: string, range: string) => {
   const response = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}:clear`,
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}`,
     {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({}),
+      headers: { Authorization: `Bearer ${accessToken}` },
     },
   );
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(`Google Sheets API request failed (${response.status}) on clear ${range}: ${JSON.stringify(payload)}`);
+    throw new Error(`Google Sheets API request failed (${response.status}) on read ${range}: ${JSON.stringify(payload)}`);
   }
-  return payload;
+  return Array.isArray(payload.values) ? (payload.values as string[][]) : [];
 };
-
-const writeRows = async (accessToken: string, range: string, values: string[][]) => {
-  const response = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?valueInputOption=USER_ENTERED`,
-    {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ values }),
-    },
-  );
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    throw new Error(`Google Sheets API request failed (${response.status}) on write ${range}: ${JSON.stringify(payload)}`);
-  }
-  return payload;
-};
-
-const appendReviewSnapshot = async (accessToken: string, payload: ReviewDraftPayload) => {
-  const reviewHeader = ["token", "version", "current_page_index", "updated_at", "status", "payload_json"];
-  const itemHeader = ["token", "version", "item_type", "page_key", "section_key", "status", "note", "current_page_index", "updated_at"];
-  const approvalHeader = ["token", "version", "approved_at", "status"];
-  const reviewRows = [[
-    String(payload.token ?? "").trim(),
-    String(payload.version ?? "V1"),
-    String(Number(payload.currentPageIndex ?? 0)),
-    String(payload.updatedAt ?? new Date().toISOString()),
-    String(payload.mode ?? "needs_review"),
-    JSON.stringify({
-      token: String(payload.token ?? "").trim(),
-      version: String(payload.version ?? "V1"),
-      currentPageIndex: Number(payload.currentPageIndex ?? 0),
-      completedPages: payload.completedPages ?? {},
-      pageStatuses: payload.pageStatuses ?? {},
-      sectionStatuses: payload.sectionStatuses ?? {},
-      notes: payload.notes ?? {},
-      updatedAt: String(payload.updatedAt ?? new Date().toISOString()),
-    }),
-  ]];
-
-  const itemRows = buildItemRows(payload);
-  await appendRows(accessToken, REVIEW_RANGE, reviewRows);
-  await appendRows(accessToken, REVIEW_ITEMS_RANGE, itemRows);
-
-  if (String(payload.mode ?? "") === "final_approved") {
-    await appendRows(accessToken, REVIEW_APPROVALS_RANGE, [[
-      String(payload.token ?? "").trim(),
-      String(payload.version ?? "V1"),
-      String(payload.updatedAt ?? new Date().toISOString()),
-      "approved",
-    ]]);
-  }
-};
-
-const rowToSnapshot = (row: string[]) => ({
-  token: row[0] ?? "",
-  version: row[1] ?? "V1",
-  currentPageIndex: Number(row[2] ?? 0),
-  updatedAt: row[3] ?? "",
-  status: row[4] ?? "needs_review",
-  payload: row[5] ?? "",
-});
 
 const buildItemRows = (payload: ReviewDraftPayload) => {
   const token = String(payload.token ?? "").trim();
-  const version = String(payload.version ?? "V1");
+  const version = normalizeVersion(payload.version);
   const currentPageIndex = String(Number(payload.currentPageIndex ?? 0));
   const updatedAt = String(payload.updatedAt ?? new Date().toISOString());
   const pageStatuses = (payload.pageStatuses ?? {}) as Record<string, unknown>;
@@ -248,6 +184,49 @@ const buildItemRows = (payload: ReviewDraftPayload) => {
   return [...pageRows, ...sectionRows];
 };
 
+const appendReviewSnapshot = async (accessToken: string, payload: ReviewDraftPayload) => {
+  const token = String(payload.token ?? "").trim();
+  const version = normalizeVersion(payload.version);
+  const reviewRows = [[
+    token,
+    version,
+    String(Number(payload.currentPageIndex ?? 0)),
+    String(payload.updatedAt ?? new Date().toISOString()),
+    String(payload.mode ?? "needs_review"),
+    JSON.stringify({
+      token,
+      version,
+      currentPageIndex: Number(payload.currentPageIndex ?? 0),
+      completedPages: payload.completedPages ?? {},
+      pageStatuses: payload.pageStatuses ?? {},
+      sectionStatuses: payload.sectionStatuses ?? {},
+      notes: payload.notes ?? {},
+      updatedAt: String(payload.updatedAt ?? new Date().toISOString()),
+    }),
+  ]];
+
+  await appendRows(accessToken, REVIEW_RANGE, reviewRows);
+  await appendRows(accessToken, REVIEW_ITEMS_RANGE, buildItemRows(payload));
+
+  if (String(payload.mode ?? "") === "final_approved") {
+    await appendRows(accessToken, REVIEW_APPROVALS_RANGE, [[
+      token,
+      version,
+      String(payload.updatedAt ?? new Date().toISOString()),
+      "approved",
+    ]]);
+  }
+};
+
+const rowToSnapshot = (row: string[]) => ({
+  token: row[0] ?? "",
+  version: row[1] ?? "V1",
+  currentPageIndex: Number(row[2] ?? 0),
+  updatedAt: row[3] ?? "",
+  status: row[4] ?? "needs_review",
+  payload: row[5] ?? "",
+});
+
 export const onRequestGet: PagesFunction = async ({ request, env }) => {
   const envRecord = env as Record<string, unknown>;
   if (isAdminListRequest(request) && !isAuthorized(request, envRecord)) {
@@ -256,40 +235,35 @@ export const onRequestGet: PagesFunction = async ({ request, env }) => {
 
   const url = new URL(request.url);
   const token = String(url.searchParams.get("token") ?? "").trim();
-  const version = String(url.searchParams.get("version") ?? "").trim();
+  const versionParam = String(url.searchParams.get("version") ?? "").trim();
   const serviceAccount = parseServiceAccount(envRecord);
   if (!serviceAccount?.client_email || !serviceAccount.private_key) {
     return Response.json({ ok: false, error: "Missing Google service account secret." }, { status: 503 });
   }
 
-  const accessToken = await getAccessToken(serviceAccount);
-  const response = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(REVIEW_RANGE)}`,
-    {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    },
-  );
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    return Response.json({ ok: false, error: `Google Sheets API request failed (${response.status}): ${JSON.stringify(payload)}` }, { status: 500 });
+  let rows: string[][];
+  try {
+    const accessToken = await getAccessToken(serviceAccount);
+    rows = await fetchRows(accessToken, REVIEW_RANGE);
+  } catch (error) {
+    return Response.json({ ok: false, error: error instanceof Error ? error.message : "Sheets read failed" }, { status: 500 });
   }
 
-  const rows = Array.isArray(payload.values) ? (payload.values as string[][]) : [];
   const snapshots = rows.slice(1).map(rowToSnapshot).filter((snapshot) => Boolean(snapshot.token));
 
   if (token) {
-    const filtered = snapshots.filter((snapshot) => snapshot.token === token && (!version || snapshot.version === version));
+    const filtered = snapshots.filter((snapshot) => snapshot.token === token && (!versionParam || snapshot.version === versionParam));
     const latest = filtered[filtered.length - 1] ?? null;
     return Response.json({ ok: true, latest }, { headers: { "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" } });
   }
 
-  const latestByToken = new Map<string, ReturnType<typeof rowToSnapshot>>();
+  const latestByRound = new Map<string, ReturnType<typeof rowToSnapshot>>();
   for (const snapshot of snapshots) {
-    latestByToken.set(makeReviewKey(snapshot.token, snapshot.version), snapshot);
+    latestByRound.set(makeReviewKey(snapshot.token, snapshot.version), snapshot);
   }
 
   return Response.json(
-    { ok: true, items: Array.from(latestByToken.values()) },
+    { ok: true, items: Array.from(latestByRound.values()) },
     { headers: { "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" } },
   );
 };
@@ -307,8 +281,8 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
     return Response.json({ ok: false, error: "Missing Google service account secret." }, { status: 503 });
   }
 
-  const accessToken = await getAccessToken(serviceAccount);
   try {
+    const accessToken = await getAccessToken(serviceAccount);
     await appendReviewSnapshot(accessToken, payload);
   } catch (error) {
     return Response.json({ ok: false, error: error instanceof Error ? error.message : "Sheets append failed" }, { status: 500 });
@@ -319,7 +293,7 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
       ok: true,
       snapshot: {
         token,
-        version: String(payload.version ?? "V1"),
+        version: normalizeVersion(payload.version),
         currentPageIndex: Number(payload.currentPageIndex ?? 0),
         updatedAt: String(payload.updatedAt ?? new Date().toISOString()),
         status: String(payload.mode ?? "needs_review"),

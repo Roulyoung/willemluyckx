@@ -4,7 +4,6 @@ import { CheckCircle2, ClipboardList, Loader2, LockKeyhole, RefreshCw, Copy, Cir
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { incrementReviewVersion } from "@/lib/reviewFlow";
-
 type ReviewSnapshot = {
   token: string;
   version: string;
@@ -272,13 +271,18 @@ const ReviewAdminPage = () => {
                     <div className="rounded-2xl bg-slate-50 p-4">
                       <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Action</div>
                       <div className="mt-2 flex flex-col gap-2">
-                        <Link className="text-sm font-semibold text-blue-700 hover:underline" to={`/review/${item.token}/summary?version=${encodeURIComponent(item.version)}`}>
+                        <Link
+                          className="text-sm font-semibold text-blue-700 hover:underline"
+                          to={`/review/${item.token}/summary?version=${encodeURIComponent(item.version)}`}
+                        >
                           Open summary
                         </Link>
                         <button
                           type="button"
                           className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:underline"
-                          onClick={() => void copyText(`${window.location.origin}/review/${item.token}/summary?version=${encodeURIComponent(item.version)}`)}
+                          onClick={() =>
+                            void copyText(`${window.location.origin}/review/${item.token}/summary?version=${encodeURIComponent(item.version)}`)
+                          }
                         >
                           <Copy className="h-3.5 w-3.5" />
                           Copy summary link
