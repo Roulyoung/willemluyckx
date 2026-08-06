@@ -56,8 +56,8 @@ export const AboutWillemPage = ({
 
   const profilePoints =
     locale === "en"
-      ? ["Former Israeli champion", "Track and road background", "Working from the Leiden area", "40+ years of experience"]
-      : ["Voormalig Israëlisch kampioen", "Ervaring op baan en weg", "Werkzaam vanuit omgeving Leiden", "40+ jaar ervaring"];
+      ? ["Former national 800m champion", "Trained internationally with world-class athletes", "Working from the Leiden area", "40+ years of experience"]
+      : ["Voormalig nationaal 800m kampioen", "Internationaal getraind met wereldtop", "Werkzaam vanuit omgeving Leiden", "40+ jaar ervaring"];
 
   const focusCards =
     locale === "en"
@@ -156,7 +156,11 @@ export const AboutWillemPage = ({
             <Card className="overflow-hidden border-slate-200 bg-white shadow-[0_30px_80px_rgba(13,46,102,0.16)]">
               <CardContent className="p-0">
                 <div className="relative min-h-[24rem]">
-                  <img src={portraitImage} alt="Willem portrait" className="h-full w-full object-cover object-[center_18%] md:object-[center_14%]" />
+                  <img
+                    src={portraitImage}
+                    alt="Willem portrait"
+                    className="absolute inset-0 h-full w-full object-cover object-[center_18%] md:object-[center_14%]"
+                  />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(8,26,58,0.26)_100%)]" />
                   <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-blue-700 shadow-sm">
                     {locale === "en" ? "Portrait" : "Portret"}
@@ -184,7 +188,11 @@ export const AboutWillemPage = ({
               <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
                 <CardContent className="p-0">
                   <div className="relative min-h-[12rem]">
-                    <img src={darkRunImage} alt="Willem running in the dark" className="h-full w-full object-cover object-[center_22%]" />
+                    <img
+                      src={darkRunImage}
+                      alt="Willem running in the dark"
+                      className="absolute inset-0 h-full w-full object-cover object-[center_22%]"
+                    />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,26,58,0.1)_0%,rgba(8,26,58,0.72)_100%)]" />
                     <div className="absolute bottom-4 left-4 right-4 text-white">
                       <div className="text-[10px] font-semibold uppercase tracking-[0.35em] text-blue-200">{locale === "en" ? "Training background" : "Trainingsachtergrond"}</div>
@@ -198,7 +206,11 @@ export const AboutWillemPage = ({
               <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
                 <CardContent className="p-0">
                   <div className="relative min-h-[12rem]">
-                    <img src={runningImage} alt="Willem running" className="h-full w-full object-cover object-[center_28%]" />
+                    <img
+                      src={runningImage}
+                      alt="Willem running"
+                      className="absolute inset-0 h-full w-full object-cover object-[center_28%]"
+                    />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(8,26,58,0.34)_100%)]" />
                     <div className="absolute bottom-4 left-4 right-4">
                       <div className="text-[10px] font-semibold uppercase tracking-[0.35em] text-blue-100">{locale === "en" ? "Running style" : "Loopstijl"}</div>
@@ -375,7 +387,11 @@ export const AboutWillemPage = ({
               <Button variant="hero" asChild>
                 <Link to={`/${locale}/contact`}>{locale === "en" ? "Contact" : "Contact"}</Link>
               </Button>
-              <Button variant="heroOutline" asChild>
+              <Button
+                variant="heroOutline"
+                className="border-white/30 bg-white text-slate-950 hover:bg-slate-100 hover:text-slate-950"
+                asChild
+              >
                 <Link to={plansHref}>{locale === "en" ? "Training plans" : "Trainingsschema's"}</Link>
               </Button>
             </div>
