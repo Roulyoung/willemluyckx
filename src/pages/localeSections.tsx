@@ -56,8 +56,8 @@ export const AboutWillemPage = ({
 
   const profilePoints =
     locale === "en"
-      ? ["Former Israeli champion", "Trained in Iten, Kenya", "Based in Amsterdam", "40+ years of experience"]
-      : ["Voormalig Israëlisch kampioen", "Getraind in Iten, Kenia", "Werkzaam vanuit Amsterdam", "40+ jaar ervaring"];
+      ? ["Former Israeli champion", "Track and road background", "Working from the Leiden area", "40+ years of experience"]
+      : ["Voormalig Israëlisch kampioen", "Ervaring op baan en weg", "Werkzaam vanuit omgeving Leiden", "40+ jaar ervaring"];
 
   const focusCards =
     locale === "en"
@@ -156,7 +156,7 @@ export const AboutWillemPage = ({
             <Card className="overflow-hidden border-slate-200 bg-white shadow-[0_30px_80px_rgba(13,46,102,0.16)]">
               <CardContent className="p-0">
                 <div className="relative min-h-[24rem]">
-                  <img src={portraitImage} alt="Willem portrait" className="h-full w-full object-cover" />
+                  <img src={portraitImage} alt="Willem portrait" className="h-full w-full object-cover object-[center_18%] md:object-[center_14%]" />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(8,26,58,0.26)_100%)]" />
                   <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-blue-700 shadow-sm">
                     {locale === "en" ? "Portrait" : "Portret"}
@@ -184,11 +184,13 @@ export const AboutWillemPage = ({
               <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
                 <CardContent className="p-0">
                   <div className="relative min-h-[12rem]">
-                    <img src={darkRunImage} alt="Willem running in the dark" className="h-full w-full object-cover object-[center_30%]" />
+                    <img src={darkRunImage} alt="Willem running in the dark" className="h-full w-full object-cover object-[center_22%]" />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,26,58,0.1)_0%,rgba(8,26,58,0.72)_100%)]" />
                     <div className="absolute bottom-4 left-4 right-4 text-white">
                       <div className="text-[10px] font-semibold uppercase tracking-[0.35em] text-blue-200">{locale === "en" ? "Training background" : "Trainingsachtergrond"}</div>
-                      <div className="mt-2 text-lg font-black uppercase tracking-[0.04em]">Iten, Kenya</div>
+                      <div className="mt-2 text-lg font-black uppercase tracking-[0.04em]">
+                        {locale === "en" ? "Leiden area" : "Omgeving Leiden"}
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -196,7 +198,7 @@ export const AboutWillemPage = ({
               <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
                 <CardContent className="p-0">
                   <div className="relative min-h-[12rem]">
-                    <img src={runningImage} alt="Willem running" className="h-full w-full object-cover" />
+                    <img src={runningImage} alt="Willem running" className="h-full w-full object-cover object-[center_28%]" />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(8,26,58,0.34)_100%)]" />
                     <div className="absolute bottom-4 left-4 right-4">
                       <div className="text-[10px] font-semibold uppercase tracking-[0.35em] text-blue-100">{locale === "en" ? "Running style" : "Loopstijl"}</div>
@@ -337,14 +339,14 @@ export const AboutWillemPage = ({
                   className="h-[36rem] w-full bg-white"
                 />
               </div>
-              <div className="flex flex-wrap gap-3">
-                <Button variant="hero" asChild>
+              <div className="flex flex-wrap gap-4">
+                <Button variant="minimal" size="sm" asChild>
                   <a href={runnersworldPdfHref} target="_blank" rel="noreferrer">
                     <ExternalLink className="h-4 w-4" />
                     {locale === "en" ? "Open PDF" : "Open PDF"}
                   </a>
                 </Button>
-                <Button variant="heroOutline" asChild>
+                <Button variant="minimal" size="sm" asChild>
                   <a href={runnersworldPdfHref} download>
                     <FileText className="h-4 w-4" />
                     {locale === "en" ? "Download PDF" : "Download PDF"}
