@@ -70,7 +70,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-muted-foreground text-sm">
-            &copy; {new Date().getFullYear()} Willem Luyckx. {footerContent.rightsText}
+            &copy; {new Date().getFullYear()} TopFit Running. {footerContent.rightsText}
           </p>
           <p className="text-muted-foreground text-xs uppercase tracking-widest">
             {footerContent.tagline}

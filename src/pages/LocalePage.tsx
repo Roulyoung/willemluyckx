@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -8,24 +8,39 @@ import { getLocaleContent, type LocaleContent } from "@/lib/topfitContent";
 import { loadTopfitContent } from "@/lib/topfitRemote";
 import { LocalePageView } from "./LocalePageView";
 import { BlogArticle as LocaleBlogArticle } from "@/pages/localeSections";
+import { propositionOffers } from "@/lib/proposition";
 const pageTitleMap: Record<string, string> = {
   home: "Home",
-  "over-willem": "Over Willem",
-  about: "Over Willem",
-  abonnementen: "Abonnementen",
-  subscriptions: "Subscriptions",
+  "over-willem": "Over Willem Luijckx",
+  about: "About Willem Luijckx",
+  abonnementen: "Aanbod",
+  aanbod: "Aanbod",
+  offers: "Offers",
+  lezingen: "Lezingen",
+  talks: "Talks",
+  subscriptions: "Offers",
+  hardloopkalender: "Hardloopkalender",
+  "running-calendar": "Running calendar",
+  "fysieke-coaching": "Fysieke coaching",
+  "physical-coaching": "Physical coaching",
   trainingsschemas: "Trainingsschema's",
   "training-plans": "Training plans",
   looptechniek: "Looptechniek",
   "running-technique": "Running technique",
   "mukti-running": "Mukti Running",
-  "clinics-en-trainingskampen": "Clinics & trainingskampen",
-  "clinics-and-training-camps": "Clinics & training camps",
+  clinics: "Clinics",
+  trainingskampen: "Trainingskampen",
+  trainingkamp: "Trainingskampen",
+  "training-camps": "Training camps",
   "online-coaching": "Online coaching",
   coaching: "Online coaching",
   contact: "Contact",
   shop: "Shop",
   blog: "Blog",
+};
+
+const sectionAliases: Record<string, string> = {
+  trainingkamp: "trainingskampen",
 };
 
 const LocalePage = () => {
@@ -56,25 +71,35 @@ const LocalePage = () => {
   }, [fallbackContent, locale]);
 
   const parts = location.pathname.split("/").filter(Boolean);
-  const section = parts[1] ?? "home";
+  const rawSection = parts[1] ?? "home";
+  const section = sectionAliases[rawSection] ?? rawSection;
   const slug = parts[2];
 
+  const hashTarget = useMemo(() => {
+    const rawHash = location.hash?.replace(/^#/, "").trim();
+    return rawHash || "";
+  }, [location.hash]);
+
   useEffect(() => {
-    const routeKey = slug ? "blog" : section;
+    const routeKey = section === "blog" && slug ? "blog" : section;
     const sectionTitle = pageTitleMap[routeKey] ?? pageTitleMap.home;
-    const blogPost = slug ? content.blog.find((entry) => entry.slug === slug) : undefined;
+    const blogPost = section === "blog" && slug ? content.blog.find((entry) => entry.slug === slug) : undefined;
+    const offer = (section === "aanbod" || section === "offers") && slug
+      ? propositionOffers(locale).find(entry => entry.slug === slug)
+      : undefined;
     const descriptionSource =
       routeKey === "blog" && slug
         ? blogPost?.excerpt ?? content.pageHighlights.blog.intro
         : content.pageHighlights[section] ?? content.pageHighlights[routeKey] ?? content.pageHighlights.home;
 
-    const title =
-      routeKey === "home"
-        ? `${topFitSiteConfig.brandName} | ${topFitSiteConfig.slogan}`
+    const title = offer
+      ? `${offer.title} | ${offer.price} | ${topFitSiteConfig.brandName}`
+      : routeKey === "home"
+          ? `${topFitSiteConfig.brandName} | ${topFitSiteConfig.slogan}`
         : routeKey === "blog" && blogPost
           ? `${blogPost.title} | ${sectionTitle} | ${topFitSiteConfig.brandName}`
           : `${sectionTitle} | ${topFitSiteConfig.brandName}`;
-    const description = typeof descriptionSource === "string" ? descriptionSource : descriptionSource.intro || content.hero.lead;
+    const description = offer?.summary ?? (typeof descriptionSource === "string" ? descriptionSource : descriptionSource.intro || content.hero.lead);
 
     document.title = title;
 
@@ -90,7 +115,20 @@ const LocalePage = () => {
     setMeta('meta[property="og:description"]', description);
     setMeta('meta[name="twitter:title"]', title);
     setMeta('meta[name="twitter:description"]', description);
-  }, [content, section, slug]);
+  }, [content, locale, section, slug]);
+
+  useEffect(() => {
+    if (!loaded || !hashTarget) return;
+
+    const target = document.getElementById(hashTarget);
+    if (!target) return;
+
+    const timer = window.setTimeout(() => {
+      target.scrollIntoView({ block: "start", inline: "nearest", behavior: "auto" });
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [hashTarget, loaded, location.pathname, location.search, section, slug, content]);
 
   if (!isLocale(params.locale)) {
     return <Navigate to="/nl" replace />;
@@ -106,7 +144,7 @@ const LocalePage = () => {
         {section === "blog" && slug ? (
           <LocaleBlogArticle locale={locale} slug={slug} />
         ) : (
-          <LocalePageView locale={locale} section={section} content={content} loaded={loaded} />
+          <LocalePageView locale={locale} section={section} slug={slug} content={content} loaded={loaded} />
         )}
       </main>
       <SiteFooter locale={locale} content={content} />

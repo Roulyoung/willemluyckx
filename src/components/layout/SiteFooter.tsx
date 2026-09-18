@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { topFitSiteConfig } from "@/lib/siteConfig";
 import type { Locale } from "@/lib/i18n";
 import type { LocaleContent } from "@/lib/topfitContent";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 type SiteFooterProps = {
   locale: Locale;
@@ -10,10 +11,11 @@ type SiteFooterProps = {
 };
 
 export const SiteFooter = ({ locale, content }: SiteFooterProps) => {
-  const menuItems = content.menu.slice(0, 3);
+  const menuItems = content.menu;
 
   return (
     <footer className="border-t border-slate-200 bg-white">
+      <div className="mx-auto max-w-3xl px-5 pt-12 md:px-8"><NewsletterSignup locale={locale} /></div>
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:px-8 lg:grid-cols-3">
         <div>
           <div className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">{content.footer.title}</div>

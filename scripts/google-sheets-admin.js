@@ -164,10 +164,60 @@ const TOPFIT_TABS = {
     "seo_description_en",
     "seo_description_he",
   ],
+  Hardloopwedstrijden: [
+    "race_id",
+    "slug_nl",
+    "slug_en",
+    "slug_he",
+    "title_nl",
+    "title_en",
+    "title_he",
+    "location_nl",
+    "location_en",
+    "location_he",
+    "country_nl",
+    "country_en",
+    "country_he",
+    "date",
+    "distance_km",
+    "elevation_m",
+    "surface_nl",
+    "surface_en",
+    "surface_he",
+    "level_nl",
+    "level_en",
+    "level_he",
+    "website_url",
+    "registration_url",
+    "contact_url",
+    "featured",
+    "active",
+  ],
   Testimonials: ["testimonial_id", "quote_nl", "quote_en", "quote_he", "name", "role", "image_id", "active"],
   FAQ: ["faq_id", "question_nl", "question_en", "question_he", "answer_nl", "answer_en", "answer_he", "section_key", "sort_order", "active"],
   Media: ["media_id", "file_name", "file_type", "asset_type", "url", "alt_nl", "alt_en", "alt_he", "credit", "active"],
   Leads: ["lead_id", "created_at", "source", "name", "email", "phone", "locale", "interest_type", "message", "status", "notes"],
+};
+
+const REVIEW_TABS = {
+  ReviewRounds: ["token", "version", "current_page_index", "updated_at", "status", "payload_json"],
+  ReviewItems: [
+    "token",
+    "version",
+    "item_type",
+    "page_key",
+    "section_key",
+    "status",
+    "note",
+    "current_page_index",
+    "updated_at",
+  ],
+  ReviewApprovals: ["token", "version", "approved_at", "status"],
+};
+
+const ALL_BOOTSTRAP_TABS = {
+  ...TOPFIT_TABS,
+  ...REVIEW_TABS,
 };
 
 const TOPFIT_SEED_ROWS = {
@@ -565,6 +615,21 @@ const TOPFIT_SEED_ROWS = {
       true,
     ],
   ],
+  Intake: [
+    "name",
+    "email",
+    "phone",
+    "goal",
+    "race_distance",
+    "weekly_volume",
+    "main_challenge",
+    "injuries",
+    "support_type",
+    "runs_per_week",
+    "timeline",
+    "coaching_preference",
+    "extra_notes",
+  ],
   BlogCategories: [
     ["training", "Training", "Training", "אימון", 1, true],
     ["technique", "Techniek", "Technique", "טכניקה", 2, true],
@@ -703,7 +768,7 @@ async function bootstrapTopfit(token) {
   );
   const existingTabs = new Set((sheetMeta.sheets || []).map((sheet) => sheet.properties?.title));
   const requests = [];
-  for (const tab of Object.keys(TOPFIT_TABS)) {
+  for (const tab of Object.keys(ALL_BOOTSTRAP_TABS)) {
     if (!existingTabs.has(tab)) {
       requests.push({ addSheet: { properties: { title: tab } } });
     }
@@ -720,7 +785,7 @@ async function bootstrapTopfit(token) {
     );
   }
 
-  for (const [tab, headers] of Object.entries(TOPFIT_TABS)) {
+  for (const [tab, headers] of Object.entries(ALL_BOOTSTRAP_TABS)) {
     await requestJson(
       `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${tab}!A1`)}?valueInputOption=USER_ENTERED`,
       token,
@@ -731,7 +796,7 @@ async function bootstrapTopfit(token) {
     );
   }
 
-  console.log(`Bootstrapped ${Object.keys(TOPFIT_TABS).length} tabs and header rows.`);
+  console.log(`Bootstrapped ${Object.keys(ALL_BOOTSTRAP_TABS).length} tabs and header rows.`);
 }
 
 async function seedTopfit(token) {

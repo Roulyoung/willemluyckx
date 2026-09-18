@@ -1,3 +1,4 @@
+import { offerPath } from "@/lib/proposition";
 import { MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,14 +10,14 @@ import type { LocaleContent } from "@/lib/topfitContent";
 type HomeHeroBackgroundSectionProps = {
   locale: Locale;
   content: LocaleContent;
-  planHref: string;
+  subscriptionsHref: string;
   loaded: boolean;
 };
 
-export const HomeHeroBackgroundSection = ({ locale, content, planHref, loaded }: HomeHeroBackgroundSectionProps) => {
+export const HomeHeroBackgroundSection = ({ locale, content, subscriptionsHref, loaded }: HomeHeroBackgroundSectionProps) => {
   return (
     <section className={`w-full px-0 pb-10 pt-0 md:pb-12 ${loaded ? "animate-fade-up" : "animate-fade-up"}`}>
-      <div className="relative min-h-[88vh] overflow-hidden bg-slate-950 text-white shadow-[0_30px_80px_rgba(13,46,102,0.2)] md:min-h-[92vh]">
+      <div id="hero" className="relative min-h-[88vh] overflow-hidden bg-slate-950 text-white shadow-[0_30px_80px_rgba(13,46,102,0.2)] md:min-h-[92vh]">
         <img
           src={darkRunImage}
           alt="Willem running in the dark"
@@ -36,22 +37,22 @@ export const HomeHeroBackgroundSection = ({ locale, content, planHref, loaded }:
               <p className="max-w-2xl text-lg leading-8 text-slate-100 md:text-xl">{content.hero.lead}</p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button variant="hero" size="lg" asChild>
-                <Link to={`/${locale}/contact`}>{content.hero.primaryCta}</Link>
+              <Button variant="hero" size="lg" className="h-auto min-h-14 whitespace-normal px-6 text-center" asChild>
+                <Link to={offerPath(locale, "schema")}>{content.hero.primaryCta}</Link>
               </Button>
               <Button
                 variant="outline"
                 size="lg"
                 asChild
-                className="border-white/35 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
+                className="h-auto min-h-14 whitespace-normal border-white/35 bg-white/10 px-6 text-center text-white hover:border-white hover:bg-white/20 hover:text-white"
               >
-                <Link to={planHref}>{content.hero.secondaryCta}</Link>
+                <Link to={subscriptionsHref}>{content.hero.secondaryCta}</Link>
               </Button>
               <Button
                 variant="outline"
                 size="lg"
                 asChild
-                className="border-white/35 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
+                className="h-auto min-h-14 whitespace-normal border-white/35 bg-white/10 px-6 text-center text-white hover:border-white hover:bg-white/20 hover:text-white"
               >
                 <a href={topFitSiteConfig.contact.whatsappHref} target="_blank" rel="noreferrer">
                   <MessageCircle className="h-4 w-4" />
@@ -61,8 +62,8 @@ export const HomeHeroBackgroundSection = ({ locale, content, planHref, loaded }:
             </div>
             <p className="max-w-2xl text-sm leading-7 text-slate-200">
               {locale === "nl"
-                ? "Gezondheid eerst, prestaties als gevolg."
-                : "Health first, performance as a result."}
+                ? "Niet méér trainen, maar beter trainen."
+                : "Train better, not just more."}
             </p>
           </div>
         </div>

@@ -1,209 +1,164 @@
 export const navigationContent = {
-  brandMain: "WILLEM",
-  brandLast: "LUYCKX",
+  brandMain: "TOPFIT",
+  brandLast: "RUNNING",
   links: [
     { name: "Methodiek", href: "#methodiek" },
-    { name: "Programmas", href: "#programmas" },
-    { name: "Over Willem", href: "#about" },
+    { name: "Programma's", href: "#programmas" },
+    { name: "Over TopFit", href: "#about" },
     { name: "Contact", href: "#contact" },
   ],
-  ctaLabel: "Gratis Check",
+  ctaLabel: "Plan je intake",
 };
 
 export const heroContent = {
-  subtitle: "Hardloopcoach - Voormalig Kampioen",
+  subtitle: "Hardloopcoach voor runners die verder willen",
   headline: {
-    line1: "TRAIN MET DE KENNIS",
-    highlight: "VAN DE WERELDTOP",
+    line1: "TRAIN MET",
+    highlight: "RUST EN RICHTING",
   },
   description:
-    "Loop je sterkste PR ooit. Ontdek de trainingsmethodes van Iten, Kenia - nu beschikbaar voor de Nederlandse loper.",
-  primaryCta: { label: "Bekijk Programmas", href: "#programmas" },
-  secondaryCta: { label: "Over Willem", href: "#about" },
+    "TopFit Running brengt begeleiding, techniek en structuur samen voor lopers die progressie willen zonder ruis.",
+  primaryCta: { label: "Bekijk programma's", href: "#programmas" },
+  secondaryCta: { label: "Over TopFit", href: "#about" },
   scrollTarget: "#proof",
 };
 
 export const proofContent = {
-  quotePrefix:
-    "IN HET VONDELPARK BEN IK VOOR VELEN GEWOON WILLEM DE TRAINER, MAAR IK HEB DE STOFPADEN VAN ITEN",
-  quoteHighlight: "GEDEELD MET DE SNELSTEN TER WERELD.",
+  quotePrefix: "TOPFIT RUNNING STOPT NIET BIJ EEN SCHEMA",
+  quoteHighlight: "MAAR BOUWT AAN EEN WERKELIJK SYSTEEM.",
   quoteAuthor: "Willem Luyckx",
   credentials: [
-    {
-      icon: "Trophy",
-      title: "Israelisch Kampioen",
-      description: "3000m Steeple & 5000m",
-    },
-    {
-      icon: "MapPin",
-      title: "Getraind in Iten",
-      description: "Het mekka van het hardlopen",
-    },
-    {
-      icon: "Timer",
-      title: "14:03 op 5.000m",
-      description: "Persoonlijk record",
-    },
-    {
-      icon: "Medal",
-      title: "29:30 op 10.000m",
-      description: "Bewezen prestaties",
-    },
+    { icon: "Trophy", title: "Ervaren coach", description: "Meer dan 40 jaar in de sport" },
+    { icon: "MapPin", title: "Gebaseerd in Amsterdam", description: "Werk in Nederland en daarbuiten" },
+    { icon: "Timer", title: "Praktisch en direct", description: "Heldere feedback, weinig ruis" },
+    { icon: "Medal", title: "TopFit methodiek", description: "Structuur, techniek en herstel" },
   ],
 };
 
 export const methodContent = {
-  label: "De Keniaanse Methodiek",
+  label: "De TopFit Methodiek",
   heading: {
-    line1: "GEHEIMEN VAN DE",
-    highlight: "AFRIKAANSE TOPLOPERS",
+    line1: "GEBOUWD OP",
+    highlight: "STRUCTUUR",
   },
   description:
-    "Ik breng de geheimen van de Afrikaanse toplopers naar de nuchtere Nederlandse loper. Geen mystiek, wel bewezen methodes.",
-  imageBadge: { value: "14:03", label: "5.000m PR" },
+    "De methode is nuchter: eerst begrijpen, dan opbouwen, daarna pas harder. Presteren blijft wel het doel.",
+  imageBadge: { value: "TopFit", label: "coachingsysteem" },
   principles: [
     {
       number: "01",
-      title: "Techniek Boven Kilometers",
-      description:
-        "Zonder de juiste cadans en houding ben je alleen maar energie aan het verspillen. Wij bouwen eerst de basis.",
+      title: "Techniek voor volume",
+      description: "Eerst efficiënt lopen, daarna pas meer belasting.",
     },
     {
       number: "02",
-      title: "De Lydiard Methode",
-      description:
-        "Gebaseerd op Arthur Lydiard's bewezen periodisering: een sterke aerobe basis gevolgd door specifieke snelheidswerk.",
+      title: "Rust is onderdeel van training",
+      description: "Herstel is geen pauze, maar een trainingsprikkel.",
     },
     {
       number: "03",
-      title: "Rust als Training",
-      description:
-        "De Kenianen begrijpen dat rust net zo belangrijk is als de harde intervallen. Recovery is waar de vooruitgang gebeurt.",
+      title: "Feedback boven gokken",
+      description: "Je krijgt duidelijke terugkoppeling op wat werkt en wat niet.",
     },
     {
       number: "04",
-      title: "Economisch Lopen",
-      description:
-        "Hardlopen moet geen strijd zijn, het moet een vloeiende beweging worden. Efficientie wint op de lange termijn.",
+      title: "Duurzaam verbeteren",
+      description: "De aanpak moet over maanden en jaren blijven werken.",
     },
   ],
 };
 
 export const programsContent = {
-  label: "Trainingsprogrammas",
+  label: "Programma's",
   heading: {
-    line1: "KIES JE PAD NAAR",
-    highlight: "SNELHEID",
+    line1: "KIES JE",
+    highlight: "VOLGENDE STAP",
   },
   description:
-    "Van techniek-basis tot elite mentorship. Elk programma is gebouwd op dezelfde principes die kampioenen maken.",
+    "Van eerste analyse tot intensieve coaching. Elk traject is gebouwd om je loopkracht gerichter op te bouwen.",
   plans: [
     {
-      name: "The Foundation",
-      subtitle: "Techniek & Basis",
+      name: "Start",
+      subtitle: "Kennismaking",
       price: "149",
-      description: "Bouw een solide technische basis. Leer lopen zoals de elite.",
-      features: [
-        "8-weken techniek programma",
-        "Video analyse van je loopvorm",
-        "Cadans & houding oefeningen",
-        "Mobiliteit routines",
-        "Toegang tot community",
-      ],
+      description: "Een duidelijke start met analyse en advies.",
+      features: ["Intake", "Loopanalyse", "Concrete verbeterpunten"],
       popular: false,
     },
     {
-      name: "Speed Evolution",
-      subtitle: "PR-Gericht",
+      name: "Build",
+      subtitle: "Begeleiding",
       price: "249",
-      description:
-        "Een volledig periodisatie plan gericht op je persoonlijk record.",
-      features: [
-        "12-weken trainingsschema",
-        "Gepersonaliseerde zones",
-        "Interval & tempo sessies",
-        "Race strategie",
-        "Wekelijkse feedback",
-        "1x video call",
-      ],
+      description: "Structurele begeleiding met een plan dat meegroeit.",
+      features: ["Trainingsplan", "Feedback", "Periodieke check-ins", "Aanpassing op vorm"],
       popular: true,
     },
     {
-      name: "Elite Mentorship",
-      subtitle: "1-op-1 Coaching",
+      name: "Elite",
+      subtitle: "1-op-1",
       price: "449",
-      description:
-        "Directe toegang tot Willem voor maximale persoonlijke begeleiding.",
-      features: [
-        "Volledig op maat programma",
-        "Wekelijkse 1-op-1 calls",
-        "Dagelijkse app ondersteuning",
-        "Live video analyse",
-        "Mentale coaching",
-        "Race-dag begeleiding",
-      ],
+      description: "Volledige persoonlijke coaching en sturing.",
+      features: ["Volledig maatwerk", "Direct contact", "Analyse en bijsturing"],
       popular: false,
     },
   ],
   pricePrefix: "\u20AC",
   priceSuffix: "/maand",
-  popularLabel: "Meest Gekozen",
-  actionLabel: "Start Nu",
+  popularLabel: "Meest gekozen",
+  actionLabel: "Start nu",
 };
 
 export const aboutContent = {
-  label: "Over Willem",
+  label: "Over TopFit",
   heading: {
-    line1: "VAN ISRAELISCH KAMPIOEN",
-    highlight: "TOT VONDELPARK COACH",
+    line1: "ERVARING",
+    highlight: "IN DE PRAKTIJK",
   },
   paragraphs: [
-    "Willem Luyckx is voormalig Israelisch kampioen op de 3000m steeple en 5000m. Zijn zoektocht naar de ultieme trainingsmethode bracht hem naar de hoogvlaktes van Iten, Kenia en Addis Abeba, Ethiopie.",
-    "Daar deelde hij jarenlang de rode stofpaden met de absolute wereldtop. Hij leerde niet alleen hoe ze trainen, maar ook hoe ze denken. De rust, de focus, de eenvoud.",
-    "Voor de liefde verhuisde Willem naar Nederland. Nu deelt hij zijn passie en kennis in het Vondelpark en bij Team Zevenheuvelen. Zijn missie: de geheimen van de Afrikaanse loopschool toegankelijk maken voor elke ambitieuze Nederlandse loper.",
+    "Willem Luyckx is de coach achter TopFit Running. Hij combineert ervaring, loopkennis en een directe manier van werken.",
+    "De insteek is simpel: meer grip op techniek, belasting en herstel zodat je als loper stabieler vooruitgaat.",
+    "Deze basis blijft bewust compact, omdat de site nog verder gebouwd wordt.",
   ],
-  quote:
-    "\"Ik zie in het park te veel mensen harken. Hardlopen moet geen strijd zijn, het moet een vloeiende beweging worden.\"",
+  quote: "\"Hardlopen moet geen strijd zijn, maar een vloeiende beweging worden.\"",
   quoteAuthor: "Willem Luyckx",
   stats: [
-    { value: "14:03", label: "5K PR" },
-    { value: "29:30", label: "10K PR" },
-    { value: "15+", label: "Jaar Ervaring" },
+    { value: "40+", label: "Jaar ervaring" },
+    { value: "NL/EN/HE", label: "Meertalige basis" },
+    { value: "TopFit", label: "Hoofdmerk" },
   ],
 };
 
 export const ctaContent = {
-  label: "Gratis Techniek Check",
+  label: "Plan je intake",
   heading: {
-    line1: "ONTDEK WAT JE",
-    highlight: "TEGENHOUDT",
+    line1: "WIL JE EEN",
+    highlight: "DUIDELIJK STARTPUNT?",
   },
   description:
-    "Ontvang een persoonlijke video-analyse van je looptechniek. Ik laat je precies zien waar je energie lekt en hoe je sneller kunt worden.",
+    "Vraag een intake aan en bekijk welke richting het beste past bij jouw niveau en doel.",
   placeholder: "je@email.nl",
   buttonLabel: "Verstuur",
-  successToast: "Gelukt! Check je inbox voor de Gratis Techniek Check.",
-  successInline: "Check je inbox voor de volgende stappen!",
-  footnote: "Geen spam. Alleen waardevolle content over hardlopen.",
+  successToast: "Dank je. We nemen contact op.",
+  successInline: "We hebben je bericht ontvangen.",
+  footnote: "Geen ruis. Alleen praktisch contact over jouw volgende stap.",
 };
 
 export const footerContent = {
-  brandMain: "WILLEM",
-  brandLast: "LUYCKX",
-  description:
-    "Hardloopcoach met de kennis van de Keniaanse elite. Gebaseerd in Amsterdam.",
+  brandMain: "TOPFIT",
+  brandLast: "RUNNING",
+  description: "TopFit Running is gericht op begeleid hardlopen met duidelijke structuur.",
   navigationTitle: "Navigatie",
   links: [
-    { label: "De Methodiek", href: "#methodiek" },
-    { label: "Programmas", href: "#programmas" },
-    { label: "Over Willem", href: "#about" },
-    { label: "Gratis Techniek Check", href: "#contact" },
+    { label: "Methodiek", href: "#methodiek" },
+    { label: "Programma's", href: "#programmas" },
+    { label: "Over TopFit", href: "#about" },
+    { label: "Contact", href: "#contact" },
   ],
   contactTitle: "Contact",
-  location: "Vondelpark, Amsterdam",
-  email: "willem@luyckx.run",
-  instagramUrl: "https://instagram.com",
-  instagramHandle: "@willemluyckx",
+  location: "Amsterdam",
+  email: "info@topfitrunning.com",
+  instagramUrl: "https://instagram.com/topfitrunning",
+  instagramHandle: "@topfitrunning",
   rightsText: "Alle rechten voorbehouden.",
-  tagline: "Train Smart. Run Fast.",
+  tagline: "Loop je vrij, presteer met plezier.",
 };

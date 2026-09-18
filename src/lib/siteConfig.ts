@@ -3,7 +3,7 @@ import logoPath from "@/assets/topfit/brand/logo-topfit.png";
 export const topFitSiteConfig = {
   siteKey: "topfitrunning",
   brandName: "TopFit Running",
-  slogan: "Loop je vrij, presteer vanzelf",
+  slogan: "Gezond, efficiënt en met plezier hardlopen",
   domain: "topfitrunning.com",
   redirectDomain: "topfitrunning.nl",
   canonicalUrl: "https://topfitrunning.com",
@@ -21,9 +21,7 @@ export const topFitSiteConfig = {
   },
   contact: {
     email: "info@topfitrunning.com",
-    phoneDisplay: "+31 6 47264454",
-    phoneHref: "tel:+31647264454",
-    whatsappHref: "https://wa.me/31647264454",
+    whatsappHref: "/wa",
     instagramUrl: "",
   },
   social: {

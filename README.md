@@ -1,8 +1,18 @@
-# Welcome to your Lovable project
+﻿# TopFit Running
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**URL**: https://topfitrunning.com/
+
+## Project Docs
+
+This repo uses a small set of project-specific setup docs:
+
+- `PROJECT_KEYS_REGISTER.md`
+- `PROJECT_SECRETS_PLAYBOOK.md`
+- `GOOGLE_SHEETS_ACCESS.md`
+- `PAYMENTS_EMAILS_IMPLEMENTATION.md`
+- `PAYMENTS_EMAILS_LIVE_RUNBOOK.md`
 
 ## Content Editing (Codex-friendly)
 
@@ -18,7 +28,7 @@ There are several ways of editing your application.
 
 **Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Simply visit the live site at [TopFit Running](https://topfitrunning.com/) and continue from there.
 
 Changes made via Lovable will be committed automatically to this repo.
 
@@ -70,12 +80,12 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+The live project is currently deployed at [https://topfitrunning.com/](https://topfitrunning.com/).
 
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+The live domain for this project is [https://topfitrunning.com/](https://topfitrunning.com/).
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+If you need to adjust hosting or domain routing, use the current deployment setup rather than the generic Lovable walkthrough.

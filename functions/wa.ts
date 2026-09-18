@@ -33,7 +33,12 @@ export const onRequest: PagesFunction = async ({ request, env }) => {
   const phone = normalizeWhatsappNumber(phoneRaw);
 
   if (!phone) {
-    return Response.redirect("https://topfitrunning.com/nl/contact", 302);
+    const contactPath = refPath.startsWith("/en")
+      ? "/en/contact"
+      : refPath.startsWith("/he")
+        ? "/he/contact"
+        : "/nl/contact";
+    return Response.redirect(`https://topfitrunning.com${contactPath}`, 302);
   }
 
   const customText = String(url.searchParams.get("text") || "").trim();
@@ -50,4 +55,3 @@ export const onRequest: PagesFunction = async ({ request, env }) => {
     },
   });
 };
-

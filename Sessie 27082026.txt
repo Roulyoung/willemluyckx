@@ -1,0 +1,2531 @@
+C:\Users\micro\Documents\Codex CLI websites\Websites\willemluyckx> cx
+
+C:\Users\micro\Documents\Codex CLI websites\Websites\willemluyckx> powershell -Command "node \Users\micro\AppData\Roaming\npm\node_modules\@openai\codex\bin\codex.js"
+╭─────────────────────────────────────────────────╮
+│ ✨ Update available! 0.101.0 -> 0.149.1         │
+│ See full release notes:                         │
+
+  Tip: New 2x rate limits until April 2nd.
+
+⚠ `enable_experimental_windows_sandbox` is deprecated. Use `[features].experimental_windows_sandbox` instead.
+
+• Ran Get-Content -Path .\SESSION_START.md
+  └ # Session Start
+• SESSION_START.md verwijst door naar statusdocs, dus ik lees die ook even mee voor de juiste stand van zaken.
+
+• Ran $files = @('.\DOCUMENTATION_FAILSAFE.md','.\WORKER_PLATFORM_PLAN.md','.\ACTIVE_WORKER_STATUS.md','C:
+  └ ---MISSING: .\SESSION_NOTES.md---
+    ---FILE: .\SESSION_CLOSE.md---
+    … +95 lines
+    - welk commit-hash de gebruiker kan terugvinden
+    - welke rollback-optie beschikbaar is
+
+• Ran Write-Output '---FILE: .\PROJECT_PROGRESS_LOG.md---'; Get-Content -Path .\PROJECT_PROGRESS_LOG.md; Write-Output
+  │ '---FILE: .\README_FIRST.md---'; Get-Content -Path .\README_FIRST.md
+  └ ---FILE: .\PROJECT_PROGRESS_LOG.md---
+    # Project Progress Log
+    … +277 lines
+    - If the user does not mention the right file, use the failsafe order above.
+    - If a breakage happened after a known-good date, roll back to the last known-good snapshot first.
+
+• Adding line numbers for file references
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb de relevante docs gelezen; ik pak nog even de exacte regels zodat ik je netjes kan terugwijzen naar de laatste
+  status.
+
+• Ran rg -n "Last update|Current status|Notes for the next session|Latest commit referenced|Latest deployment|Session
+  │ update: reader-focused copy sweep|ACTIVE_WORKER_STATUS|Required Reading" .\PROJECT_PROGRESS_LOG.md .
+  │ \SESSION_START.md .\WORKER_MIGRATION_MATRIX.md
+  └ .\PROJECT_PROGRESS_LOG.md:3:Last update: 2026-06-16
+    .\PROJECT_PROGRESS_LOG.md:15:Current status:
+    … +5 lines
+    .\SESSION_START.md:10:4. `ACTIVE_WORKER_STATUS.md` if it exists
+    rg: .\WORKER_MIGRATION_MATRIX.md: The system cannot find the file specified. (os error 2)
+
+• Summarizing project status in Dutch
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb SESSION_START.md:5 en de gelinkte statusdocs gelezen.
+
+  - De laatste concrete projectstatus staat in PROJECT_PROGRESS_LOG.md:3 en is van 16 juni 2026.
+  - Daar stond de frontend-only fase volledig afgerond: alle 5 frontendtaken waren op completed gezet in
+    PROJECT_PROGRESS_LOG.md:15.
+  - De laatste inhoudelijke stopplek was een reader-focused copy sweep: homepage, about en routepagina’s zijn
+    herschreven naar directere, bezoekersgerichte copy; worker/backend bleef ongemoeid in PROJECT_PROGRESS_LOG.md:192.
+
+  Laatste Bekende Staat
+
+  - De site was toen als stabiel en publiek reviewbaar genoteerd, met extra aandacht voor mobiele hero-headings in een
+    volgende sessie in PROJECT_PROGRESS_LOG.md:184.
+  - Laatst genoteerde deploy: PROJECT_PROGRESS_LOG.md:176 → https://a4de59de.willemluyckx.pages.dev
+  - Laatst genoemde commit: PROJECT_PROGRESS_LOG.md:180 → 63a9722 (Update topfit metadata)
+
+  Opmerking
+
+  - ACTIVE_WORKER_STATUS.md ontbreekt in deze repo, en SESSION_NOTES.md bestaat ook niet; de beste handoff-info kwam dus
+    uit PROJECT_PROGRESS_LOG.md.
+
+  Kort gezegd: we waren gebleven bij een afgewerkte frontend/live-state voor TopFit Running, zonder open blocker; de
+  volgende logische stap was vooral gerichte review en verdere contentverfijning, niet een backend-fix.
+
+  Als je wilt, kan ik nu meteen ook git status en de laatste commits checken om te zien of de repo nog exact op die
+  handoff aansluit.
+
+
+› maar net sloot ik af met dit maar kon niets meer doen in het venster want kreeg een fout:
+
+  Live Status
+
+    - Op woensdag 26 augustus 2026 heb ik het mailgedeelte live gezet en opnieuw gedeployed naar https://
+      cd1a9ee9.willemluyckx.pages.dev.
+    - POST https://topfitrunning.com/api/contact geeft nu 200 terug en verstuurt echt mail via Brevo.
+    - POST https://topfitrunning.com/api/stripe-checkout is nog niet live; die blijft geblokkeerd door missende Stripe-
+      config in Cloudflare.
+
+    Wat ik heb gedaan
+
+    - Brevo-helper toegevoegd in functions/lib/brevo.ts:29.
+    - Stripe success redirect gecorrigeerd naar de echte intake-route in functions/api/stripe-checkout.ts:27.
+    - Promo-codeflow verplaatst naar Stripe Checkout in functions/api/stripe-checkout.ts:75 en src/pages/
+      localeRoutePages.tsx:745.
+    - Intake laat nu taal via querystring meelopen in src/pages/IntakePage.tsx:46.
+    - STRIPE_PRICE_PREMIUM
+    - STRIPE_PRICE_BASE
+    - STRIPE_PRICE_CLINIC
+
+• Ik zoek even de Stripe- en key-docs op, zodat ik je precies de veilige overdrachtsroute kan geven.
+
+• Ran rg -n "Stripe|secret|Credential Manager|HEYGEN_API|PROJECT_KEYS_REGISTER|wrangler secret|Brevo|api key|key" -g
+• Ik heb de juiste documenten gevonden; nu lees ik alleen de secret-overdrachtsstukken en de TopFit handoff.
+
+• Ran $files = @('.\PROJECT_SECRETS_PLAYBOOK.md','.\PROJECT_KEYS_REGISTER.md','.
+  │ \willemluyckx\SESSION_HANDOFF_TOPFITRUNNING.md','.\willemluyckx\TEMPLATE_START.md'); foreach ($f in $files) { if
+  │ (Test-Path $f) { Write-Output "---FILE: $f---"; Get-Content -Path $f } }
+  └ ---FILE: .\PROJECT_SECRETS_PLAYBOOK.md---
+    # Project Secrets Playbook
+    … +550 lines
+    - point the admin frontend to the worker API, not a relative site route
+    - include the project site key on admin requests
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb de regels; ik haal nog even de exacte TopFit-secretnotities erbij zodat de instructies op dit project passen.
+
+• Ran rg -n "Do not store raw|rotate|If a token or key was pasted|STRIPE_SECRET_KEY|STRIPE_WEBHOOK_SECRET|STRIPE_PRICE_|
+• Clarifying env var usage for Stripe and Cloudflare secrets
+
+  Outlining PowerShell env var setup and verification steps
+  Inspecting .gitignore for .env rules
+
+─ Worked for 1m 01s ────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik check nog even de lokale ignore-regels, zodat ik je een veilige repo-lokale route kan geven zonder git-risico.
+
+• Ran Get-Content -Path .\.gitignore
+  └ Get-Content : Cannot find path 'C:\Users\micro\Documents\Codex CLI websites\Websites\willemluyckx\.gitignore'
+  └ # Logs
+    logs
+    … +23 lines
+    Assets/**/*.zip
+    Assets/**/*.wmv
+
+• Recommending safe secret storage methods
+
+  Locating exact doc line numbers
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb genoeg om je een veilige route te geven; ik haal alleen nog de precieze regelnummers erbij.
+
+• Ran rg -n "Never paste secrets into chat|Treat anything pasted into chat|Always move secrets|Save the raw value|Push
+  │ it to GitHub|Store secret metadata|Use client-prefixed names|STRIPE_SECRET_KEY|STRIPE_WEBHOOK_SECRET|Put raw
+  │ secrets in a local user env var|Always move secrets from local env vars|\*\.local" .\PROJECT_SECRETS_PLAYBOOK.md .
+  │ … +1 lines
+  └ .\willemluyckx\.gitignore:13:*.local
+    .\PROJECT_SECRETS_PLAYBOOK.md:8:- Never paste secrets into chat when a local env var, non-committed `.env`, GitHub
+    … +18 lines
+    .\willemluyckx\TEMPLATE_START.md:63:Always move secrets from local env vars into GitHub or Cloudflare by CLI instead
+    of pasting raw values into chat.
+
+• Specifying secure local env file setup
+
+  Advising environment variable setup without value echoing
+
+  Planning secure local file environment setup instructions
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ja — volgens de documentatie moet je ze niet in chat plakken.
+
+  Veilige Route
+
+  - PROJECT_SECRETS_PLAYBOOK.md:8 zegt: geen secrets in chat als een lokale env var of niet-gecommitte .env kan.
+  - PROJECT_SECRETS_PLAYBOOK.md:30 en PROJECT_SECRETS_PLAYBOOK.md:32 zeggen: eerst lokaal opslaan, daarna pas naar
+    Cloudflare/GitHub via CLI.
+  - willemluyckx/TEMPLATE_START.md:33 zegt hetzelfde expliciet voor dit project.
+  - willemluyckx/.gitignore:13 negeert *.local, dus een lokaal .local-bestand is hiervoor geschikt.
+
+  Doe Dit
+
+  - Maak lokaal dit bestand aan: willemluyckx/.env.topfit.local
+  - Zet daar alleen deze regels in:
+  VITE_STRIPE_PUBLISHABLE_KEY=pk_live_...
+  STRIPE_SECRET_KEY=sk_live_...
+  STRIPE_WEBHOOK_SECRET=whsec_...
+  STRIPE_PRICE_PREMIUM=price_...
+
+  - Stuur mij daarna niet de waarden, maar alleen dit bericht:
+      - Bestand willemluyckx/.env.topfit.local staat klaar.
+
+  Wat Ik Dan Doe
+
+  - Ik verifieer checkout/webhook zonder de ruwe waarden terug te tonen.
+  - Daarna kan ik desgewenst het lokale bestand weer laten verwijderen.
+
+  Belangrijk
+
+  - Documentatie zegt ook dat alles wat in chat of shell history belandt als blootgesteld telt en dan geroteerd moet
+    worden: PROJECT_SECRETS_PLAYBOOK.md:12, PROJECT_KEYS_REGISTER.md:84.
+
+  Als je wilt, kan ik je daarna ook meteen exact vertellen welke keys als Pages secret moeten worden gezet en welke als
+  Pages variable.
+
+
+› maak het document voor me aan met instructies wat ik precies invul met haakjes of niet etc. dan kan ik de waardes
+  opzoeken en erin zetten
+
+
+• Drafting commented .env template with instructions
+
+  Searching for existing .env examples
+
+• Ik maak een veilige, lokaal ingevulde template aan in de appmap, met precies hoe je de waarden moet noteren.
+
+• Ran rg --files .\willemluyckx | rg "\.env|env\.example|example\.env|sample\.env"
+  └ (no output)
+
+• Planning .env template with usage notes
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb geen bestaand env-template gevonden; ik zet nu een invulklare .local template neer met commentaarregels.
+
+• Added willemluyckx/.env.topfit.local (+43 -0)
+     1 +# TopFit Stripe local handoff file
+     2 +# Date created: 2026-08-26
+     3 +#
+     4 +# Vul de echte waarden alleen rechts van het = teken in.
+     5 +#
+     6 +# Belangrijk:
+     7 +# - Laat GEEN haakjes staan: dus niet [price_...] en niet (price_...)
+     8 +# - Gebruik GEEN quotes: dus niet "sk_live_..." en niet 'sk_live_...'
+     9 +# - Gebruik GEEN extra spaties rond het = teken
+    10 +# - Laat elke sleutel op 1 regel staan
+    11 +# - Verwijder de placeholder volledig en vervang die door de echte waarde
+    12 +# - Stuur mij daarna alleen: Bestand `willemluyckx/.env.topfit.local` staat klaar.
+    13 +#
+    14 +# Voorbeeld goed:
+    15 +# STRIPE_PRICE_BASE=price_1ABCDEF234567
+    16 +#
+    17 +# Voorbeeld fout:
+    18 +# STRIPE_PRICE_BASE=[price_1ABCDEF234567]
+    19 +# STRIPE_PRICE_BASE="price_1ABCDEF234567"
+    20 +# STRIPE_PRICE_BASE = price_1ABCDEF234567
+    21 +
+    22 +# Publieke frontend key
+    23 +# Vul hier de Stripe publishable key in die begint met pk_live_
+    24 +VITE_STRIPE_PUBLISHABLE_KEY=pk_live_replace_me
+    25 +
+    26 +# Geheime server-side key
+    34 +# Stripe Price IDs
+    35 +# Vul hier de drie live prijs-ID's in die bij TopFit horen
+    36 +STRIPE_PRICE_PREMIUM=price_replace_me_premium
+    37 +STRIPE_PRICE_BASE=price_replace_me_base
+    38 +STRIPE_PRICE_CLINIC=price_replace_me_clinic
+    39 +
+    40 +# Klaar?
+    41 +# 1. Opslaan
+    42 +# 2. Niets uit dit bestand in chat plakken
+    43 +# 3. Meld alleen dat het bestand klaarstaat
+
+• Planning file content retrieval with line numbers
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• De template staat er; ik check nog even de regelnummers zodat je hem direct kunt openen en invullen.
+
+• Ran $i=1; Get-Content .\willemluyckx\.env.topfit.local | ForEach-Object { '{0}:{1}' -f $i, $_; $i++ }
+  └ 1:# TopFit Stripe local handoff file
+    2:# Date created: 2026-08-26
+    … +39 lines
+    42:# 2. Niets uit dit bestand in chat plakken
+    43:# 3. Meld alleen dat het bestand klaarstaat
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Klaar — ik heb een veilige invultemplate aangemaakt in willemluyckx/.env.topfit.local:1.
+
+  - Open willemluyckx/.env.topfit.local:1
+  - Vervang alleen de placeholders rechts van = op willemluyckx/.env.topfit.local:24
+  - Vul de secret key in op willemluyckx/.env.topfit.local:28
+  - Vul de webhook secret in op willemluyckx/.env.topfit.local:32
+  - Vul de drie price_... IDs in op willemluyckx/.env.topfit.local:36
+
+  Regels
+
+  - Geen haakjes: niet [] en niet ()
+  - Geen quotes: niet '...' en niet "..."
+  - Geen spaties rond =
+  - Alles op één regel per key
+  - Niets uit dit bestand in chat plakken
+  - Stuur alleen: Bestand willemluyckx/.env.topfit.local staat klaar.
+
+  Dan lees ik het lokaal in en zet ik de juiste Cloudflare Pages secrets/vars voor je door.
+
+  └ □ Lees Stripe runbook en config
+    □ Controleer lokale env template
+    □ Zet Cloudflare vars/secrets juist
+    □ Build en endpoint checks draaien
+    □ Vat live status en blockers samen
+  └ ---FILE: .\STRIPE_ELEMENTS_MIGRATION_GUIDE.md---
+    # Stripe Checkout -> Stripe Elements migratie
+    … +742 lines
+      );
+  │ $lines = Get-Content $envFile | Where-Object { $_ -match '^[A-Z0-9_]+=' }
+  │ … +26 lines
+  └
+    key                         present placeholder format_ok length
+    … +7 lines
+
+
+
+• Verifying price ID format and config files
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• De keys zelf lijken goed; ik check nu de Pages-config en waarom de drie price-waarden nog niet valide ogen.
+
+  └ De Stripe keys zijn gevuld en valide van vorm. De drie prijsvelden zijn wel ingevuld, maar matchen nu nog niet het
+    verwachte `price_...` formaat, dus ik controleer eerst of de app of Cloudflare hier een andere naam/bron gebruikt.
+    ✔ Lees Stripe runbook en config
+    ✔ Controleer lokale env template
+    };
+
+• Ran Get-Content .\PROJECT_KEYS_REGISTER.md | Select-Object -First 120
+  └ # Project Keys Register
+
+    … +86 lines
+    - Detailed execution log for this phase is in `PROJECT_PROGRESS_LOG.md`.
+    - Domain-specific cutover checklist/status is in `TOPFITRUNNING_DOMAIN_CUTOVER_STATUS.md`.
+
+• Planning local build and deploy with env variables
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik bepaal nu de veiligste live route: lokale build met frontend-key, plus Pages secrets voor de serverroutes.
+
+    }
+
+• Planning environment variable and secret injection
+
+• Searched Cloudflare Pages CLI set environment variables project edit vars wrangler pages secret put official docs
+
+• Planning secret storage with CLI and runtime functions
+
+
+• De price-regels zelf zijn nog geen geldige Stripe Price IDs; ik probeer nu veilig uit Stripe op te halen welke live
+  price_... IDs bij TopFit horen.
+
+• Ran $envFile = '.\willemluyckx\.env.topfit.local'
+  │ Get-Content $envFile | ForEach-Object {
+  │   if ($_ -match '^[A-Z0-9_]+=') {
+
+• Ran $envFile = '.\willemluyckx\.env.topfit.local'
+  │ Get-Content $envFile | ForEach-Object {
+  │   if ($_ -match '^[A-Z0-9_]+=') {
+  │ … +16 lines
+  └ products=0
+    prices=0
+    … +176 lines
+    - `https://topfitrunning.com/nl/clinics`
+
+  │ foreach ($line in $lines) {
+  │ … +7 lines
+  └ At line:10 char:3
+
+• Ran $envFile = '.\willemluyckx\.env.topfit.local'
+  │ $rows = foreach ($line in (Get-Content $envFile | Where-Object { $_ -match '^STRIPE_PRICE_[A-Z]+=' })) {
+  │   $idx = $line.IndexOf('=')
+  │ … +7 lines
+  └
+    key                  kind    length
+    … +4 lines
+
+  │ \willemluyckx\src\lib\topfitContent.ts .\willemluyckx\src\lib\siteContent.ts
+  └ .\willemluyckx\src\pages\localeRoutePages.tsx:97:const formatPrice = (price: string) => {
+    .\willemluyckx\src\pages\localeRoutePages.tsx:98:  const index = price.toLowerCase().indexOf(" incl.");
+    … +94 lines
+• Ik zie in de sitecode dat de bedragen waarschijnlijk €99, €69 en €125 zijn; ik check nog snel of daar een bestaande
+  setup- of runbooknotitie voor is voordat ik iets aan Stripe aanmaak.
+
+• Ik heb de betaalnotities gevonden; ik lees nog de live runbook en handel daarna volgens die volgorde.
+
+• Ran Get-Content .\willemluyckx\PAYMENTS_EMAILS_LIVE_RUNBOOK.md
+  └ # Payments & Emails Live Runbook
+
+    … +206 lines
+  └ FOUND .\willemluyckx\rollback-status-2026-08-26-after-brevo-live.txt
+    FOUND .\willemluyckx\rollback-2026-08-26-after-brevo-live.patch
+    … +62 lines
+    ?? src/pages/IntakePage.tsx
+    ?? wrangler.toml
+
+• Verifying Stripe key mode from prefixes
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ran $envFile = '.\willemluyckx\.env.topfit.local'
+  │ $rows = foreach ($line in (Get-Content $envFile | Where-Object { $_ -match '^(VITE_STRIPE_PUBLISHABLE_KEY|
+  │ STRIPE_SECRET_KEY)=' })) {
+  │ … +8 lines
+  └
+
+
+• Researching Cloudflare Pages secret management
+
+• Searched site:developers.cloudflare.com Pages API set environment variables deployment configs production Cloudflare
+  official
+
+• Ran npx wrangler@latest pages secret list --project-name willemluyckx
+  └ (no output)
+
+─ Worked for 1m 10s ────────────────────────────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Wrangler is er. Ik run nu de echte Cloudflare checks met ruimere timeout.
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Cloudflare toegang werkt. Ik check nu de juiste Pages-commando’s voor secrets én production vars, zodat we niets
+  verkeerd wegschrijven.
+
+• Ran wrangler pages --help; wrangler pages project --help; wrangler pages deployment --help
+  └ wrangler pages
+
+• Ran wrangler pages download --help; wrangler pages download config --help
+  └ wrangler pages download
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik ga de praktische route nemen: secrets zetten via Pages secret store, frontend lokaal met de test publishable key
+  bouwen, dan deployen en live checken.
+
+• Ran wrangler pages secret --help
+  └ wrangler pages secret
+
+    … +13 lines
+      -h, --help      Show help  [boolean]
+
+    … +11 lines
+    OPTIONS
+          --project-name, --project  The name of your Pages project  [string]
+
+• Evaluating methods for temporary secret file creation
+
+  Planning interactive secret uploads via stdin
+
+  Planning environment secret management
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    OPTIONS
+          --project-name, --project  The name of your Pages project  [string]
+
+• Designing Stripe product and price creation
+
+  Planning environment variable updates for testing
+
+  Confirming deployment and testing approach
+
+  Verifying Stripe key usage in frontend
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik check nog één ding: of de frontend die publishable key nu echt gebruikt, of dat alleen de backend-checkout al
+  genoeg is voor de test.
+
+• Ran rg -n "VITE_STRIPE_PUBLISHABLE_KEY|loadStripe|@stripe|stripe-js|stripe" .\willemluyckx\src .
+  │ \willemluyckx\functions -g "*.ts" -g "*.tsx"
+  └ .\willemluyckx\functions\api\stripe-webhook.ts:93:  const signature = request.headers.get("stripe-signature") ?? "";
+    .\willemluyckx\functions\api\stripe-webhook.ts:172:    tags: ["stripe-payment", productSlug, locale, "internal"],
+    … +8 lines
+    .\willemluyckx\src\pages\localeRoutePages.tsx:774:                      const response = await fetch("/api/
+    stripe-checkout", {
+
+• Planning build and deploy after config changes
+  Summarizing Stripe product and price creation
+
+  Planning Stripe product and price creation
+
+  Implementing secret storage for Stripe prices
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik zet nu een testbare Stripe-config neer: ik maak test-prijzen aan op basis van je ingevulde bedragen, schrijf alleen
+  de runtime-keys naar Pages, en laat de ruwe waarden nergens zien.
+
+• Ran $ErrorActionPreference = 'Stop'
+  │ $projectName = 'willemluyckx'
+  │ $envFile = '.\\.env.topfit.local'
+
+• De Stripe testconfig staat nu in Pages. Ik draai nu lint/build en doe daarna een verse Pages deploy voor deze
+  omgeving.
+
+• Updated Plan
+
+• Ik doe nu de verificatiepass en zet daarna direct de nieuwe deployment live.
+
+• Ran npm run lint; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; npm run build
+    ✖ 4 problems (1 error, 3 warnings)
+
+
+• Inspecting lint error near line 26
+
+    … +76 lines
+    79:  };
+    80:};
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• De escape-fix staat erin; ik herhaal nu de verificatie en pak daarna de deploy.
+    … +16 lines
+    ✖ 4 problems (1 error, 3 warnings)
+
+
+    35:    return {
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• De regel is nu opnieuw gezet; ik controleer meteen of de helper schoon is en run dan weer lint/build.
+
+• Ran $i=21; (Get-Content .\willemluyckx\functions\lib\brevo.ts | Select-Object -Skip 20 -First 8) | ForEach-Object
+  │ { '{0}:{1}' -f $i, $_; $i++ }
+─ Worked for 1m 29s ────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Build is groen genoeg om te shippen; ik doe nu de Pages deploy en daarna een live smoke-test op checkout/contact.
+
+• Ran wrangler pages deploy dist --project-name willemluyckx --commit-dirty=true
+  └
+     ⛅️ wrangler 4.78.0 (update available 4.126.0)
+    … +7 lines
+    🌎 Deploying...
+    ✨ Deployment complete! Take a peek over at https://2ad4bec5.willemluyckx.pages.dev
+
+• Verifying production deployment environment
+
+• Designing comprehensive Stripe checkout tests
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik doe nu de echte smoke-tests: routechecks plus drie checkout-session tests tegen productie met Stripe in testmodus.
+
+• Ran $ErrorActionPreference='Stop'
+  │ $envFile = '.\\.env.topfit.local'
+  │ $cfg = @{}
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Kleine PowerShell-pipefoutje; ik run de smoke-tests opnieuw en haal meteen de Stripe-sessiondetails op.
+
+  └ route_checks
+    Invoke-WebRequest : Object reference not set to an instance of an object.
+    … +4 lines
+        + FullyQualifiedErrorId : System.NullReferenceException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+  │ $cfg = @{}
+  │ … +46 lines
+  └ route_checks
+    200 https://topfitrunning.com/nl/abonnementen/premium
+  │ phone='+31600000001' } | ConvertTo-Json -Compress
+  │ $resp = & curl.exe -s -D - -X POST 'https://topfitrunning.com/api/stripe-checkout' -H 'Content-Type: application/
+  │ … +2 lines
+  └ HTTP/1.1 400 Bad Request
+    Date: Wed, 26 Aug 2026 14:53:07 GMT
+  │ … +1 lines
+  └ {"ok":true,"url":"https://checkout.stripe.com/c/pay/
+    cs_test_b1ghrz8OaD6xRNOY3JzqxrmDXTjdYVnkIMSwTEszr1c7Dw9VnF8qOJ3uHK#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSdicGRmZGhqaWB
+    … +2 lines
+    3Jz8nJmNjY2NjYycpJ2lkfGpwcVF8dWAnPydocGlxbFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl","id":"cs_test_b1ghrz8OaD6
+• Ran $ErrorActionPreference='Stop'
+  │ $envFile = '.\\.env.topfit.local'
+  │ $cfg = @{}
+  │ … +31 lines
+
+• Ran $contact = try { Invoke-WebRequest -Uri 'https://topfitrunning.com/api/contact' -Method Post -ContentType
+  │ $envFile = '.\\.env.topfit.local'
+  │ $cfg = @{}
+  │ … +25 lines
+  └
+    slug          success_url                                                                    cancel_url
+    … +7 lines
+
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik pak de cancel-URL’s nog even onverkort mee, zodat de teststatus volledig is.
+
+• Ran $ErrorActionPreference='Stop'
+
+
+• Confirming file changes and environment details
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik rond nog even af met de precieze file-regel van die ene lint-fix, dan geef ik je de teststatus en het risico netjes
+  terug.
+
+• Ran rg -n "escapeHtml|replace\(/\"/g|replace\(/'/g" .\willemluyckx\functions\lib\brevo.ts
+  └ The string is missing the terminator: '.
+        + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+        + FullyQualifiedErrorId : TerminatorExpectedAtEndOfString
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik pak de regelreferentie nog even zonder extra parsing-trucs.
+
+• Ran $i=1; Get-Content .\willemluyckx\functions\lib\brevo.ts | ForEach-Object { if ($i -ge 21 -and $i -le 27) { '{0}:
+  │ {1}' -f $i, $_ }; $i++ }
+  └ 21:export const escapeHtml = (value: string) =>
+    22:  value
+    … +3 lines
+    26:    .replace(/"/g, "&quot;")
+    27:    .replace(/'/g, "&#39;");
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Alles is getest wat ik automatisch veilig kon doen; ik markeer de laatste stap af en vat dan de live status samen.
+
+• Updated Plan
+  └ De test-Stripe-config is geplaatst, een nieuwe productie-deploy staat live, en de checkout/session smoke-tests voor
+    alle drie productslugs zijn geslaagd. Alleen een echte betaalafronding en webhook/email-eindtest vereisen nog een
+    handmatige checkout in Stripe test mode.
+    ✔ Lees Stripe runbook en config
+    ✔ Controleer lokale env template
+    ✔ Zet Cloudflare vars/secrets juist
+    ✔ Build en endpoint checks draaien
+    ✔ Vat live status en blockers samen
+
+• Detailing deployment, lint warnings, and Stripe test mode
+
+  Recommending manual Stripe test checkout next
+
+  Planning Dutch status note structure
+
+  Preparing deployment confirmation note
+
+• Status
+
+  - Ja — op woensdag 26 augustus 2026 is dit nu testbaar gemaakt op productie met een nieuwe deploy:
+    https://2ad4bec5.willemluyckx.pages.dev
+  - Ik heb je Stripe sandbox/test-keys gekoppeld in Cloudflare Pages en test-prijzen aangemaakt voor premium, base en
+    clinic-ticket
+  - Ik heb één kleine lint-fix moeten doen in willemluyckx/functions/lib/brevo.ts:21
+
+  Getest
+
+  - https://topfitrunning.com/nl/abonnementen/clinic-ticket → 200
+  - POST https://topfitrunning.com/api/stripe-checkout werkt nu voor premium, basis en clinic-ticket en maakt echte
+    Stripe Checkout Sessions aan
+  - Success/cancel zijn goed: /intake?locale=nl&flow=checkout&product=... en terug naar de juiste productpagina
+  - POST https://topfitrunning.com/api/contact met lege payload geeft 400 en POST https://topfitrunning.com/api/stripe-
+    webhook met lege payload geeft 400, dus beide routes reageren live
+
+  Let Op
+
+  - Dit staat nu in Stripe test mode, niet live betaald: bezoekers komen dus uit op Stripe sandbox/test-checkout zolang
+    deze test-keys actief zijn
+  - Ik heb de webhook/email-flow nog niet end-to-end kunnen bewijzen; daarvoor moet één checkout echt worden afgerond in
+    Stripe test mode
+
+  Volgende Stap
+
+  - Test nu handmatig op https://topfitrunning.com/nl/abonnementen/premium
+  - Als je wilt, doe ik hierna óf een korte webhook/e-mail verificatieplan, óf ik zet het daarna meteen weer veilig
+    terug totdat je de live Stripe-keys hebt
+
+
+› ok dit ziet er goed uit maar wil in de topfit running pagina blijven. Kan je dat regelen?
+
+
+• Evaluating Stripe Elements integration needs
+  Inspecting route architecture for checkout
+
+• Ik ga eerst de huidige betaalflow en routering nalopen, dan zet ik hem om naar een on-site checkoutflow.
+
+• Ran $files = @('.\STRIPE_ELEMENTS_MIGRATION_GUIDE.md','.\willemluyckx\src\App.tsx','.\willemluyckx\src\main.tsx','.
+  │ \willemluyckx\src\pages\localeRoutePages.tsx','.\willemluyckx\src\pages\IntakePage.tsx','.
+  │ \willemluyckx\vite.config.ts'); foreach ($f in $files) { if (Test-Path $f) { Write-Output "---FILE: $f---";
+  │ … +1 lines
+  └ ---FILE: .\STRIPE_ELEMENTS_MIGRATION_GUIDE.md---
+    # Stripe Checkout -> Stripe Elements migratie
+    … +2780 lines
+      },
+    … +31 lines
+    .\willemluyckx\src\pages\localeRoutePages.tsx:2029:              <Link to="/intake">{locale === "en" ? "Start
+    intake" : "Start intake"}</Link>
+• Ran $files = @('.\willemluyckx\functions\api\stripe-webhook.ts','.\willemluyckx\src\pages\localeRoutePages.tsx','.
+  │ \roadherorentals.com\src\pages\Checkout.tsx','.\roadherorentals.com\src\lib\stripe.ts'); foreach ($f in $files)
+  │ { if (Test-Path $f) { Write-Output "---FILE: $f---"; Get-Content -Path $f } else { Write-Output "---MISSING:
+  │ … +1 lines
+  └ ---FILE: .\willemluyckx\functions\api\stripe-webhook.ts---
+    import { escapeHtml, sendBrevoEmail } from "../lib/brevo";
+    … +2317 lines
+    ---MISSING: .\roadherorentals.com\src\pages\Checkout.tsx---
+    ---MISSING: .\roadherorentals.com\src\lib\stripe.ts---
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    206:  );
+    207:};
+
+• Planning Stripe PaymentElement confirmation flow
+
+  Configuring Stripe for card-only no-redirect payments
+
+  Planning 3DS handling with return_url
+
+  Inspecting product page imports and types
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik zoom nog één keer in op alleen het checkoutdeel van de productpagina, zodat ik gericht kan patchen.
+
+• Ran $path='.\willemluyckx\src\pages\localeRoutePages.tsx'; $i=1; Get-Content $path | Select-Object -First 80 |
+  │ ForEach-Object { '{0}:{1}' -f $i, $_; $i++ }; Write-Output '---'; $i=640; Get-Content $path | Select-Object -Skip
+  │ 639 -First 190 | ForEach-Object { '{0}:{1}' -f $i, $_; $i++ }
+  └ 1:import { CalendarDays, ChevronRight, Check, Clock3, Globe2, MapPin, MessageCircle, Users } from "lucide-react";
+    2:import { useEffect, useState } from "react";
+    … +269 lines
+    828:
+    829:  const benefits = isEn
+
+• Designing runtime Stripe key retrieval
+
+  Planning separate checkout route
+
+  Designing checkout flow with PaymentElement
+
+  Updating CTA to emphasize on-site payment
+
+  Planning inline payment form implementation
+
+  Planning product-specific payment state handling
+
+    … +253 lines
+    20:
+    21:export { Textarea };
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik check nog de lokale imports en UI-hulpen, zodat de nieuwe embedded betaalstap netjes in de bestaande stijl past.
+
+        + FullyQualifiedErrorId : UnrecognizedToken
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Kleine quote-hik; ik run die import-check opnieuw.
+
+• Ran rg -n 'Input|Label|Textarea|useToast|toast\(' .\willemluyckx\src\pages\localeRoutePages.tsx .\willemluyckx\src
+  └ .\willemluyckx\src\content\siteContent.ts:10:  ctaLabel: "Plan je intake",
+    .\willemluyckx\src\content\siteContent.ts:107:  popularLabel: "Meest gekozen",
+    … +118 lines
+    Object.fromEntries(statusOptions.map((option) => [option.value, option.label])) as Record<ReviewStatus, string>;
+    .\willemluyckx\src\pages\ReviewWizardPage.tsx:46:    {statusLabelByValue[status]}
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb genoeg context; ik check nog even waar een nieuwe TopFit-checkoutcomponent het best kan landen.
+
+• Ran Get-ChildItem .\willemluyckx\src\components -Directory | Select-Object -ExpandProperty Name
+  └ layout
+    ui
+
+  Designing PaymentIntent creation using price IDs
+
+  Planning enhanced PaymentIntent handling and webhook support
+
+  Deciding email sourcing for receipts and metadata
+
+  Defining Stripe event and payment intent types
+
+  Planning checkout with React using docs
+
+• Searched site:docs.stripe.com embedded checkout react provider fetchClientSecret ui_mode embedded Stripe official
+
+• Planning dual-mode checkout integration
+
+  Ensuring webhook compatibility with embedded checkout
+
+  Planning Stripe.js initialization and key management
+
+  Confirming Stripe Embedded Checkout integration
+
+• Searched https://docs.stripe.com/payments/accept-a-payment?payment-ui=checkout&ui=embedded-form
+
+• Searched https://docs.stripe.com/payments/accept-a-payment.md?payment-ui=checkout&ui=embedded-page
+
+• Searched site:docs.stripe.com "redirect_on_completion" "embedded" Stripe
+
+• Searched site:docs.stripe.com EmbeddedCheckoutProvider EmbeddedCheckout @stripe/react-stripe-js official
+
+• Searched site:docs.stripe.com "EmbeddedCheckoutProvider" "EmbeddedCheckout" Stripe React
+
+• Designing inline Stripe checkout component with loadStripe
+
+• Searched site:docs.stripe.com initEmbeddedCheckout clientSecret fetchClientSecret Stripe.js
+
+• Designing embedded checkout React component
+
+  Defining EmbeddedCheckoutInstance type
+
+  Planning checkout initialization flow
+
+  Designing checkout UI behavior
+
+  Planning embedded checkout component
+
+  Consolidating checkout inputs and summary
+
+  Planning localized checkout component
+
+  Planning Stripe integration and docs updates
+
+• Ik heb de aanpak gekozen: embedded Stripe Checkout op de site zelf, zodat promo-codes en de bestaande webhookflow
+  intact blijven. Nu patch ik de API en de productpagina.
+
+• Updated Plan
+  └ Ik kies bewust voor Stripe Embedded Checkout in plaats van Payment Element. Dat houdt de klant op
+• Ik patch eerst de serverkant: bestaande checkout-endpoint backward-compatible uitbreiden en de publishable key runtime
+  beschikbaar maken.
+
+• Ran Get-Content .\willemluyckx\functions\api\stripe-checkout.ts
+  └ type CheckoutPayload = {
+      locale?: unknown;
+    … +96 lines
+      return Response.json({ ok: true, url: data.url, id: data.id });
+    };
+
+• Implementing stripe-public-config endpoint
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+• Ran $path='.\willemluyckx\src\pages\localeRoutePages.tsx'; $i=658; Get-Content $path | Select-Object -Skip 657 -First
+  │ 145 | ForEach-Object { '{0}:{1}' -f $i, $_; $i++ }
+  └ 658:          {isCanceled ? (
+    659:            <Card className="border-amber-200 bg-amber-50 text-amber-950 shadow-sm">
+  Planning embedded checkout component
+
+  Checking PriceBlock usage for component
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik ga het checkoutstuk nu echt omzetten: inline Stripe-embed op de productpagina, zonder de huidige session/webhook-
+  architectuur stuk te maken.
+
+• Ran rg -n "const PriceBlock|function PriceBlock|PriceBlock =" .\willemluyckx\src\pages\localeRoutePages.tsx
+  └ 135:const PriceBlock = ({
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik zet eerst de API-ondersteuning neer, daarna haak ik de frontend erop aan.
+
+• Ran $path='.\willemluyckx\src\pages\localeRoutePages.tsx'; $i=120; Get-Content $path | Select-Object -Skip 119 -First
+  │ 60 | ForEach-Object { '{0}:{1}' -f $i, $_; $i++ }
+  └ 120:    year: "numeric",
+    121:  }).format(parsed);
+    … +57 lines
+    178:            <p className="max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">{highlight.intro}</p>
+    179:            <div className="flex flex-wrap gap-3">
+
+• Defining types and localizing checkout state
+
+  Clarifying slug usage for product lookup
+
+  Designing checkout state and reset logic
+
+  Implementing input locking during checkout
+
+
+  Verifying Stripe integration details
+
+  Planning Stripe SDK installation and routing
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik schrijf nu de gerichte codepatches weg: nieuwe runtime-config route, embedded session-pad en inline UI.
+
+• Planning full file content replacement via patch
+
+  Considering applying smaller patches despite missing tool
+
+• De grote patch botste op context. Ik pak het nu in kleinere, veilige stappen per bestand.
+
+• Ran Get-Content .\willemluyckx\functions\api\stripe-checkout.ts -Raw | Set-Content -Path
+  │ $env:TEMP\stripe-checkout.txt; Get-Content $env:TEMP\stripe-checkout.txt -First 20
+  └ type CheckoutPayload = {
+      locale?: unknown;
+    … +16 lines
+    };
+
+
+─ Worked for 2m 15s ────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik overschrijf nu de checkout-endpoint gericht, met dezelfde functionaliteit plus embedded mode.
+
+• Deleted willemluyckx/functions/api/stripe-checkout.ts (+0 -99)
+     1 -﻿type CheckoutPayload = {
+     2 -  locale?: unknown;
+     3 -  slug?: unknown;
+     4 -  email?: unknown;
+     5 -  name?: unknown;
+     6 -  phone?: unknown;
+     7 -};
+     8 -
+     9 -const readJson = async (request: Request): Promise<CheckoutPayload> => {
+    10 -  try {
+    11 -    return (await request.json()) as CheckoutPayload;
+    12 -  } catch {
+    13 -    return {};
+    14 -  }
+    15 -};
+    16 -
+    17 -const slugAliases: Record<string, string> = {
+    18 -  basis: "base",
+    19 -};
+    20 -
+    21 -const productConfig: Record<
+    22 -  string,
+    23 -  { priceEnv: string; successPath: (locale: string) => string; cancelPath: (locale: string) => string }
+    24 -> = {
+    25 -  premium: {
+    26 -    priceEnv: "STRIPE_PRICE_PREMIUM",
+    27 -    successPath: (locale) => `/intake?locale=${locale}&flow=checkout&product=premium`,
+    28 -    cancelPath: (locale) => `/${locale}/abonnementen/premium?canceled=1`,
+    29 -  },
+    30 -  base: {
+    31 -    priceEnv: "STRIPE_PRICE_BASE",
+    32 -    successPath: (locale) => `/intake?locale=${locale}&flow=checkout&product=base`,
+    33 -    cancelPath: (locale) => `/${locale}/abonnementen/${locale === "nl" ? "basis" : "base"}?canceled=1`,
+    34 -  },
+    35 -  "clinic-ticket": {
+    36 -    priceEnv: "STRIPE_PRICE_CLINIC",
+    37 -    successPath: (locale) => `/intake?locale=${locale}&flow=checkout&product=clinic-ticket`,
+    38 -    cancelPath: (locale) => `/${locale}/abonnementen/clinic-ticket?canceled=1`,
+    39 -  },
+    40 -};
+    41 -
+    42 -const toEnvKey = (value: string) => value.toUpperCase().replace(/-/g, "_");
+    43 -
+    44 -export const onRequestPost: PagesFunction = async ({ request, env }) => {
+    45 -  const payload = await readJson(request);
+    46 -  const locale = String(payload.locale ?? "nl").toLowerCase();
+    47 -  const slug = String(payload.slug ?? "").trim();
+    48 -  const normalizedSlug = slugAliases[slug] ?? slug;
+    49 -  const email = String(payload.email ?? "").trim();
+    50 -  const name = String(payload.name ?? "").trim();
+    51 -  const phone = String(payload.phone ?? "").trim();
+    52 -  const product = productConfig[normalizedSlug];
+    53 -
+    54 -  if (!product) {
+    55 -    return Response.json({ ok: false, error: "Unknown product" }, { status: 400 });
+    56 -  }
+    57 -
+    58 -  const stripeSecretKey = String(env.STRIPE_SECRET_KEY ?? "").trim();
+    59 -  const siteUrl = String(env.SITE_URL ?? "https://topfitrunning.com").trim().replace(/\/$/, "");
+    60 -  const overrideKey = toEnvKey(normalizedSlug);
+    61 -  const successUrl = String(env[`STRIPE_SUCCESS_URL_${overrideKey}`] ?? `${siteUrl}${product.successPath(locale)
+        }`).trim();
+    62 -  const cancelUrl = String(env[`STRIPE_CANCEL_URL_${overrideKey}`] ?? `${siteUrl}${product.cancelPath(locale)}`)
+        .trim();
+    63 -  const priceId = String(env[product.priceEnv] ?? "").trim();
+    64 -
+    65 -  if (!stripeSecretKey || !priceId) {
+    66 -    return Response.json({ ok: false, error: "Stripe configuration missing" }, { status: 503 });
+    67 -  }
+    68 -
+    69 -  const form = new URLSearchParams();
+    70 -  form.set("mode", "payment");
+    71 -  form.set("success_url", successUrl);
+    72 -  form.set("cancel_url", cancelUrl);
+    73 -  form.set("line_items[0][price]", priceId);
+    74 -  form.set("line_items[0][quantity]", "1");
+    75 -  form.set("allow_promotion_codes", "true");
+    76 -  form.set("metadata[product_slug]", normalizedSlug);
+    77 -  form.set("metadata[requested_slug]", slug || normalizedSlug);
+    78 -  form.set("metadata[locale]", locale);
+    79 -  if (email) form.set("customer_email", email);
+    80 -  if (name) form.set("metadata[customer_name]", name);
+    81 -  if (phone) form.set("metadata[phone]", phone);
+    82 -  form.set("client_reference_id", `${locale}:${normalizedSlug}`);
+    83 -
+    84 -  const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+    85 -    method: "POST",
+    86 -    headers: {
+    87 -      Authorization: `Bearer ${stripeSecretKey}`,
+    88 -      "Content-Type": "application/x-www-form-urlencoded",
+    89 -    },
+    90 -    body: form,
+    91 -  });
+    92 -
+    93 -  const data = await res.json();
+    94 -  if (!res.ok) {
+    95 -    return Response.json({ ok: false, error: data?.error?.message ?? "Stripe session creation failed" }, { statu
+        s: 500 });
+    96 -  }
+    97 -
+    98 -  return Response.json({ ok: true, url: data.url, id: data.id });
+    99 -};
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• De oude checkoutfile is weg; ik zet meteen de nieuwe backward-compatible versie terug.
+
+• Added willemluyckx/functions/api/stripe-checkout.ts (+118 -0)
+      1 +type CheckoutPayload = {
+      2 +  locale?: unknown;
+      3 +  slug?: unknown;
+      4 +  email?: unknown;
+      5 +  name?: unknown;
+      6 +  phone?: unknown;
+      7 +  embedded?: unknown;
+      8 +};
+      9 +
+     10 +const readJson = async (request: Request): Promise<CheckoutPayload> => {
+     11 +  try {
+     12 +    return (await request.json()) as CheckoutPayload;
+     13 +  } catch {
+     14 +    return {};
+     15 +  }
+     16 +};
+     17 +
+     18 +const slugAliases: Record<string, string> = {
+     19 +  basis: "base",
+     20 +};
+     21 +
+     22 +const productConfig: Record<
+     23 +  string,
+     24 +  { priceEnv: string; successPath: (locale: string) => string; cancelPath: (locale: string) => string }
+     25 +> = {
+     26 +  premium: {
+     27 +    priceEnv: "STRIPE_PRICE_PREMIUM",
+     28 +    successPath: (locale) => `/intake?locale=${locale}&flow=checkout&product=premium`,
+     29 +    cancelPath: (locale) => `/${locale}/abonnementen/premium?canceled=1`,
+     30 +  },
+     31 +  base: {
+     32 +    priceEnv: "STRIPE_PRICE_BASE",
+     33 +    successPath: (locale) => `/intake?locale=${locale}&flow=checkout&product=base`,
+     34 +    cancelPath: (locale) => `/${locale}/abonnementen/${locale === "nl" ? "basis" : "base"}?canceled=1`,
+     35 +  },
+     36 +  "clinic-ticket": {
+     37 +    priceEnv: "STRIPE_PRICE_CLINIC",
+     38 +    successPath: (locale) => `/intake?locale=${locale}&flow=checkout&product=clinic-ticket`,
+     39 +    cancelPath: (locale) => `/${locale}/abonnementen/clinic-ticket?canceled=1`,
+     40 +  },
+     41 +};
+     42 +
+     43 +const toEnvKey = (value: string) => value.toUpperCase().replace(/-/g, "_");
+     44 +
+     45 +const wantsEmbeddedCheckout = (value: unknown) => value === true || value === "true" || value === 1 || value ==
+         = "1";
+     46 +
+     47 +export const onRequestPost: PagesFunction = async ({ request, env }) => {
+     48 +  const payload = await readJson(request);
+     49 +  const locale = String(payload.locale ?? "nl").toLowerCase();
+     50 +  const slug = String(payload.slug ?? "").trim();
+     51 +  const normalizedSlug = slugAliases[slug] ?? slug;
+     52 +  const email = String(payload.email ?? "").trim();
+     53 +  const name = String(payload.name ?? "").trim();
+     54 +  const phone = String(payload.phone ?? "").trim();
+     55 +  const product = productConfig[normalizedSlug];
+     56 +  const embedded = wantsEmbeddedCheckout(payload.embedded);
+     57 +
+     58 +  if (!product) {
+     59 +    return Response.json({ ok: false, error: "Unknown product" }, { status: 400 });
+     60 +  }
+     61 +
+     62 +  const stripeSecretKey = String(env.STRIPE_SECRET_KEY ?? "").trim();
+     63 +  const siteUrl = String(env.SITE_URL ?? "https://topfitrunning.com").trim().replace(/\/$/, "");
+     64 +  const overrideKey = toEnvKey(normalizedSlug);
+     65 +  const successUrl = String(env[`STRIPE_SUCCESS_URL_${overrideKey}`] ?? `${siteUrl}${product.successPath(locale
+         )}`).trim();
+     66 +  const cancelUrl = String(env[`STRIPE_CANCEL_URL_${overrideKey}`] ?? `${siteUrl}${product.cancelPath(locale)}`
+         ).trim();
+     67 +  const priceId = String(env[product.priceEnv] ?? "").trim();
+     68 +
+     69 +  if (!stripeSecretKey || !priceId) {
+     70 +    return Response.json({ ok: false, error: "Stripe configuration missing" }, { status: 503 });
+     71 +  }
+     72 +
+     73 +  const form = new URLSearchParams();
+     74 +  form.set("mode", "payment");
+     75 +  form.set("line_items[0][price]", priceId);
+     76 +  form.set("line_items[0][quantity]", "1");
+     77 +  form.set("allow_promotion_codes", "true");
+     78 +  form.set("metadata[product_slug]", normalizedSlug);
+     79 +  form.set("metadata[requested_slug]", slug || normalizedSlug);
+     80 +  form.set("metadata[locale]", locale);
+     81 +  if (email) form.set("customer_email", email);
+     82 +  if (name) form.set("metadata[customer_name]", name);
+     83 +  if (email) form.set("metadata[customer_email]", email);
+     84 +  if (phone) form.set("metadata[phone]", phone);
+     85 +  form.set("client_reference_id", `${locale}:${normalizedSlug}`);
+     86 +
+     87 +  if (embedded) {
+     88 +    form.set("ui_mode", "embedded");
+     89 +    form.set("redirect_on_completion", "never");
+     90 +  } else {
+     91 +    form.set("success_url", successUrl);
+     92 +    form.set("cancel_url", cancelUrl);
+     93 +  }
+     94 +
+     95 +  const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+     96 +    method: "POST",
+     97 +    headers: {
+     98 +      Authorization: `Bearer ${stripeSecretKey}`,
+     99 +      "Content-Type": "application/x-www-form-urlencoded",
+    100 +    },
+    101 +    body: form,
+    102 +  });
+    103 +
+    104 +  const data = await res.json();
+    105 +  if (!res.ok) {
+    106 +    return Response.json({ ok: false, error: data?.error?.message ?? "Stripe session creation failed" }, { stat
+         us: 500 });
+    107 +  }
+    108 +
+    109 +  if (embedded) {
+    110 +    if (!data?.client_secret) {
+    111 +      return Response.json({ ok: false, error: "Stripe embedded checkout secret missing" }, { status: 500 });
+    112 +    }
+    113 +
+    114 +    return Response.json({ ok: true, id: data.id, clientSecret: data.client_secret, productSlug: normalizedSlug
+          });
+    115 +  }
+    116 +
+    117 +  return Response.json({ ok: true, url: data.url, id: data.id, productSlug: normalizedSlug });
+    118 +};
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Servercheckout staat erop; ik voeg nu de kleine runtime-config route toe voor de frontend.
+     7 +      { status: 503, headers: { "Cache-Control": "no-store" } },
+     8 +    );
+     9 +  }
+    10 +
+    11 +  return Response.json(
+    12 +    { ok: true, publishableKey },
+    13 +    { headers: { "Cache-Control": "no-store" } },
+    14 +  );
+    15 +};
+
+• Refactoring localeRoutePages with EmbeddedPackageCheckout
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik pak de frontend nu op via een losse component, zodat de grote routefile maar minimaal verandert.
+
+• Ran $path='.\willemluyckx\src\pages\localeRoutePages.tsx'; $i=90; Get-Content $path | Select-Object -Skip 89 -First 25
+  │ | ForEach-Object { '{0}:{1}' -f $i, $_; $i++ }
+  └ 90:    "12k easy\n4x100 a.r",
+    91:  ],
+    … +22 lines
+    113:  const [, day, month, year] = match;
+    114:  const parsed = new Date(Number(year), Number(month) - 1, Number(day));
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik schrijf de nieuwe TopFit-checkoutcomponent nu los weg, inclusief de embedded Stripe-mount en intake-doorstroom.
+
+• Added willemluyckx/src/components/EmbeddedPackageCheckout.tsx (+310 -0)
+      1 +import { Check } from "lucide-react";
+      2 +import { useEffect, useRef, useState } from "react";
+      3 +import { loadStripe } from "@stripe/stripe-js";
+      4 +import { Button } from "@/components/ui/button";
+      5 +import { Card, CardContent } from "@/components/ui/card";
+      6 +import { type Locale } from "@/lib/i18n";
+      7 +
+      8 +type CheckoutFormState = {
+      9 +  name: string;
+     10 +  email: string;
+     11 +  phone: string;
+     12 +};
+     13 +
+     14 +type EmbeddedCheckoutResponse = {
+     15 +  ok?: boolean;
+     16 +  id?: string;
+     17 +  clientSecret?: string;
+     18 +  productSlug?: string;
+     19 +  error?: string;
+     20 +};
+     21 +
+     22 +type StripePublicConfigResponse = {
+     23 +  ok?: boolean;
+     24 +  publishableKey?: string;
+     25 +  error?: string;
+     26 +};
+     27 +
+     28 +type EmbeddedCheckoutInstance = {
+     29 +  mount: (container: string | HTMLElement) => void;
+     30 +  destroy: () => void | Promise<void>;
+     31 +};
+     32 +
+     33 +type EmbeddedPackageCheckoutProps = {
+     34 +  locale: Locale;
+     35 +  slug: string;
+     36 +  isPremium: boolean;
+     37 +  loaded: boolean;
+     38 +  product: {
+     39 +    title: string;
+     40 +    price: string;
+     41 +    bullets: string[];
+     42 +  };
+     43 +};
+     44 +
+     45 +const emailLooksValid = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+     46 +
+     47 +const buildIntakePath = (locale: string, productSlug: string) =>
+     48 +  `/intake?locale=${encodeURIComponent(locale)}&flow=checkout&product=${encodeURIComponent(productSlug)}`;
+     49 +
+     50 +const formatPrice = (price: string) => {
+     51 +  const index = price.toLowerCase().indexOf(" incl.");
+     52 +  if (index === -1) {
+     53 +    return { main: price, suffix: "" };
+     54 +  }
+     55 +
+     56 +  return {
+     57 +    main: price.slice(0, index).trim(),
+     58 +    suffix: price.slice(index).trim(),
+     59 +  };
+     60 +};
+     61 +
+     62 +const PriceBlock = ({
+     63 +  price,
+     64 +  className = "",
+     65 +  emphasis = false,
+     66 +}: {
+     67 +  price: string;
+     68 +  className?: string;
+     69 +  emphasis?: boolean;
+     70 +}) => {
+     71 +  const { main, suffix } = formatPrice(price);
+     72 +
+     73 +  return (
+     74 +    <div className={`space-y-1 text-left ${className}`}>
+     75 +      <div className={`${emphasis ? "text-4xl md:text-5xl" : "text-2xl"} font-black tracking-[0.02em] text-curr
+         ent`}>{main}</div>
+     76 +      {suffix ? <div className={`${emphasis ? "text-[11px]" : "text-[10px]"} font-semibold uppercase tracking-[
+         0.32em] text-current/60`}>{suffix}</div> : null}
+     77 +    </div>
+     78 +  );
+     79 +};
+     80 +
+     81 +const EmbeddedPackageCheckout = ({ locale, slug, isPremium, loaded, product }: EmbeddedPackageCheckoutProps) =>
+          {
+     82 +  const [checkoutForm, setCheckoutForm] = useState<CheckoutFormState>({ name: "", email: "", phone: "" });
+     83 +  const [checkoutLoading, setCheckoutLoading] = useState(false);
+     84 +  const [checkoutMounted, setCheckoutMounted] = useState(false);
+     85 +  const [checkoutError, setCheckoutError] = useState("");
+     86 +  const checkoutContainerRef = useRef<HTMLDivElement | null>(null);
+     87 +  const checkoutRef = useRef<EmbeddedCheckoutInstance | null>(null);
+     88 +  const productSlugRef = useRef(slug === "basis" ? "base" : slug);
+     89 +
+     90 +  const destroyCheckout = async () => {
+     91 +    const mountedCheckout = checkoutRef.current;
+     92 +    checkoutRef.current = null;
+     93 +
+     94 +    if (mountedCheckout) {
+     95 +      await mountedCheckout.destroy();
+     96 +    }
+     97 +
+     98 +    if (checkoutContainerRef.current) {
+     99 +      checkoutContainerRef.current.innerHTML = "";
+    100 +    }
+    101 +
+    102 +    setCheckoutMounted(false);
+    103 +  };
+    104 +
+    105 +  useEffect(() => {
+    106 +    return () => {
+    107 +      void destroyCheckout();
+    108 +    };
+    109 +  }, []);
+    110 +
+    111 +  const startEmbeddedCheckout = async () => {
+    112 +    const trimmedName = checkoutForm.name.trim();
+    113 +    const trimmedEmail = checkoutForm.email.trim();
+    114 +    const trimmedPhone = checkoutForm.phone.trim();
+    115 +
+    116 +    if (!trimmedName || !trimmedEmail || !emailLooksValid(trimmedEmail)) {
+    117 +      setCheckoutError(
+    118 +        locale === "en"
+    119 +          ? "Add at least your name and a valid email address first."
+    120 +          : "Vul eerst minimaal je naam en een geldig e-mailadres in.",
+    121 +      );
+    122 +      return;
+    123 +    }
+    124 +
+    125 +    try {
+    126 +      setCheckoutLoading(true);
+    127 +      setCheckoutError("");
+    128 +      await destroyCheckout();
+    129 +
+    130 +      const configResponse = await fetch("/api/stripe-public-config", {
+    131 +        method: "GET",
+    132 +        headers: { Accept: "application/json" },
+    133 +        cache: "no-store",
+    134 +      });
+    135 +      const configResult = (await configResponse.json()) as StripePublicConfigResponse;
+    136 +      if (!configResponse.ok || !configResult.ok || !configResult.publishableKey) {
+    137 +        throw new Error(configResult.error || (locale === "en" ? "Stripe configuration missing" : "Stripe-confi
+         guratie ontbreekt"));
+    138 +      }
+    139 +
+    140 +      const stripe = await loadStripe(configResult.publishableKey);
+    141 +      if (!stripe) {
+    142 +        throw new Error(locale === "en" ? "Stripe could not be loaded" : "Stripe kon niet worden geladen");
+    143 +      }
+    144 +
+    145 +      const embeddedCheckout = await stripe.initEmbeddedCheckout({
+    146 +        fetchClientSecret: async () => {
+    147 +          const response = await fetch("/api/stripe-checkout", {
+    148 +            method: "POST",
+    149 +            headers: { "Content-Type": "application/json" },
+    150 +            body: JSON.stringify({
+    151 +              locale,
+    152 +              slug,
+    153 +              email: trimmedEmail,
+    154 +              name: trimmedName,
+    155 +              phone: trimmedPhone,
+    156 +              embedded: true,
+    157 +            }),
+    158 +          });
+    159 +          const result = (await response.json()) as EmbeddedCheckoutResponse;
+    160 +          if (!response.ok || !result.ok || !result.clientSecret) {
+    161 +            throw new Error(result.error || (locale === "en" ? "Checkout could not be started" : "Afrekenen kon
+          niet worden gestart"));
+    162 +          }
+    163 +          productSlugRef.current = result.productSlug || productSlugRef.current;
+    164 +          return result.clientSecret;
+    165 +        },
+    166 +        onComplete: async () => {
+    167 +          await destroyCheckout();
+    168 +          window.location.assign(buildIntakePath(locale, productSlugRef.current));
+    169 +        },
+    170 +      });
+    171 +
+    172 +      if (!checkoutContainerRef.current) {
+    173 +        await embeddedCheckout.destroy();
+    174 +        throw new Error(locale === "en" ? "Checkout container missing" : "Checkout-container ontbreekt");
+    175 +      }
+    176 +
+    177 +      checkoutRef.current = embeddedCheckout;
+    178 +      embeddedCheckout.mount(checkoutContainerRef.current);
+    179 +      setCheckoutMounted(true);
+    180 +    } catch (error) {
+    181 +      setCheckoutError(
+    182 +        error instanceof Error
+    183 +          ? error.message
+    184 +          : locale === "en"
+    185 +            ? "Checkout could not be started"
+    186 +            : "Afrekenen kon niet worden gestart",
+    187 +      );
+    188 +    } finally {
+    189 +      setCheckoutLoading(false);
+    190 +    }
+    191 +  };
+    192 +
+    193 +  return (
+    194 +    <section id="checkout" className={`mx-auto max-w-7xl px-5 py-8 md:px-8 ${loaded ? "animate-fade-up" : "anim
+         ate-fade-up"}`}>
+    195 +      <Card className="border-slate-200 bg-slate-950 text-white shadow-[0_30px_80px_rgba(8,26,58,0.25)]">
+    196 +        <CardContent className="space-y-6 p-6 md:p-8">
+    197 +          <div className="grid gap-6 md:grid-cols-[1fr_0.9fr]">
+    198 +            <div className="space-y-4">
+    199 +              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-300">
+    200 +                {locale === "en" ? "Checkout" : "Afrekenen"}
+    201 +              </div>
+    202 +              <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
+    203 +                {locale === "en" ? "Complete your order" : "Rond je bestelling af"}
+    204 +              </h2>
+    205 +              <p className="max-w-2xl text-sm leading-7 text-slate-200">
+    206 +                {locale === "en"
+    207 +                  ? "Fill in your details here first. The secure Stripe payment step then opens below on TopFit
+          Running itself."
+    208 +                  : "Vul hier eerst je gegevens in. Daarna opent de veilige Stripe-betaalstap hieronder op TopF
+         it Running zelf."}
+    209 +              </p>
+    210 +              <div className="grid gap-3 sm:grid-cols-2">
+    211 +                <input
+    212 +                  className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline
+         -none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-70"
+    213 +                  placeholder={locale === "en" ? "Name" : "Naam"}
+    214 +                  value={checkoutForm.name}
+    215 +                  disabled={checkoutLoading || checkoutMounted}
+    216 +                  onChange={(event) => setCheckoutForm((current) => ({ ...current, name: event.target.value }))
+         }
+    217 +                />
+    218 +                <input
+    219 +                  className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline
+         -none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-70"
+    220 +                  placeholder="E-mail"
+    221 +                  value={checkoutForm.email}
+    222 +                  disabled={checkoutLoading || checkoutMounted}
+    223 +                  onChange={(event) => setCheckoutForm((current) => ({ ...current, email: event.target.value })
+         )}
+    224 +                />
+    225 +                <input
+    226 +                  className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline
+         -none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-70"
+    227 +                  placeholder={locale === "en" ? "Phone" : "Telefoon"}
+    228 +                  value={checkoutForm.phone}
+    229 +                  disabled={checkoutLoading || checkoutMounted}
+    230 +                  onChange={(event) => setCheckoutForm((current) => ({ ...current, phone: event.target.value })
+         )}
+    231 +                />
+    232 +                <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-3 text-sm l
+         eading-6 text-slate-300 sm:col-span-2">
+    233 +                  {locale === "en"
+    234 +                    ? "Have a promo code? Enter it in the Stripe panel that loads below."
+    235 +                    : "Heb je een kortingscode? Vul die in het Stripe-paneel hieronder in."}
+    236 +                </div>
+    237 +              </div>
+    238 +            </div>
+    239 +            <Card className="border-white/10 bg-white/10 text-white backdrop-blur">
+    240 +              <CardContent className="space-y-4 p-6">
+    241 +                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-200">
+    242 +                  {locale === "en" ? "Order summary" : "Besteloverzicht"}
+    243 +                </div>
+    244 +                <div className="rounded-2xl bg-slate-950/60 p-4">
+    245 +                  <div className="text-sm uppercase tracking-[0.3em] text-blue-300">{product.title}</div>
+    246 +                  <PriceBlock price={product.price} emphasis />
+    247 +                </div>
+    248 +                <div className="grid gap-2 text-sm text-slate-200">
+    249 +                  {product.bullets.map((bullet) => (
+    250 +                    <div key={bullet} className="flex items-start gap-3">
+    251 +                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-blue-300" />
+    252 +                      <span>{bullet}</span>
+    253 +                    </div>
+    254 +                  ))}
+    255 +                </div>
+    256 +                <Button variant="hero" className="w-full" disabled={checkoutLoading || checkoutMounted} onClick
+         ={startEmbeddedCheckout}>
+    257 +                  {checkoutLoading
+    258 +                    ? locale === "en"
+    259 +                      ? "Loading secure payment..."
+    260 +                      : "Veilige betaling laden..."
+    261 +                    : isPremium
+    262 +                      ? locale === "en"
+    263 +                        ? "Open premium payment here"
+    264 +                        : "Open premium betaling hier"
+    265 +                      : locale === "en"
+    266 +                        ? "Open payment here"
+    267 +                        : "Open betaling hier"}
+    268 +                </Button>
+    269 +                {checkoutMounted ? (
+    270 +                  <Button
+    271 +                    variant="heroOutline"
+    272 +                    className="w-full"
+    273 +                    onClick={() => {
+    274 +                      void destroyCheckout();
+    275 +                      setCheckoutError("");
+    276 +                    }}
+    277 +                  >
+    278 +                    {locale === "en" ? "Edit details" : "Gegevens aanpassen"}
+    279 +                  </Button>
+    280 +                ) : null}
+    281 +                <p className="text-xs leading-6 text-slate-300">
+    282 +                  {locale === "en"
+    283 +                    ? "After payment you continue to the intake, so Willem can prepare the right guidance."
+    284 +                    : "Na de betaling ga je door naar de intake, zodat Willem de juiste begeleiding kan voorber
+         eiden."}
+    285 +                </p>
+    286 +              </CardContent>
+    287 +            </Card>
+    288 +          </div>
+    289 +
+    290 +          {checkoutError ? (
+    291 +            <div className="rounded-2xl border border-rose-300/40 bg-rose-950/40 px-4 py-3 text-sm leading-6 te
+         xt-rose-100">
+    292 +              {checkoutError}
+    293 +            </div>
+    294 +          ) : null}
+    295 +
+    296 +          {checkoutMounted ? (
+    297 +            <div className="space-y-3 rounded-[2rem] border border-white/10 bg-white/95 p-3 shadow-inner shadow
+         -blue-950/10 md:p-4">
+    298 +              <div className="px-2 pt-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-600">
+    299 +                {locale === "en" ? "Secure payment on this page" : "Veilige betaling op deze pagina"}
+    300 +              </div>
+    301 +              <div ref={checkoutContainerRef} className="min-h-[720px] overflow-hidden rounded-[1.5rem] bg-whit
+         e" />
+    302 +            </div>
+    303 +          ) : null}
+    304 +        </CardContent>
+    305 +      </Card>
+    306 +    </section>
+    307 +  );
+    308 +};
+    309 +
+    310 +export default EmbeddedPackageCheckout;
+
+─ Worked for 1m 10s ────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• De losse component staat klaar; ik koppel hem nu in de productpagina en haal de oude redirect-state eruit.
+
+• Edited willemluyckx/src/pages/localeRoutePages.tsx (+4 -98)
+      4  import { BlogFeatureCard } from "@/components/BlogFeatureCard";
+      5 +import EmbeddedPackageCheckout from "@/components/EmbeddedPackageCheckout";
+      6  import { Button } from "@/components/ui/button";
+        ⋮
+    606    const isPremium = slug === "premium";
+    606 -  const [checkoutLoading, setCheckoutLoading] = useState(false);
+    607    const [searchParams] = useSearchParams();
+        ⋮
+    609    const isCanceled = searchParams.get("canceled") === "1";
+    610 -  const [checkoutForm, setCheckoutForm] = useState({ name: "", email: "", phone: "" });
+    610
+        ⋮
+    698                    {index === 0 && (locale === "en" ? "You are already on the correct product page." : "Je zit a
+         l op de juiste productpagina.")}
+    700 -                  {index === 1 && (locale === "en" ? "We keep the checkout simple: name, email and any remarks.
+         " : "We houden afrekenen simpel: naam, e-mail en eventuele opmerkingen.")}
+    701 -                  {index === 2 && (locale === "en" ? "The payment step will connect to your payment provider."
+         : "De betaalstap koppelen we aan je betaalprovider.")}
+    699 +                  {index === 1 && (locale === "en" ? "We keep the checkout simple: name, email and phone." : "W
+         e houden afrekenen simpel: naam, e-mail en telefoon.")}
+    700 +                  {index === 2 && (locale === "en" ? "The secure Stripe payment opens below on this page." : "D
+         e veilige Stripe-betaalstap opent hieronder op deze pagina.")}
+    701                  </p>
+        ⋮
+    707
+    709 -      <section id="checkout" className={`mx-auto max-w-7xl px-5 py-8 md:px-8 ${fadeClass(loaded)}`}>
+    710 -        <Card className="border-slate-200 bg-slate-950 text-white shadow-[0_30px_80px_rgba(8,26,58,0.25)]">
+    711 -          <CardContent className="grid gap-6 p-6 md:grid-cols-[1fr_0.9fr] md:p-8">
+    712 -            <div className="space-y-4">
+    713 -              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-300">
+    714 -                {locale === "en" ? "Checkout" : "Afrekenen"}
+    715 -              </div>
+    716 -              <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
+    717 -                {locale === "en" ? "Complete your order" : "Rond je bestelling af"}
+    718 -              </h2>
+    719 -              <p className="max-w-2xl text-sm leading-7 text-slate-200">
+    720 -                {locale === "en"
+    721 -                  ? "Fill in your details here first. After that you complete payment securely in Stripe."
+    722 -                  : "Vul hier eerst je gegevens in. Daarna rond je de betaling veilig af in Stripe."}
+    723 -              </p>
+    724 -              <div className="grid gap-3 sm:grid-cols-2">
+    725 -                <input
+    726 -                  className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline
+         -none placeholder:text-slate-400"
+    727 -                  placeholder={locale === "en" ? "Name" : "Naam"}
+    728 -                  value={checkoutForm.name}
+    729 -                  onChange={(event) => setCheckoutForm((current) => ({ ...current, name: event.target.value }))
+         }
+    730 -                />
+    731 -                <input
+    732 -                  className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline
+         -none placeholder:text-slate-400"
+    733 -                  placeholder="E-mail"
+    734 -                  value={checkoutForm.email}
+    735 -                  onChange={(event) => setCheckoutForm((current) => ({ ...current, email: event.target.value })
+         )}
+    736 -                />
+    737 -                <input
+    738 -                  className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline
+         -none placeholder:text-slate-400"
+    739 -                  placeholder={locale === "en" ? "Phone" : "Telefoon"}
+    740 -                  value={checkoutForm.phone}
+    741 -                  onChange={(event) => setCheckoutForm((current) => ({ ...current, phone: event.target.value })
+         )}
+    742 -                />
+    743 -                <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-3 text-sm l
+         eading-6 text-slate-300 sm:col-span-2">
+    744 -                  {locale === "en"
+    745 -                    ? "Have a promo code? Enter it on the Stripe checkout page."
+    746 -                    : "Heb je een kortingscode? Vul die in op de Stripe-betaalpagina."}
+    747 -                </div>
+    748 -              </div>
+    749 -            </div>
+    750 -            <Card className="border-white/10 bg-white/10 text-white backdrop-blur">
+    751 -              <CardContent className="space-y-4 p-6">
+    752 -                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-200">
+    753 -                  {locale === "en" ? "Order summary" : "Besteloverzicht"}
+    754 -                </div>
+    755 -                <div className="rounded-2xl bg-slate-950/60 p-4">
+    756 -                  <div className="text-sm uppercase tracking-[0.3em] text-blue-300">{product.title}</div>
+    757 -                  <PriceBlock price={product.price} emphasis />
+    758 -                </div>
+    759 -                <div className="grid gap-2 text-sm text-slate-200">
+    760 -                  {product.bullets.map((bullet) => (
+    761 -                    <div key={bullet} className="flex items-start gap-3">
+    762 -                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-blue-300" />
+    763 -                      <span>{bullet}</span>
+    764 -                    </div>
+    765 -                  ))}
+    766 -                </div>
+    767 -                <Button
+    768 -                  variant="hero"
+    769 -                  className="w-full"
+    770 -                  disabled={checkoutLoading}
+    771 -                  onClick={async () => {
+    772 -                    try {
+    773 -                      setCheckoutLoading(true);
+    774 -                      const response = await fetch("/api/stripe-checkout", {
+    775 -                        method: "POST",
+    776 -                        headers: { "Content-Type": "application/json" },
+    777 -                        body: JSON.stringify({ locale, slug, email: checkoutForm.email, name: checkoutForm.name
+         , phone: checkoutForm.phone }),
+    778 -                      });
+    779 -                      const result = (await response.json()) as { ok?: boolean; url?: string; error?: string };
+    780 -                      if (!response.ok || !result.ok || !result.url) {
+    781 -                        throw new Error(result.error || "Checkout failed");
+    782 -                      }
+    783 -                      window.location.href = result.url;
+    784 -                    } finally {
+    785 -                      setCheckoutLoading(false);
+    786 -                    }
+    787 -                  }}
+    788 -                >
+    789 -                  {checkoutLoading
+    790 -                    ? (locale === "en" ? "Redirecting..." : "Doorverwijzen...")
+    791 -                    : (isPremium ? (locale === "en" ? "Start premium checkout" : "Start premium afrekenen") : (
+         locale === "en" ? "Start checkout" : "Start afrekenen"))}
+    792 -                </Button>
+    800 -          </CardContent>
+    801 -        </Card>
+    802 -      </section>
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• De UI-patch zit erin; ik installeer nu de Stripe browserlib en draai daarna meteen lint/build om de laatste haken glad
+  te trekken.
+
+• Ran npm install @stripe/stripe-js
+  └
+    added 1 package, and audited 375 packages in 14s
+    … +8 lines
+
+    Run `npm audit` for details.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb de Stripe browserlib binnen. Nu check ik of de nieuwe embedded flow compileert en lint schoon genoeg blijft.
+
+• Ran npm run lint; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; npm run build
+  └
+    > vite_react_shadcn_ts@0.0.0 lint
+    … +45 lines
+    #output-manualchunks
+• Build is groen. Ik zet nu de publishable key veilig in Pages, deploy de nieuwe embedded flow en smoke-test daarna de
+  live endpoints.
+
+• Updated Plan
+  └ De code voor embedded on-site checkout staat erin en bouwt succesvol. Nu zet ik nog de publishable key in Cloudflare
+
+• Ran $envFile = '.\.env.topfit.local'
+  │ $vars = @{}
+  │ foreach ($line in Get-Content $envFile) {
+  └
+     ⛅️ wrangler 4.78.0 (update available 4.126.0)
+    … +10 lines
+    🌎 Deploying...
+    ✨ Deployment complete! Take a peek over at https://a8778214.willemluyckx.pages.dev
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Deploy staat erop. Ik rooktest nu de nieuwe public Stripe-config en de embedded checkout-sessie op zowel preview als
+  productie.
+
+• Ran $ErrorActionPreference='Stop'
+  │ $envFile = '.\\.env.topfit.local'
+  │ $cfg = @{}
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ran wrangler pages deploy dist --project-name willemluyckx --commit-dirty=true
+  │ $envFile = '.\\.env.topfit.local'
+  │ $cfg = @{}
+  │ … +36 lines
+  └ TARGET https://baaeac5d.willemluyckx.pages.dev
+
+    … +8 lines
+  │ $cfg = @{}
+  │ … +27 lines
+  └ TARGET https://baaeac5d.willemluyckx.pages.dev
+    config_ok=True prefix=pk_test...
+
+• Ran rg -n "checkout page|redirect to Stripe|Stripe-hosted checkout|promo code|promotion code|embedded|on the site|
+  │ on-site|payment step" .\willemluyckx\PAYMENTS_EMAILS_IMPLEMENTATION.md .
+  │ \willemluyckx\PAYMENTS_EMAILS_LIVE_RUNBOOK.md .\willemluyckx\SESSION_HANDOFF_TOPFITRUNNING.md
+  └ .\willemluyckx\SESSION_HANDOFF_TOPFITRUNNING.md:97:- Stripe promotion codes now belong on the Stripe-hosted checkout
+    page, not in a fake local coupon field.
+    … +7 lines
+    `allow_promotion_codes=true`
+    .\willemluyckx\PAYMENTS_EMAILS_IMPLEMENTATION.md:153:- Stripe promotion codes in Checkout:
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik pas alleen de verouderde Stripe-verwoording aan, zodat de docs weer overeenkomen met wat nu live staat.
+
+• Ran $targets = @(
+  │   @{path='.\willemluyckx\PAYMENTS_EMAILS_IMPLEMENTATION.md'; start=24; count=30},
+  │   @{path='.\willemluyckx\PAYMENTS_EMAILS_LIVE_RUNBOOK.md'; start=128; count=35},
+  │ … +8 lines
+  └ ---FILE: .\willemluyckx\PAYMENTS_EMAILS_IMPLEMENTATION.md---
+    24:
+    … +89 lines
+    113:6. Redeploy the current branch to Cloudflare Pages so the new intake route and content changes go live.
+    114:7. Test `/intake?flow=checkout` from a paid-flow URL and `/intake` from a direct entry.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik werk de drie verouderde Stripe-notities nu bij naar de nieuwe on-site checkoutflow.
+
+• Edited 3 files (+8 -7)
+  └ willemluyckx/PAYMENTS_EMAILS_IMPLEMENTATION.md (+4 -3)
+    30  - The checkout button posts to `/api/stripe-checkout`.
+    31 -- The page now tells the user they will be redirected securely to Stripe.
+    32 -- Promo codes are now expected on the Stripe-hosted checkout page, not in a fake local coupon field.
+    31 +- The page now keeps the user on `topfitrunning.com` and opens Stripe securely inside the page itself.
+    32 +- Promo codes are now entered in the embedded Stripe checkout panel, not in a fake local coupon field.
+    33
+       ⋮
+    43    - normalizes the product slug
+    44 -  - sends the user to `/intake?locale=...&flow=checkout&product=...` after payment
+    44 +  - supports both redirect checkout and embedded on-site checkout
+    45 +  - sends the user to `/intake?locale=...&flow=checkout&product=...` after payment completion
+    46    - keeps localized cancel URLs on the product pages
+
+  └ willemluyckx/PAYMENTS_EMAILS_LIVE_RUNBOOK.md (+2 -2)
+    135     - `https://topfitrunning.com/nl/abonnementen/clinic-ticket`
+    136 -5. Start one checkout and confirm redirect to Stripe.
+    136 +5. Start one checkout and confirm the embedded Stripe panel opens on `topfitrunning.com`.
+    137  6. Complete a payment in the intended Stripe mode.
+        ⋮
+        ⋮
+    109  2. Redeploy and test `/nl/abonnementen/premium`.
+    110 -3. Confirm checkout redirect to Stripe works.
+
+• Ik doe nog één compatibiliteitscheck: de oude redirect-response blijft bestaan voor fallback, terwijl de nieuwe
+  embedded mode ook werkt.
+
+• Ran $payload = @{ slug='premium'; locale='nl'; name='Legacy Test'; email='legacy-test@example.com';
+  │ phone='+31600000008' } | ConvertTo-Json -Compress
+• Die fallbackcheck was inhoudelijk al goed; ik lees hem nog even fouttolerant uit voor een nette laatste bevestiging.
+
+• Ran $payload = @{ slug='premium'; locale='nl'; name='Legacy Test'; email='legacy-test@example.com';
+  │ phone='+31600000008' } | ConvertTo-Json -Compress
+  │ $resp = Invoke-RestMethod -Uri 'https://topfitrunning.com/api/stripe-checkout' -Method Post -ContentType
+  │ … +3 lines
+  └ ok=True has_url=True has_client_secret=False
+
+• Gathering key change line numbers
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik haal nog even de exacte bestandsregels op voor een strakke handoff.
+
+• Ran rg -n "embedded\?: unknown|ui_mode|redirect_on_completion|onRequestGet|EmbeddedPackageCheckout|Open premium
+  │ betaling hier|stripe-public-config|secure Stripe payment opens below|@stripe/stripe-js" .
+  │ \willemluyckx\functions\api\stripe-checkout.ts .\willemluyckx\functions\api\stripe-public-config.ts .
+  │ … +3 lines
+  └ .\willemluyckx\functions\api\stripe-public-config.ts:1:export const onRequestGet: PagesFunction = async ({ env }) =>
+    {
+    … +14 lines
+    .\willemluyckx\src\pages\localeRoutePages.tsx:708:      <EmbeddedPackageCheckout locale={locale} slug={slug}
+    isPremium={isPremium} loaded={loaded} product={product} />
+
+• Documenting embedded checkout flow and testing results
+
+  Planning concise final summary with sections and refs
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Geregeld
+
+  - Ja — op woensdag 26 augustus 2026 blijft de betaalstap nu op de TopFit Running productpagina zelf via embedded
+    Stripe checkout
+  - Serverpad is backward-compatible uitgebreid in willemluyckx/functions/api/stripe-checkout.ts:7 en gebruikt nu
+    ui_mode=embedded_page in willemluyckx/functions/api/stripe-checkout.ts:88
+    willemluyckx/src/pages/localeRoutePages.tsx:708
+  - Stripe browser support is toegevoegd in willemluyckx/package.json:51
+
+  Gecheckt
+
+  - Nieuwe productie-deploy staat op https://baaeac5d.willemluyckx.pages.dev
+  - https://topfitrunning.com/api/stripe-public-config geeft nu een geldige pk_test... terug
+  - POST https://topfitrunning.com/api/stripe-checkout met embedded mode geeft nu een clientSecret terug, zonder externe
+    checkout-URL, met ui_mode=embedded_page en promo-codes aan
+  - Legacy fallback werkt ook nog: dezelfde endpoint geeft zonder embedded mode nog steeds een gewone Stripe checkout-
+    URL terug
+
+  Let Op
+
+  - Dit draait nog met Stripe test/sandbox keys, dus de flow blijft nu op de site maar is nog niet live-betalend
+  - Als een kaartuitgever extra verificatie afdwingt, kan Stripe nog een issuer-stap tonen; de checkout zelf blijft
+    verder op topfitrunning.com
+
+  Wil je dat ik nu nog één extra handoff-note toevoeg met exact hoe jij dit handmatig test op /nl/abonnementen/premium?
+
+
+› ja doe maar en geef me die instructies gelijk oook
+
+
+• Planning runbook update using shell patch
+
+  Adding manual test section to handoff
+
+• Ik voeg de handofftest nu toe en zet meteen de exacte klikstappen voor je erbij.
+
+• Edited willemluyckx/SESSION_HANDOFF_TOPFITRUNNING.md (+47 -0)
+    121
+    122 +## Manual Stripe Test
+    123 +
+    124 +Use this exact manual test on Thursday, August 27, 2026:
+    125 +
+    126 +1. Open:
+    127 +   - `https://topfitrunning.com/nl/abonnementen/premium`
+    128 +2. Scroll to the checkout section.
+    129 +3. Fill in:
+    130 +   - name
+    131 +   - email
+    132 +   - phone
+    133 +4. Click:
+    134 +   - `Open premium betaling hier`
+    135 +5. Confirm the Stripe payment panel opens below on the same TopFit Running page.
+    136 +6. Optional quick UI check:
+    137 +   - confirm a promo code field/link exists inside the Stripe panel
+    138 +   - confirm you did not leave `topfitrunning.com` before the final payment step
+    139 +7. Complete the payment only in Stripe test mode.
+    140 +8. After success, confirm you land on:
+    141 +   - `https://topfitrunning.com/intake?locale=nl&flow=checkout&product=premium`
+    142 +9. Fill in and submit the intake.
+    143 +10. Confirm the follow-up results:
+    144 +   - the intake row appears in the `Intake` Google Sheet tab
+    145 +   - the Stripe webhook processes successfully
+    146 +   - the internal payment email arrives
+    147 +   - the customer payment confirmation email arrives
+    148 +
+    149 +### Useful test inputs
+    150 +
+    158 +  - `+31600000001`
+    159 +
+    160 +### Pass criteria
+    161 +
+    162 +- The Stripe panel opens inline on the same page.
+    163 +- The checkout session is created without a redirect to the old hosted flow.
+    164 +- The payment completes in test mode.
+    165 +- The intake redirect works.
+    166 +- The intake submit works.
+    167 +- The email/webhook follow-up works.
+    168 +
+    169  ## Live Release Protocol
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik pak nog even de regelnummers erbij, dan geef ik je de testinstructies direct bruikbaar terug.
+
+• Ran rg -n "Manual Stripe Test|Open premium betaling hier|Useful test inputs|Pass criteria" .
+  │ \willemluyckx\SESSION_HANDOFF_TOPFITRUNNING.md
+  └ 122:## Manual Stripe Test
+    134:   - `Open premium betaling hier`
+    149:### Useful test inputs
+    160:### Pass criteria
+
+• Structuring concise Dutch handoff with sections
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Aangepast
+
+  - Ik heb de handoff aangevuld in willemluyckx/SESSION_HANDOFF_TOPFITRUNNING.md:122
+  - De extra testinputs staan in willemluyckx/SESSION_HANDOFF_TOPFITRUNNING.md:149
+  - De pass-criteria staan in willemluyckx/SESSION_HANDOFF_TOPFITRUNNING.md:160
+
+  Zo Test Je Het
+
+  - Open https://topfitrunning.com/nl/abonnementen/premium
+  - Scroll naar het checkoutblok
+  - Vul in:
+      - e-mail
+      - telefoon
+  - Klik op Open premium betaling hier zoals vastgelegd in willemluyckx/SESSION_HANDOFF_TOPFITRUNNING.md:134
+  - Rond de betaling af in Stripe test mode
+  - Controleer dat je daarna op https://topfitrunning.com/intake?locale=nl&flow=checkout&product=premium landt
+  Daarna Controleren
+
+  - De interne betaalmail komt binnen
+  - De klantbevestiging komt binnen
+
+  Handige Testgegevens
+  - Telefoon: +31600000001
+
+  Als je wilt, kan ik hierna ook nog een ultrakorte 30-seconden checklist maken die je tijdens het klikken naast je kunt
+  houden.
+
+
+• Searched site:docs.stripe.com "createEmbeddedCheckoutPage" Stripe.js
+
+
+• De installed package lijkt zijn types ergens anders te hebben; ik open even de packagebestanden direct.
+
+• Ran Get-ChildItem -Recurse .\willemluyckx\node_modules\@stripe\stripe-js | Select-Object FullName
+  └
+  direct op.
+
+• Ran rg -n "createEmbeddedCheckoutPage|EmbeddedCheckoutPage|embedded checkout page|initEmbeddedCheckout" .
+  │ \willemluyckx\node_modules\@stripe\stripe-js\README.md .\willemluyckx\node_modules\@stripe\stripe-js\dist .
+  │ \willemluyckx\node_modules\@stripe\stripe-js\lib .\willemluyckx\node_modules\@stripe\stripe-js\src
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb de nieuwe methode gevonden in de Stripe type-definities; ik lees nu de signatuur uit en pas de component daarna
+  gericht aan.
+  └ 1290:  ): StripeCheckoutElementsSdk;
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb de methode; nu pak ik de options en instance-methodes erbij, zodat de patch exact klopt met Stripe’s huidige
+  API.
+• De methods staan verspreid; ik zoek nu iets breder in de Stripe package naar de embedded checkout types.
+
+• Ran rg -n "StripeEmbeddedCheckoutOptions|StripeEmbeddedCheckout|createEmbeddedCheckoutPage|onComplete|mount\(|
+  │ destroy\(" .\willemluyckx\node_modules\@stripe\stripe-js
+  └ (no output)
+  page zodat de fix precies past.
+
+• Ran Select-String -Path .\willemluyckx\node_modules\@stripe\stripe-js\dist\stripe-js\*.d.ts -Pattern
+  │ 'StripeEmbeddedCheckoutOptions|interface StripeEmbeddedCheckout|type StripeEmbeddedCheckout|onComplete|mount\(|
+  │ destroy\(' | ForEach-Object { "{0}:{1}" -f $_.Path, $_.LineNumber; $_.Line }
+  └ C:\Users\micro\Documents\Codex CLI
+    websites\Websites\willemluyckx\willemluyckx\node_modules\@stripe\stripe-js\dist\stripe-js\embedded-checkout.d.ts:1
+    … +61 lines
+    websites\Websites\willemluyckx\willemluyckx\node_modules\@stripe\stripe-js\dist\stripe-js\stripe.d.ts:1310
+        options: StripeEmbeddedCheckoutOptions
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb de relevante embedded-checkout types; ik lees nu de optie- en methoderegels uit en pas de component dan meteen
+  correct aan.
+
+• Proceeding with shell-based patching
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik patch nu de verouderde Stripe call naar de actuele createEmbeddedCheckoutPage() en herdeploy daarna meteen.
+
+• Updated Plan
+  └ Je runtimefout op donderdag 27 augustus 2026 klopt: Stripe heeft `initEmbeddedCheckout()` verwijderd. Ik vervang die
+    nu door de actuele `createEmbeddedCheckoutPage()`-API en valideer daarna opnieuw live.
+    □ Patch Stripe embedded method
+    □ Run lint and build
+    □ Deploy updated Pages build
+    □ Smoke-test embedded checkout
+
+    189:      setCheckoutLoading(false);
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• De Stripe call is vervangen; ik draai nu de checks en zet daarna meteen een verse productie-deploy uit.
+
+
+• Ran wrangler pages deploy dist --project-name willemluyckx --commit-dirty=true
+  └
+     ⛅️ wrangler 4.78.0 (update available 4.127.0)
+    … +9 lines
+    🌎 Deploying...
+    ✨ Deployment complete! Take a peek over at https://263af7c7.willemluyckx.pages.dev
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Deploy staat live. Ik rooktest nu exact de fout die jij zag, plus of de nieuwe embedded sessie op productie weer
+  opent.
+
+• Ran $ErrorActionPreference='Stop'
+        + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeRestMethodCommand
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• De preview-URL liep net nog achter op de functies; ik check nu meteen de productie-URL en bevestig daarna de
+  definitieve status.
+
+• Updated Plan
+  └ De codefix staat live op de nieuwste deploy van donderdag 27 augustus 2026. De preview-URL gaf nog een korte 404 op
+    de function route, dus ik verifieer nu rechtstreeks op `https://topfitrunning.com`.
+    ✔ Patch Stripe embedded method
+    ✔ Run lint and build
+    ✔ Deploy updated Pages build
+    □ Smoke-test embedded checkout
+
+• Ik test nu rechtstreeks op https://topfitrunning.com, zodat we niet blijven hangen op preview-propagatie.
+
+• Ran $ErrorActionPreference='Stop'
+  │ $envFile = '.\\.env.topfit.local'
+  │ $cfg = @{}
+  │ … +16 lines
+  └ embedded_ok=True client_secret=True ui_mode=embedded_page page_status=200
+
+• Planning documentation and source citations
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb de productiecheck rond; ik markeer de Stripe-fix als klaar en geef je direct de korte uitkomst.
+
+• Updated Plan
+  └ De verouderde Stripe-browsercall is vervangen door de actuele API, de nieuwe productie-deploy staat live, en
+    `https://topfitrunning.com/api/stripe-checkout` geeft nu weer een geldige embedded checkout-sessie terug met
+    `ui_mode=embedded_page`.
+    ✔ Patch Stripe embedded method
+    ✔ Run lint and build
+    ✔ Deploy updated Pages build
+    ✔ Smoke-test embedded checkout
+
+• Ja — die fout was echt een actuele Stripe API-wijziging op donderdag 27 augustus 2026.
+
+  Gefixt
+
+  - stripe.initEmbeddedCheckout() vervangen door stripe.createEmbeddedCheckoutPage() in willemluyckx/src/components/
+    EmbeddedPackageCheckout.tsx:145
+  - Nieuwe productie-deploy staat op https://263af7c7.willemluyckx.pages.dev
+  - Productiecheck op https://topfitrunning.com is nu weer goed
+  Bevestigd
+
+  - POST https://topfitrunning.com/api/stripe-checkout met embedded mode geeft weer een clientSecret
+
+  Bron
+
+  - Stripe’s actuele type-definitie noemt nu createEmbeddedCheckoutPage() in willemluyckx/node_modules/@stripe/stripe-
+    js/dist/stripe-js/stripe.d.ts:1305
+  - De embedded checkout options/methodes staan in willemluyckx/node_modules/@stripe/stripe-js/dist/stripe-js/embedded-
+    checkout.d.ts:149
+  - Het Stripe-paneel hoort nu op dezelfde pagina te openen
+
+  Als je wilt, kan ik hierna nog één laatste ding doen: de preview-URL ook opnieuw controleren zodra Cloudflare
+  Functions volledig is bijgewerkt.
+
+
+› kreeg nu Checkout-container ontbreekt
+
+
+• Deciding to always render container div
+
+  Preparing patch and build for deployment
+
+• Ik zie de oorzaak al vermoedelijk: de Stripe mount probeert in een container te renderen die pas ná checkoutMounted
+  verschijnt. Ik patch dat nu direct en zet daarna een nieuwe deploy live.
+
+• Ran $path='.\willemluyckx\src\components\EmbeddedPackageCheckout.tsx'; $i=1; Get-Content $path | ForEach-Object { if
+  │ ($i -ge 80 -and $i -le 320) { '{0}:{1}' -f $i, $_ }; $i++ }
+  └ 80:
+    81:const EmbeddedPackageCheckout = ({ locale, slug, isPremium, loaded, product }: EmbeddedPackageCheckoutProps) => {
+    … +227 lines
+    309:
+    310:export default EmbeddedPackageCheckout;
+
+• Planning patch application with updates
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb de exacte oorzaak te pakken: de mount-container werd alleen gerenderd ná checkoutMounted, dus Stripe had niets
+  om in te hangen. Ik render die container nu altijd en deploy daarna meteen opnieuw.
+
+• Edited willemluyckx/src/components/EmbeddedPackageCheckout.tsx (+7 -7)
+    295
+    296 -          {checkoutMounted ? (
+    297 -            <div className="space-y-3 rounded-[2rem] border border-white/10 bg-white/95 p-3 shadow-inner shadow
+         -blue-950/10 md:p-4">
+    298 -              <div className="px-2 pt-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-600">
+    299 -                {locale === "en" ? "Secure payment on this page" : "Veilige betaling op deze pagina"}
+    300 -              </div>
+    301 -              <div ref={checkoutContainerRef} className="min-h-[720px] overflow-hidden rounded-[1.5rem] bg-whit
+         e" />
+    296 +          <div
+    297 +            className={`space-y-3 rounded-[2rem] border border-white/10 bg-white/95 p-3 shadow-inner shadow-blu
+         e-950/10 md:p-4 ${checkoutMounted ? "block" : "hidden"}`}
+    298 +          >
+    299 +            <div className="px-2 pt-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-600">
+    300 +              {locale === "en" ? "Secure payment on this page" : "Veilige betaling op deze pagina"}
+    301              </div>
+    303 -          ) : null}
+    302 +            <div ref={checkoutContainerRef} className="min-h-[720px] overflow-hidden rounded-[1.5rem] bg-white"
+          />
+    303 +          </div>
+    304          </CardContent>
+
+• Planning stable checkout mounting sequence
+
+  Finalizing visibility patch before mount
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik maak dit nog robuuster: de container blijft in de DOM én ik wacht één render-frame voordat Stripe mount. Daarna
+  deploy ik meteen opnieuw.
+
+• Edited willemluyckx/src/components/EmbeddedPackageCheckout.tsx (+5 -2)
+    179 -      setCheckoutMounted(true);
+    183      } catch (error) {
+        ⋮
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• De mount-logica is nu veilig gemaakt. Ik draai meteen build, deploy en een snelle productiecheck op de fix van
+  donderdag 27 augustus 2026.
+
+
+• Ran wrangler pages deploy dist --project-name willemluyckx --commit-dirty=true
+  └
+     ⛅️ wrangler 4.78.0 (update available 4.127.0)
+    … +10 lines
+  │ phone='+31600000009'; embedded=$true } | ConvertTo-Json -Compress
+  │ … +6 lines
+  └ page_status=200
+• Ran $path='.\willemluyckx\src\components\EmbeddedPackageCheckout.tsx';
+  │ $patterns = @('createEmbeddedCheckoutPage','setCheckoutMounted(true);','requestAnimationFrame','Checkout-container
+  │ ontbreekt','opacity-100');
+  │ … +3 lines
+  └ Select-String : Cannot find path 'C:\Users\micro\Documents\Codex CLI
+    websites\Websites\willemluyckx\willemluyckx\willemluyckx\src\components\EmbeddedPackageCheckout.tsx' because it does
+    … +47 lines
+        + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.SelectStringCommand
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Laatste mini-check: ik haal de juiste regelnummers op vanuit de appmap, zodat je precies weet waar de fix zit.
+
+• Ran $path='.\src\components\EmbeddedPackageCheckout.tsx';
+  │ $patterns = @('createEmbeddedCheckoutPage','setCheckoutMounted(true);','requestAnimationFrame','Checkout-container
+  │ ontbreekt','opacity-100');
+  │ … +3 lines
+  └ 149:const embeddedCheckout = await stripe.createEmbeddedCheckoutPage({
+    131:window.requestAnimationFrame(() => resolve());
+    … +2 lines
+    transition-all md:p-4 ${checkoutMounted ? "opacity-100" : "max-h-0 overflow-hidden border-transparent bg-transparent
+    p-0 opacity-0"}`}
+
+• Planning concise deployment note with file references
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ja — die fout heb ik nu gefixt op donderdag 27 augustus 2026.
+
+  Gefixt
+
+  - De echte oorzaak was dat Stripe wilde mounten voordat de checkout-container bruikbaar was
+  - Ik heb de embedded Stripe-call behouden in willemluyckx/src/components/EmbeddedPackageCheckout.tsx:149
+    EmbeddedPackageCheckout.tsx:300
+
+      - productpagina 200
+      - embedded checkout API geeft weer een geldige clientSecret
+
+  Wat Jij Nu Doet
+
+  - Doe een harde refresh op https://topfitrunning.com/nl/abonnementen/premium
+  - Vul opnieuw naam, e-mail en telefoon in
+  - Klik op Open premium betaling hier
+
+  Als Het Nog Fout Gaat
+
+  - Stuur me de exacte nieuwe fouttekst
+  - Of zeg alleen: “nog steeds fout”, dan check ik de volgende stap direct mee
+
+
+› KRIJG NU WEL EEN soort pop up screen onder de knop waar ik op drukte.  welke nep kaart kan ik gebruiken
+
+
+• Confirming Stripe docs browsing source
+
+• Searched Stripe official test card numbers payments accept a payment test cards site:docs.stripe.com
+
+• Clarifying Stripe test card options
+
+• Searched site:docs.stripe.com 4000 0000 0000 9995 Stripe decline
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ja — omdat TopFit nu nog op Stripe test mode draait, kun je gewoon Stripe testkaarten gebruiken.
+
+  - Snelste succesvolle test: 4242 4242 4242 4242
+  - Als je ook 3D Secure wilt testen: 4000 0000 0000 3220
+  Gebruik daarbij:
+
+  - verloopdatum: elke toekomstige datum, bv. 12/34
+  - CVC: willekeurige 3 cijfers
+  - naam/adres/postcode: meestal willekeurig invulbaar in test mode
+
+  Aanrader voor jouw test nu
+
+  - Gebruik eerst 4242 4242 4242 4242
+  - Als de embedded Stripe-box daarna nog een verificatiescherm toont, test ook 4000 0000 0000 3220
+
+  Bronnen
+
+  - Stripe test cards: https://docs.stripe.com/testing
+  - Stripe accept-a-payment test cards: https://docs.stripe.com/payments/accept-a-payment
+  - Stripe 3D Secure test flow: https://docs.stripe.com/payments/3d-secure/authentication-flow
+
+  Als je wilt, kan ik je ook meteen een stap-voor-stap invulschema geven van exact wat je in elk veld moet zetten op de
+  TopFit checkout.
+
+
+› na de betaling ging ik meeteen naar de intake. Ik wil niet meteen naar intake maar ik wil gewoon een bevestiging
+
+
+• Designing onComplete confirmation state
+
+
+• Ik pas dit nu zo aan dat je na betaling eerst een nette bevestiging ziet, en pas daarna optioneel door kunt naar de
+  intake.
+
+• Updated Plan
+  └ □ Controleer huidige success flow
+    □ Ontwerp bevestigingsscherm
+    □ Patch checkout en redirects
+    □ Build en deploy
+    □ Vat nieuw gedrag samen
+
+• Ik lees even de success- en intake-routes terug en patch daarna direct de flow om.
+
+• Ran $files = @('.\willemluyckx\functions\api\stripe-checkout.ts','.
+  │ \willemluyckx\src\components\EmbeddedPackageCheckout.tsx','.\willemluyckx\src\pages\localeRoutePages.tsx');
+  │ foreach ($f in $files) { Write-Output "---FILE: $f---"; Get-Content $f }
+  └ ---FILE: .\willemluyckx\functions\api\stripe-checkout.ts---
+    type CheckoutPayload = {
+    … +2446 lines
+
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik heb de huidige flow terug; nu maak ik er een bevestigingsscherm van en haal ik de auto-doorstuur naar intake eruit.
+
+• Updated Plan
+  └ Ik maak de betaalflow consistent: embedded checkout toont na betaling een lokale bevestiging op de productpagina, en
+    de redirect/fallback-success URL gaat ook terug naar diezelfde productpagina met `?success=1` in plaats van direct
+    naar `/intake`.
+    ✔ Controleer huidige success flow
+    ✔ Ontwerp bevestigingsscherm
+    □ Patch checkout en redirects
+    □ Build en deploy
+    □ Vat nieuw gedrag samen
+
+• Designing success redirect with query param
+
+  Refining success state UI in checkout
+
+  Implementing checkout success state handling
+
+  Simplifying checkout confirmation rendering
+
+  Removing redundant top success card
+  Optimizing checkout completion redirect and success display
+
+  Simplifying success URL handling with query parameter
+
+  Patching payment success URL handling
+
+  Clarifying intake path slug normalization
+
+  Refactoring redirect logic and success URL handling
+
+  Identifying and removing unused buildIntakePath function
+
+• Ik kies de nette, minimale fix: na betalen terug naar dezelfde productpagina met een bevestiging, en een intake-knop
+  als optionele vervolgstap.
+
+• Ran rg -n "buildIntakePath|onComplete:|Payment successful|Betaling geslaagd|isSuccess \?|successPath:" .
+  │ \willemluyckx\src\components\EmbeddedPackageCheckout.tsx .\willemluyckx\src\pages\localeRoutePages.tsx .
+  │ \willemluyckx\functions\api\stripe-checkout.ts
+  └ .\willemluyckx\src\components\EmbeddedPackageCheckout.tsx:47:const buildIntakePath = (locale: string, productSlug:
+    string) =>
+    … +14 lines
+    .\willemluyckx\functions\api\stripe-checkout.ts:38:    successPath: (locale) => `/intake?locale=${locale}
+    &flow=checkout&product=clinic-ticket`,
+
+• Adding success state and conditional CTA rendering
+
+  Refactoring success confirmation handling into component
+
+  Updating checkout success UI
+
+  Configuring checkout success URL with anchor
+
+─ Worked for 1m 21s ────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik patch nu de drie plekken samen: Stripe success-URL, de embedded onComplete, en de bevestigingstekst op de
+  productpagina.
+
+• Edited 3 files (+46 -18)
+  └ willemluyckx/functions/api/stripe-checkout.ts (+3 -3)
+    27      priceEnv: "STRIPE_PRICE_PREMIUM",
+    28 -    successPath: (locale) => `/intake?locale=${locale}&flow=checkout&product=premium`,
+    28 +    successPath: (locale) => `/${locale}/abonnementen/premium?success=1#checkout`,
+    29      cancelPath: (locale) => `/${locale}/abonnementen/premium?canceled=1`,
+       ⋮
+    32      priceEnv: "STRIPE_PRICE_BASE",
+    33 -    successPath: (locale) => `/intake?locale=${locale}&flow=checkout&product=base`,
+    33 +    successPath: (locale) => `/${locale}/abonnementen/${locale === "nl" ? "basis" : "base"}?success=1#checkout`,
+    34      cancelPath: (locale) => `/${locale}/abonnementen/${locale === "nl" ? "basis" : "base"}?canceled=1`,
+       ⋮
+    37      priceEnv: "STRIPE_PRICE_CLINIC",
+    38 -    successPath: (locale) => `/intake?locale=${locale}&flow=checkout&product=clinic-ticket`,
+    38 +    successPath: (locale) => `/${locale}/abonnementen/clinic-ticket?success=1#checkout`,
+    39      cancelPath: (locale) => `/${locale}/abonnementen/clinic-ticket?canceled=1`,
+
+  └ willemluyckx/src/components/EmbeddedPackageCheckout.tsx (+40 -5)
+     36    isPremium: boolean;
+     37 +  isSuccess: boolean;
+     38 +  intakePath: string;
+     39    loaded: boolean;
+        ⋮
+     47  const emailLooksValid = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+     46 -
+     47 -const buildIntakePath = (locale: string, productSlug: string) =>
+     48 -  `/intake?locale=${encodeURIComponent(locale)}&flow=checkout&product=${encodeURIComponent(productSlug)}`;
+     48
+        ⋮
+     79
+     81 -const EmbeddedPackageCheckout = ({ locale, slug, isPremium, loaded, product }: EmbeddedPackageCheckoutProps) =>
+          {
+     80 +const EmbeddedPackageCheckout = ({ locale, slug, isPremium, isSuccess, intakePath, loaded, product }: EmbeddedP
+         ackageCheckoutProps) => {
+     81    const [checkoutForm, setCheckoutForm] = useState<CheckoutFormState>({ name: "", email: "", phone: "" });
+        ⋮
+    170            await destroyCheckout();
+    172 -          window.location.assign(buildIntakePath(locale, productSlugRef.current));
+    171 +          const url = new URL(window.location.href);
+    172 +          url.searchParams.set("success", "1");
+    173 +          url.searchParams.delete("canceled");
+    174 +          url.hash = "checkout";
+    175 +          window.location.assign(url.toString());
+    176          },
+        ⋮
+    198
+    199 +  if (isSuccess) {
+    200 +    return (
+    201 +      <section id="checkout" className={`mx-auto max-w-7xl px-5 py-8 md:px-8 ${loaded ? "animate-fade-up" : "an
+         imate-fade-up"}`}>
+    202 +        <Card className="border-emerald-200 bg-emerald-50 text-emerald-950 shadow-sm">
+    203 +          <CardContent className="space-y-5 p-6 md:p-8">
+    204 +            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-700">
+    205 +              {locale === "en" ? "Payment received" : "Betaling ontvangen"}
+    206 +            </div>
+    207 +            <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
+    208 +              {locale === "en" ? "Your payment is confirmed" : "Je betaling is bevestigd"}
+    209 +            </h2>
+    210 +            <p className="max-w-3xl text-sm leading-7 text-emerald-950/80 md:text-base">
+    211 +              {locale === "en"
+    212 +                ? "Everything worked. Your order is in, and you can start the intake whenever it suits you. You
+          do not need to do that immediately."
+    213 +                : "Alles is goed gegaan. Je bestelling is ontvangen en je kunt de intake starten wanneer het jo
+         u uitkomt. Dat hoeft niet meteen."}
+    214 +            </p>
+    215 +            <div className="flex flex-wrap gap-3">
+    216 +              <Button variant="hero" asChild>
+    217 +                <a href={intakePath}>{locale === "en" ? "Start intake when ready" : "Start intake wanneer je wi
+         lt"}</a>
+    218 +              </Button>
+    219 +              <Button variant="heroOutline" asChild>
+    220 +                <a href={`/${locale}/${locale === "en" ? "subscriptions" : "abonnementen"}`}>
+    221 +                  {locale === "en" ? "Back to plans" : "Terug naar pakketten"}
+    222 +                </a>
+    223 +              </Button>
+    224 +            </div>
+    225 +          </CardContent>
+    226 +        </Card>
+    227 +      </section>
+    228 +    );
+    229 +  }
+    230 +
+    231    return (
+
+  └ willemluyckx/src/pages/localeRoutePages.tsx (+3 -10)
+    604    const normalizedSlug = locale === "nl" && slug === "base" ? "basis" : locale !== "nl" && slug === "basis" ? "
+         base" : slug;
+    605 +  const checkoutProductSlug = slug === "basis" ? "base" : slug;
+    606 +  const intakePath = `/intake?locale=${encodeURIComponent(locale)}&flow=checkout&product=${encodeURIComponent(c
+         heckoutProductSlug)}`;
+    607    const product = content.offers.find((offer) => offer.slug === slug || offer.slug === normalizedSlug);
+        ⋮
+    649            </div>
+    648 -          {isSuccess ? (
+    649 -            <Card className="border-emerald-200 bg-emerald-50 text-emerald-950 shadow-sm">
+    650 -              <CardContent className="p-4">
+    651 -                {locale === "en"
+    652 -                  ? "Payment successful. We received your order and will follow up shortly."
+    653 -                  : "Betaling geslaagd. We hebben je bestelling ontvangen en nemen snel contact op."}
+    654 -              </CardContent>
+    655 -            </Card>
+    656 -          ) : null}
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    □ Build en deploy
+    □ Vat nieuw gedrag samen
+
+• Ik rond de flow nu af met build, deploy en één snelle productiecheck op de nieuwe bevestigingspagina.
+
+• Ran npm run build
+
+• Ran wrangler pages deploy dist --project-name willemluyckx --commit-dirty=true
+  └
+     ⛅️ wrangler 4.78.0 (update available 4.127.0)
+    … +10 lines
+• Ran $ErrorActionPreference='Stop'
+  │ $envFile = '.\\.env.topfit.local'
+  │ $cfg = @{}
+  │ … +24 lines
+  └ embedded_ok=True client_secret=True
+    fallback_success_url=https://topfitrunning.com/nl/abonnementen/premium?success=1#checkout
+  │ \willemluyckx\PAYMENTS_EMAILS_IMPLEMENTATION.md .\willemluyckx\PAYMENTS_EMAILS_LIVE_RUNBOOK.md .
+  │ … +1 lines
+  └ .\willemluyckx\SESSION_HANDOFF_TOPFITRUNNING.md:43:  - `STRIPE_SUCCESS_URL=https://topfitrunning.com/nl/
+    abonnementen/premium?success=1`
+    … +4 lines
+    locale=...&flow=checkout&product=...` after payment completion
+    .\willemluyckx\PAYMENTS_EMAILS_IMPLEMENTATION.md:57:### Intake flow after payment
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik pas alleen de paar verouderde betaaldoc-regels aan; daarna ben ik klaar met een nette handoff.
+
+• De docpatch miste op context; ik kijk alleen de relevante stukjes na en werk ze daarna gericht bij.
+
+• Ran $targets = @(
+  │   @{path='.\willemluyckx\PAYMENTS_EMAILS_IMPLEMENTATION.md'; start=36; count=35},
+  │   @{path='.\willemluyckx\PAYMENTS_EMAILS_LIVE_RUNBOOK.md'; start=140; count=20},
+  │ … +8 lines
+  └ ---FILE: .\willemluyckx\PAYMENTS_EMAILS_IMPLEMENTATION.md---
+    36:- Endpoint: `functions/api/stripe-checkout.ts`
+    … +76 lines
+    112:5. Wire Brevo for the contact form if that is the next priority.
+    113:6. Redeploy the current branch to Cloudflare Pages so the new intake route and content changes go live.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik werk die drie docregels nog snel bij naar het nieuwe bevestigingsgedrag van vrijdag 28 augustus 2026.
+
+• Edited 3 files (+9 -6)
+  └ willemluyckx/PAYMENTS_EMAILS_IMPLEMENTATION.md (+3 -2)
+    44    - supports both redirect checkout and embedded on-site checkout
+    45 -  - sends the user to `/intake?locale=...&flow=checkout&product=...` after payment completion
+    45 +  - returns the user to the same product page with `?success=1#checkout` after payment completion
+    46    - keeps localized cancel URLs on the product pages
+       ⋮
+    61  - The intake page now reads `?locale=nl` or `?locale=en` from the query string.
+    62 -- A successful payment can therefore return to the non-localized intake route while still rendering the right la
+        nguage.
+    62 +- A successful payment now shows a confirmation on the product page first.
+    63 +- From that confirmation, the customer can start the non-localized intake route when ready while still rendering
+         the right language.
+    64  - Intake submissions are written to the `Intake` tab by `functions/api/intake.ts`.
+
+  └ willemluyckx/PAYMENTS_EMAILS_LIVE_RUNBOOK.md (+5 -3)
+    144  9. Confirm post-payment redirect lands on:
+    145 -   - `/intake?locale=nl&flow=checkout&product=...`
+    157 +- Intake stays available from that confirmation state.
+    158
+
+  └ willemluyckx/SESSION_HANDOFF_TOPFITRUNNING.md (+1 -1)
+
+• Ran rg -n "successPath|createEmbeddedCheckoutPage|searchParams.set\(\"success\"|Payment received|Start intake when
+  │ ready|isSuccess=|checkoutProductSlug|returns the user to the same product page|Confirm post-payment redirect|
+  │ Stripe success now returns" .\willemluyckx\functions\api\stripe-checkout.ts .
+  │ … +3 lines
+  └ rg: regex parse error:
+        (?:successPath|createEmbeddedCheckoutPage|searchParams.set\(\)
+        ^
+    error: unclosed group
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Die regex brak op quotes; ik haal de regelverwijzingen nu één voor één op.
+
+• Ran $checks = @(
+  │   @{path='.\willemluyckx\functions\api\stripe-checkout.ts'; pattern='successPath'},
+  │   @{path='.\willemluyckx\src\components\EmbeddedPackageCheckout.tsx'; pattern='createEmbeddedCheckoutPage'},
+  │ … +13 lines
+  └ C:\Users\micro\Documents\Codex CLI websites\Websites\willemluyckx\willemluyckx\functions\api\stripe-checkout.ts:24
+    C:\Users\micro\Documents\Codex CLI websites\Websites\willemluyckx\willemluyckx\functions\api\stripe-checkout.ts:28
+    … +11 lines
+    C:\Users\micro\Documents\Codex CLI websites\Websites\willemluyckx\willemluyckx\PAYMENTS_EMAILS_LIVE_RUNBOOK.md:144
+    C:\Users\micro\Documents\Codex CLI websites\Websites\willemluyckx\willemluyckx\SESSION_HANDOFF_TOPFITRUNNING.md:95
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik rond nog even de planning af; daarna heb je de nieuwe flow en teststap compact bij elkaar.
+
+• Updated Plan
+  └ Op vrijdag 28 augustus 2026 is de betaalflow aangepast zodat een succesvolle betaling eerst terugkomt op dezelfde
+    productpagina met een bevestiging, in plaats van direct door te sturen naar de intake. De nieuwe productie-deploy en
+    API-checks zijn geslaagd.
+    ✔ Controleer huidige success flow
+    ✔ Ontwerp bevestigingsscherm
+    ✔ Patch checkout en redirects
+    ✔ Build en deploy
+    ✔ Vat nieuw gedrag samen
+
+• Aangepast
+
+  - Nieuwe deploy: https://9cfac087.willemluyckx.pages.dev
+  - Productiecheck: fallback_success_url=https://topfitrunning.com/nl/abonnementen/premium?success=1#checkout
+  - Embedded checkout werkt nog steeds op https://topfitrunning.com
+
+  Test Nu
+
+  - Doe een harde refresh op https://topfitrunning.com/nl/abonnementen/premium
+    wilt
+
+  Als je wilt, kan ik als volgende stap die bevestigingstekst nog persoonlijker/simpler maken voor Willem’s tone of
+  voice.
+
+
+› ok dit ziet er goed uit. maar de betaal module is een soort van popup in de pagina. Ik wil het mooi en netjes
+  verwerkt hebben. Willen we ook niet dat iemand eerst klikt op knop: Ga van start. en dat je dan naar de betaal pagina
+  gaat waar je nummer en email en telefoon ook moet invullen. Nu is het een barriere denkik. Volg de best converterende
+  principes en herontwerp dit dat het goed converteert, mooi is en mensen helemaal in onze stijl website blijven.
+
+
+• Researching latest checkout UX principles
+
+  Designing dedicated localized checkout route
+
+  Planning Stripe embedded checkout with phone collection
+
+  Updating webhook to read phone from customer details
+
+  Designing embedded checkout success confirmation
+
+  Implementing smooth success state with URL update
+
+  Evaluating locale route extension
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Ik duik nu kort in de locale-router en layout, zodat de nieuwe checkoutpagina echt in TopFit-stijl blijft en niet als
+  los blok aanvoelt.
+
+• Ran rg -n "useParams|useLocation|switch \(route|abonnementen|premium|clinic-ticket|checkout|LocalePageView|SiteHeader|
+  │ Footer|topFitSiteConfig|localizedPath" .\willemluyckx\src\pages\LocalePage.tsx .
+  │ \willemluyckx\src\pages\LocalePageView.tsx .\willemluyckx\src\lib\localeRoutes.ts .
+  │ … +1 lines
+  └ .\willemluyckx\src\lib\siteConfig.ts:3:export const topFitSiteConfig = {
+    .\willemluyckx\src\lib\localeRoutes.ts:19:    abonnementen: "abonnementen",
+    … +50 lines
+    content={content} loaded={loaded} />
+    .\willemluyckx\src\pages\LocalePage.tsx:141:      <SiteFooter locale={locale} content={content} />
+
+■ Error running remote compact task: unexpected status 404 Not Found: {"detail":"Not Found"}, url: https://chatgpt.com/
+backend-api/codex/responses/compact, cf-ray: a32305856a5ea462-AMS, request id: c5cd4f80-a1da-4b9b-b899-feb44ded0591

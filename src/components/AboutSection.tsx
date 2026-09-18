@@ -60,7 +60,7 @@ export const AboutSection = () => {
             <div className="relative">
               <img
                 src={willemImage}
-                alt="Willem Luyckx - Running Coach"
+                alt="TopFit Running coach"
                 className="w-full grayscale"
               />
               {/* Stats overlay */}

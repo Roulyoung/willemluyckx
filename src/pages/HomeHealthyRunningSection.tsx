@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { type Locale } from "@/lib/i18n";
+import { localizedPath } from "@/lib/localeRoutes";
 
 const copy = {
   nl: {
@@ -104,8 +105,8 @@ type HomeHealthyRunningSectionProps = {
 
 export const HomeHealthyRunningSection = ({ locale, loaded }: HomeHealthyRunningSectionProps) => {
   const content = copy[locale];
-  const muktiHref = locale === "en" ? "/en/mukti-running" : locale === "he" ? "/he/mukti-running" : "/nl/mukti-running";
-  const offersHref = locale === "en" ? "/en/subscriptions" : locale === "he" ? "/he/subscriptions" : "/nl/abonnementen";
+  const muktiHref = localizedPath(locale, "mukti-running");
+  const offersHref = localizedPath(locale, locale === "en" ? "subscriptions" : "abonnementen");
 
   return (
     <section className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${loaded ? "animate-fade-up" : "animate-fade-up"}`}>

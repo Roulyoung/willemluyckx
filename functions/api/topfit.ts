@@ -1,13 +1,28 @@
-type Locale = "nl" | "en" | "he";
+import { normalizeLocale, type Locale } from "@/lib/i18n";
+import { TOPFIT_SHEETS_RANGES } from "@/lib/sheets/topfitSheets";
 
 type LocaleContent = {
   nav: Array<{ label: string; href: string }>;
   hero: { eyebrow: string; title: string; lead: string; primaryCta: string; secondaryCta: string };
   proof: { headline: string; description: string; stats: Array<{ value: string; label: string }> };
-  offers: Array<{ title: string; price: string; summary: string; bullets: string[]; featured?: boolean }>;
+  offers: Array<{ slug: string; title: string; price: string; summary: string; bullets: string[]; featured?: boolean }>;
   services: Array<{ title: string; summary: string; tag: string }>;
   shop: Array<{ slug: string; title: string; summary: string; price: string; type: string }>;
   blog: Array<{ slug: string; title: string; excerpt: string; category: string; readTime: string }>;
+  hardloopwedstrijden: Array<{
+    title: string;
+    location: string;
+    country: string;
+    date: string;
+    distance: string;
+    elevation: string;
+    surface: string;
+    level: string;
+    websiteUrl: string;
+    registrationUrl: string;
+    contactUrl: string;
+    featured?: boolean;
+  }>;
   about: { eyebrow: string; title: string; paragraphs: string[] };
   cta: { title: string; lead: string; button: string };
   pageHighlights: Record<string, { title: string; intro: string; bullets: string[] }>;
@@ -19,6 +34,8 @@ type SheetRow = Record<string, string>;
 
 const SHEET_ID =
   "1vd2rMjxAyBDn5lSWLJwBNJ1NI8FD0OlMcQ4WR-diLwA";
+const LIVE_HOSTS = new Set(["topfitrunning.com", "www.topfitrunning.com", "localhost", "127.0.0.1"]);
+const HIDDEN_NAV_SEGMENTS = ["/trainingskampen", "/training-camps"];
 
 const parseBoolean = (value: unknown) =>
   String(value ?? "")
@@ -28,6 +45,134 @@ const parseBoolean = (value: unknown) =>
 
 const getLocaleValue = (row: SheetRow, key: string, locale: Locale) =>
   row[`${key}_${locale}`] ?? row[`${key}_nl`] ?? row[key] ?? "";
+
+const getAnyValue = (row: SheetRow, keys: string[]) => {
+  for (const key of keys) {
+    const value = row[key];
+    if (value !== undefined && String(value).trim() !== "") return String(value);
+  }
+  return "";
+};
+
+const isTruthyRow = (value: unknown) => {
+  if (value === undefined || value === null || String(value).trim() === "") return true;
+  return parseBoolean(value);
+};
+
+const looksLikeEuropeanDate = (value: string) => /^\d{2}\/\d{2}\/\d{4}$/.test(value.trim());
+
+const cleanCompactCell = (value: unknown) =>
+  String(value ?? "")
+    .trim()
+    .replace(/^\*+/, "");
+
+const inferCompactRaceTitle = (location: string, distance: string, surface: string) => {
+  if (!location) return "";
+
+  const normalizedLocation = location.toLowerCase();
+  const normalizedDistance = distance.toLowerCase();
+  const normalizedSurface = surface.toLowerCase();
+
+  if (normalizedLocation === "vrouwenpolder") return "Kustloop Vrouwenpolder";
+  if (normalizedLocation === "amsterdam" && normalizedDistance.includes("16,1")) return "Amsterdam Loop 16K";
+  if (normalizedLocation === "terschelling" && normalizedDistance.includes("21,1")) return "Terschelling Halve Marathon";
+  if (normalizedLocation === "nijmegen" && normalizedSurface.includes("bos")) return "Nijmegen Trail";
+  if (normalizedLocation === "etten-leur") return "Etten-Leur Halve Marathon";
+  if (normalizedDistance.includes("42,2")) return `${location} Marathon`;
+  if (normalizedDistance.includes("21,1")) return `${location} Halve Marathon`;
+  if (normalizedSurface.includes("trail") || normalizedSurface.includes("onverhard")) return `${location} Trail`;
+
+  return location;
+};
+
+const isSectionSlug = (value: string) =>
+  new Set(["nl", "en", "he", "abonnementen", "subscriptions", "clinics"]).has(value.toLowerCase());
+
+const deriveOfferSlug = (value: string, locale: Locale) => {
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return "";
+  if (normalized.includes("premium")) return "premium";
+  if (normalized.includes("base") || normalized.includes("basis")) return locale === "nl" ? "basis" : "base";
+  if (normalized.includes("clinic")) return "clinic-ticket";
+  return "";
+};
+
+const normalizeOfferSlug = (row: SheetRow, locale: Locale) => {
+  const candidates = [
+    row[`slug_${locale}`],
+    row.slug_nl,
+    row.slug_en,
+    row.slug_he,
+  ]
+    .map((value) => String(value ?? "").trim())
+    .filter(Boolean);
+
+  for (const candidate of candidates) {
+    if (!candidate.includes("/")) return candidate;
+
+    const lastSegment = candidate.split("/").filter(Boolean).at(-1) ?? "";
+    if (lastSegment && !isSectionSlug(lastSegment)) return lastSegment;
+  }
+
+  return deriveOfferSlug(String(row.offer_id ?? ""), locale) || deriveOfferSlug(getLocaleValue(row, "title", locale), locale);
+};
+
+const mapHardloopwedstrijd = (row: SheetRow, locale: Locale) => {
+  const legacyCompactRow =
+    looksLikeEuropeanDate(String(row.race_id ?? "")) &&
+    !getAnyValue(row, ["date", "datum"]) &&
+    !getLocaleValue(row, "location", locale) &&
+    !getLocaleValue(row, "country", locale);
+
+  if (legacyCompactRow) {
+    const location = cleanCompactCell(row.slug_nl);
+    const country = cleanCompactCell(row.slug_en) || (locale === "en" ? "Netherlands" : "Nederland");
+    const distance = cleanCompactCell(row.slug_he);
+    const surface = cleanCompactCell(row.title_nl);
+
+    return {
+      title: inferCompactRaceTitle(location, distance, surface),
+      location,
+      country,
+      date: cleanCompactCell(row.race_id),
+      distance,
+      elevation: "",
+      surface,
+      level: locale === "en" ? "Race" : "Wedstrijd",
+      websiteUrl: "",
+      registrationUrl: "",
+      contactUrl: "",
+      featured: false,
+    };
+  }
+
+  const location =
+    getLocaleValue(row, "location", locale) ||
+    getAnyValue(row, ["stad", "city", "plaats", "locatie", "location"]);
+  const country =
+    getLocaleValue(row, "country", locale) ||
+    getAnyValue(row, ["land", "country"]);
+  const distance = getAnyValue(row, ["distance_km", "afstand", "distance"]);
+  const surface = getLocaleValue(row, "surface", locale) || getAnyValue(row, ["ondergrond", "surface"]);
+
+  return {
+    title:
+      getLocaleValue(row, "title", locale) ||
+      getAnyValue(row, ["titel", "naam", "race", "event", "wedstrijd", "title"]) ||
+      inferCompactRaceTitle(location, distance, surface),
+    location,
+    country,
+    date: getAnyValue(row, ["date", "datum"]),
+    distance,
+    elevation: getAnyValue(row, ["elevation_m", "hoogtemeters", "elevation"]),
+    surface,
+    level: getLocaleValue(row, "level", locale) || getAnyValue(row, ["niveau", "level"]) || (locale === "en" ? "Race" : "Wedstrijd"),
+    websiteUrl: getAnyValue(row, ["website_url", "website", "url"]),
+    registrationUrl: getAnyValue(row, ["registration_url", "inschrijven_url", "registration"]),
+    contactUrl: getAnyValue(row, ["contact_url", "contact", "email"]),
+    featured: parseBoolean(row.featured),
+  };
+};
 
 const rowsToObjects = (rows: string[][]): SheetRow[] => {
   if (!rows.length) return [];
@@ -41,9 +186,9 @@ const rowsToObjects = (rows: string[][]): SheetRow[] => {
 };
 
 const getServiceAccount = (env: Record<string, unknown>) => {
-  const raw =
-    String(env.GOOGLE_SERVICE_ACCOUNT_JSON ?? "").trim() ||
-    String(env.GOOGLE_SHEETS_SERVICE_ACCOUNT_JSON ?? "").trim();
+  const raw = [env.GOOGLE_SERVICE_ACCOUNT_JSON, env.GOOGLE_SHEETS_SERVICE_ACCOUNT_JSON]
+    .map((value) => String(value ?? "").trim())
+    .find(Boolean);
 
   if (!raw) return null;
   try {
@@ -133,6 +278,48 @@ const normalizePrice = (price: string, currency: string) => {
   return value;
 };
 
+const formatOfferPrice = (price: string, currency: string, billingCycle: string, locale: Locale) => {
+  const base = normalizePrice(price, currency);
+  if (!base || base === "Inbegrepen" || /op aanvraag/i.test(base)) return base;
+
+  const cycle = String(billingCycle ?? "").trim().toLowerCase();
+  if (cycle === "monthly") {
+    return locale === "en" ? `${base} / month` : `${base} / maand`;
+  }
+  if (cycle === "one_time") {
+    return locale === "en" ? `${base} one-time` : `${base} eenmalig`;
+  }
+  return base;
+};
+
+const splitOfferBullets = (details: string, minCommitmentMonths: string, locale: Locale) => {
+  const normalizedDetails = String(details ?? "").trim();
+  const segments = normalizedDetails
+    ? (normalizedDetails.includes("\n") || normalizedDetails.includes(";") || normalizedDetails.includes("•")
+        ? normalizedDetails.split(/\r?\n|;|•/g)
+        : normalizedDetails.split(/\s*,\s*/g)
+      )
+        .map((part) => part.trim())
+        .filter(Boolean)
+    : [];
+
+  const minCommitment = Number(minCommitmentMonths);
+  if (Number.isFinite(minCommitment) && minCommitment > 0) {
+    const commitmentText = locale === "en" ? `Minimum ${minCommitment} months` : `Minimaal ${minCommitment} maanden`;
+    const hasCommitmentAlready = segments.some((segment) => /\b(minimum|minimaal)\b/i.test(segment));
+    if (!hasCommitmentAlready) {
+      segments.unshift(commitmentText);
+    }
+  }
+
+  return segments;
+};
+
+const isVisibleShopRow = (row: SheetRow) => {
+  const productType = String(row.product_type ?? "").trim().toLowerCase();
+  return productType !== "physical" && productType !== "bundle";
+};
+
 const buildPartialContent = (locale: Locale, data: Record<string, SheetRow[] | undefined>): Partial<LocaleContent> => {
   const siteConfig = data.SiteConfig?.[0];
   const navRows = (data.Navigation || []).filter((row) => parseBoolean(row.visible));
@@ -142,6 +329,7 @@ const buildPartialContent = (locale: Locale, data: Record<string, SheetRow[] | u
   const pages = data.Pages || [];
   const blogCategories = data.BlogCategories || [];
   const blogPosts = data.BlogPosts || [];
+  const hardloopwedstrijden = data.Hardloopwedstrijden || [];
 
   const pageMap = new Map(
     pages.map((row) => [
@@ -159,18 +347,22 @@ const buildPartialContent = (locale: Locale, data: Record<string, SheetRow[] | u
   );
 
   return {
-    nav: navRows.map((row) => ({
-      label: getLocaleValue(row, "label", locale),
-      href: row.href || `/${locale}`,
-    })),
+    nav: navRows
+      .map((row) => ({
+        label: getLocaleValue(row, "label", locale),
+        href: row.href || `/${locale}`,
+      }))
+      .filter((item) => !HIDDEN_NAV_SEGMENTS.some((segment) => item.href.includes(segment))),
     hero: {
       eyebrow: siteConfig?.brand_name || "TopFit Running",
-      title: getLocaleValue(siteConfig ?? {}, "tagline", locale) || "Loop je vrij, presteer vanzelf",
+      title: getLocaleValue(siteConfig ?? {}, "tagline", locale) || "Loop je vrij, presteer met plezier",
       lead:
         pageMap.get("home")?.intro ||
-        "Abonnementen, coaching, clinics, webshop en kennis in één premium platform voor lopers die meer willen dan een schema.",
-      primaryCta: locale === "en" ? "Start your plan" : locale === "he" ? "התחל את התכנית שלך" : "Start je schema",
-      secondaryCta: locale === "en" ? "Visit the shop" : locale === "he" ? "למדו בחנות" : "Bekijk de shop",
+        (locale === "en"
+          ? "For runners who want to run better with more enjoyment, stronger technique and direct guidance from Willem."
+          : "Voor lopers die met meer plezier, betere techniek en gerichte begeleiding van Willem duurzaam beter willen lopen."),
+      primaryCta: locale === "en" ? "Run better" : locale === "he" ? "???????? ???? ???????????? ??????" : "Ren beter",
+      secondaryCta: locale === "en" ? "View subscriptions" : locale === "he" ? "?????? ??????????????" : "Bekijk abonnementen",
     },
     proof: {
       headline: locale === "en" ? "A complete system, not just a training plan" : "Een compleet systeem, geen los trainingsschema",
@@ -187,17 +379,17 @@ const buildPartialContent = (locale: Locale, data: Record<string, SheetRow[] | u
     offers: offers
       .filter((row) => parseBoolean(row.active))
       .map((row) => ({
+        slug: normalizeOfferSlug(row, locale),
         title: getLocaleValue(row, "title", locale),
-        price: normalizePrice(row.price, row.currency),
+        price: formatOfferPrice(row.price, row.currency, row.billing_cycle, locale),
         summary: getLocaleValue(row, "summary", locale),
-        bullets: [getLocaleValue(row, "details", locale)]
-          .concat(row.min_commitment_months ? [`Minimaal ${row.min_commitment_months} maanden`] : [])
-          .filter(Boolean),
+        bullets: splitOfferBullets(getLocaleValue(row, "details", locale), row.min_commitment_months, locale),
         featured: parseBoolean(row.featured),
-      })),
+      }))
+      .filter((row) => row.slug),
     services: [],
     shop: shop
-      .filter((row) => parseBoolean(row.active))
+      .filter((row) => parseBoolean(row.active) && isVisibleShopRow(row))
       .map((row) => ({
         slug: row.slug_nl || row.slug_en || row.product_id,
         title: getLocaleValue(row, "name", locale),
@@ -214,6 +406,10 @@ const buildPartialContent = (locale: Locale, data: Record<string, SheetRow[] | u
         category: categoryLabel.get(row.category_key) || row.category_key,
         readTime: "5 min",
       })),
+    hardloopwedstrijden: hardloopwedstrijden
+      .filter((row) => isTruthyRow(row.active))
+      .map((row) => mapHardloopwedstrijd(row, locale))
+      .filter((row) => row.title || row.location || row.date),
     about: {
       eyebrow: locale === "en" ? "About Willem" : "Over Willem",
       title: locale === "en" ? "40+ years of coaching and teaching experience" : "40+ jaar ervaring als coach en docent",
@@ -224,12 +420,12 @@ const buildPartialContent = (locale: Locale, data: Record<string, SheetRow[] | u
       ],
     },
     cta: {
-      title: locale === "en" ? "Ready for a system that goes beyond a plan?" : "Klaar voor een traject dat verder gaat dan een schema?",
+      title: locale === "en" ? "Start your intake now" : "Begin nu met je intake",
       lead:
         locale === "en"
-          ? "Start with a subscription, book an intake or go straight to a clinic or shop item."
-          : "Start met een abonnement, boek een intake of kies direct een clinic of shopproduct.",
-      button: locale === "en" ? "Book your intake" : "Plan je intake",
+          ? "Tell Willem where you are now, where you want to go and what your body can handle so your guidance starts from the right place."
+          : "Vertel Willem waar je nu staat, waar je naartoe wilt en wat jouw lichaam aankan, zodat je gericht kunt starten met begeleiding die bij je past.",
+      button: locale === "en" ? "Start your intake now" : "Begin nu met je intake",
     },
     pageHighlights: Object.fromEntries(pageMap.entries()),
     faq: faqRows
@@ -248,7 +444,11 @@ const buildPartialContent = (locale: Locale, data: Record<string, SheetRow[] | u
 export const onRequestGet: PagesFunction = async ({ request, env }) => {
   try {
     const url = new URL(request.url);
-    const locale = (url.searchParams.get("locale") || "nl").toLowerCase() as Locale;
+    if (!LIVE_HOSTS.has(url.hostname)) {
+      return Response.json({ ok: false, error: "Not found" }, { status: 404 });
+    }
+
+    const locale = normalizeLocale(url.searchParams.get("locale")?.toLowerCase()) as Locale;
     const serviceAccount = getServiceAccount(env as Record<string, unknown>);
     if (!serviceAccount?.client_email || !serviceAccount.private_key) {
       return Response.json({ error: "Missing Google service account secret." }, { status: 503 });
@@ -256,14 +456,15 @@ export const onRequestGet: PagesFunction = async ({ request, env }) => {
 
     const token = await getAccessToken(serviceAccount);
     const ranges = [
-      "SiteConfig!A1:Z10",
-      "Navigation!A1:Z100",
-      "Pages!A1:Z100",
-      "Offers!A1:Z100",
-      "ShopProducts!A1:Z100",
-      "BlogCategories!A1:Z50",
-      "BlogPosts!A1:Z100",
-      "FAQ!A1:Z100",
+      TOPFIT_SHEETS_RANGES.siteConfig,
+      TOPFIT_SHEETS_RANGES.navigation,
+      TOPFIT_SHEETS_RANGES.pages,
+      TOPFIT_SHEETS_RANGES.offers,
+      TOPFIT_SHEETS_RANGES.shopProducts,
+      TOPFIT_SHEETS_RANGES.blogCategories,
+      TOPFIT_SHEETS_RANGES.blogPosts,
+      TOPFIT_SHEETS_RANGES.hardloopwedstrijden,
+      TOPFIT_SHEETS_RANGES.faq,
     ];
 
     const valuesByTab = await Promise.all(

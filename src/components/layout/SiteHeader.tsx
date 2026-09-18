@@ -11,8 +11,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { localeLabels, type Locale } from "@/lib/i18n";
+import { getLocalizedPath } from "@/lib/localeRoutes";
 import { topFitSiteConfig } from "@/lib/siteConfig";
 import type { LocaleContent } from "@/lib/topfitContent";
+import { offerPath } from "@/lib/proposition";
 
 type SiteHeaderProps = {
   locale: Locale;
@@ -34,9 +36,9 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
       topFitSiteConfig.locales.map((value) => ({
         value,
         label: localeLabels[value],
-        href: currentPath.replace(/^\/(nl|en|he)/, `/${value}`) || `/${value}`,
+        href: getLocalizedPath(currentPath, value, content),
       })),
-    [currentPath],
+    [content, currentPath],
   );
 
   const closeMenu = () => setOpen(false);
@@ -95,7 +97,7 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
           {content.menu.map((item) => renderDesktopMenuItem(item))}
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 xl:flex">
           {localeLinks.map((item) => (
             <Link
               key={item.value}
@@ -108,7 +110,7 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
             </Link>
           ))}
           <Button variant="hero" size="sm" asChild>
-            <Link to={`/${locale}/contact`}>{content.hero.primaryCta}</Link>
+            <Link to={offerPath(locale, "schema")}>{content.hero.primaryCta}</Link>
           </Button>
           <Button variant="heroOutline" size="sm" asChild>
             <a href={topFitSiteConfig.contact.whatsappHref} target="_blank" rel="noreferrer">
@@ -121,7 +123,7 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-900 shadow-sm lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-900 shadow-sm xl:hidden"
           aria-label="Toggle navigation"
           aria-expanded={open}
         >
@@ -129,7 +131,7 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
         </button>
       </div>
 
-      <div className={`overflow-hidden border-t border-slate-200 bg-white lg:hidden ${open ? "max-h-[34rem]" : "max-h-0"}`}>
+      <div className={`border-t border-slate-200 bg-white xl:hidden ${open ? "max-h-[80vh] overflow-y-auto" : "hidden"}`}>
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-4 md:px-8">
           {content.menu.map((item) =>
             item.children?.length ? (
@@ -180,7 +182,7 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
             ))}
           </div>
           <Button variant="hero" className="mt-2 w-full justify-center" asChild>
-            <Link to={`/${locale}/contact`} onClick={closeMenu}>
+            <Link to={offerPath(locale, "schema")} onClick={closeMenu}>
               {content.hero.primaryCta}
             </Link>
           </Button>

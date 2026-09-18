@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageCircle } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -15,10 +16,16 @@ export const ContactPage = ({
   locale: Locale;
   loaded: boolean;
 }) => {
+  const [searchParams] = useSearchParams();
+  const subject = searchParams.get("onderwerp") ?? "";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    setMessage(subject ? `${locale === "nl" ? "Ik ontvang graag meer informatie over" : "I would like more information about"} ${subject}.` : "");
+  }, [subject, locale]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,8 +56,8 @@ export const ContactPage = ({
   };
 
   return (
-    <section className={`mx-auto grid max-w-7xl gap-10 px-5 py-10 md:px-8 lg:grid-cols-[0.95fr_1.05fr] ${fadeClass(loaded)}`}>
-      <div className="space-y-6">
+    <section id="contact-hero" className={`mx-auto grid max-w-7xl gap-10 px-5 py-10 md:px-8 lg:grid-cols-[0.95fr_1.05fr] ${fadeClass(loaded)}`}>
+      <div className="min-w-0 space-y-6">
         <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/85 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-blue-700 shadow-sm shadow-blue-950/5">
           <MessageCircle className="h-4 w-4" />
           Contact
@@ -67,16 +74,16 @@ export const ContactPage = ({
           <Button variant="heroOutline" size="lg" asChild>
             <a href={topFitSiteConfig.contact.whatsappHref} target="_blank" rel="noreferrer">
               <MessageCircle className="h-4 w-4" />
-              {topFitSiteConfig.contact.phoneDisplay}
+              WhatsApp
             </a>
           </Button>
           <Button variant="heroOutline" size="lg" asChild>
-            <a href={topFitSiteConfig.contact.phoneHref}>{locale === "en" ? "Call now" : "Bel nu"}</a>
+            <Link to="/intake">{locale === "en" ? "Start intake" : "Start intake"}</Link>
           </Button>
         </div>
       </div>
 
-      <Card className="border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
+      <Card id="contact-form" className="min-w-0 border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
         <CardContent className="p-6 md:p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
@@ -118,14 +125,14 @@ export const ContactPage = ({
                 required
               />
             </div>
-            <Button type="submit" variant="hero" size="lg" className="w-full">
+            <Button type="submit" disabled={submitting} variant="hero" size="lg" className="h-auto min-h-14 w-full whitespace-normal px-4 text-center">
               {submitting ? (locale === "en" ? "Sending..." : "Versturen...") : locale === "en" ? "Send message" : "Verstuur bericht"}
             </Button>
           </form>
           <p className="mt-4 text-sm leading-7 text-slate-500">
             {locale === "en"
-              ? "Or use WhatsApp if you want a quicker reply."
-              : "Of gebruik WhatsApp als je sneller antwoord wilt."}
+              ? "Or use WhatsApp or the intake if you want a quicker route."
+              : "Of gebruik WhatsApp of de intake als je sneller verder wilt."}
           </p>
         </CardContent>
       </Card>

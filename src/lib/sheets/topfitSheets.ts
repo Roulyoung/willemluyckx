@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n";
-import type { BlogPostRow, NavigationRow, OfferRow, ShopProductRow, SiteConfigRow } from "./schema";
+import type { BlogPostRow, HardloopwedstrijdRow, IntakeRow, NavigationRow, OfferRow, ShopProductRow, SiteConfigRow } from "./schema";
 
 export const TOPFIT_SHEETS = {
   siteConfig: "SiteConfig",
@@ -9,6 +9,8 @@ export const TOPFIT_SHEETS = {
   shopProducts: "ShopProducts",
   blogCategories: "BlogCategories",
   blogPosts: "BlogPosts",
+  hardloopwedstrijden: "Hardloopwedstrijden",
+  intake: "Intake",
   testimonials: "Testimonials",
   faq: "FAQ",
   media: "Media",
@@ -23,6 +25,8 @@ export const TOPFIT_SHEETS_RANGES = {
   shopProducts: "ShopProducts!A:Z",
   blogCategories: "BlogCategories!A:Z",
   blogPosts: "BlogPosts!A:Z",
+  hardloopwedstrijden: "Hardloopwedstrijden!A:Z",
+  intake: "Intake!A:Z",
   testimonials: "Testimonials!A:Z",
   faq: "FAQ!A:Z",
   media: "Media!A:Z",
@@ -130,3 +134,48 @@ export const mapBlogPostRow = (row: Record<string, unknown>): BlogPostRow => ({
   content_he: String(row.content_he ?? ""),
 });
 
+export const mapHardloopwedstrijdRow = (row: Record<string, unknown>): HardloopwedstrijdRow => ({
+  race_id: String(row.race_id ?? ""),
+  slug_nl: String(row.slug_nl ?? ""),
+  slug_en: String(row.slug_en ?? ""),
+  slug_he: String(row.slug_he ?? ""),
+  title_nl: String(row.title_nl ?? ""),
+  title_en: String(row.title_en ?? ""),
+  title_he: String(row.title_he ?? ""),
+  location_nl: String(row.location_nl ?? ""),
+  location_en: String(row.location_en ?? ""),
+  location_he: String(row.location_he ?? ""),
+  country_nl: String(row.country_nl ?? ""),
+  country_en: String(row.country_en ?? ""),
+  country_he: String(row.country_he ?? ""),
+  date: String(row.date ?? ""),
+  distance_km: String(row.distance_km ?? ""),
+  elevation_m: String(row.elevation_m ?? ""),
+  surface_nl: String(row.surface_nl ?? ""),
+  surface_en: String(row.surface_en ?? ""),
+  surface_he: String(row.surface_he ?? ""),
+  level_nl: String(row.level_nl ?? ""),
+  level_en: String(row.level_en ?? ""),
+  level_he: String(row.level_he ?? ""),
+  website_url: String(row.website_url ?? ""),
+  registration_url: String(row.registration_url ?? ""),
+  contact_url: String(row.contact_url ?? ""),
+  featured: parseBoolean(row.featured ?? false),
+  active: parseBoolean(row.active ?? true),
+});
+
+export const mapIntakeRow = (row: Record<string, unknown>): IntakeRow => ({
+  name: String(row.name ?? ""),
+  email: String(row.email ?? ""),
+  phone: String(row.phone ?? ""),
+  goal: String(row.goal ?? ""),
+  race_distance: String(row.race_distance ?? ""),
+  weekly_volume: String(row.weekly_volume ?? ""),
+  main_challenge: String(row.main_challenge ?? ""),
+  injuries: String(row.injuries ?? ""),
+  support_type: String(row.support_type ?? ""),
+  runs_per_week: String(row.runs_per_week ?? ""),
+  timeline: String(row.timeline ?? ""),
+  coaching_preference: String(row.coaching_preference ?? ""),
+  extra_notes: String(row.extra_notes ?? ""),
+});

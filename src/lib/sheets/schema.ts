@@ -94,3 +94,49 @@ export type BlogPostRow = {
   content_en: string;
   content_he: string;
 };
+
+export type HardloopwedstrijdRow = {
+  race_id: string;
+  slug_nl: string;
+  slug_en: string;
+  slug_he: string;
+  title_nl: string;
+  title_en: string;
+  title_he: string;
+  location_nl: string;
+  location_en: string;
+  location_he: string;
+  country_nl: string;
+  country_en: string;
+  country_he: string;
+  date: string;
+  distance_km: string;
+  elevation_m: string;
+  surface_nl: string;
+  surface_en: string;
+  surface_he: string;
+  level_nl: string;
+  level_en: string;
+  level_he: string;
+  website_url: string;
+  registration_url: string;
+  contact_url: string;
+  featured: boolean;
+  active: boolean;
+};
+
+export type IntakeRow = {
+  name: string;
+  email: string;
+  phone: string;
+  goal: string;
+  race_distance: string;
+  weekly_volume: string;
+  main_challenge: string;
+  injuries: string;
+  support_type: string;
+  runs_per_week: string;
+  timeline: string;
+  coaching_preference: string;
+  extra_notes: string;
+};
