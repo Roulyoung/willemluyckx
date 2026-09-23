@@ -81,6 +81,7 @@ const formatAmount = (amountTotal?: number | null, currency?: string | null) => 
 
 const getProductLabel = (productSlug: string, locale: string) => {
   const labels: Record<string, { nl: string; en: string }> = {
+    schema: { nl: "Persoonlijk hardloopschema (12 weken)", en: "Personal running plan (12 weeks)" },
     premium: { nl: "Premium abonnement", en: "Premium subscription" },
     base: { nl: "Basis abonnement", en: "Base subscription" },
     "clinic-ticket": { nl: "Clinic ticket", en: "Clinic ticket" },

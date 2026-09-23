@@ -38,6 +38,11 @@ const productConfig: Record<
     successPath: (locale) => `/${locale}/abonnementen/clinic-ticket?success=1#checkout`,
     cancelPath: (locale) => `/${locale}/abonnementen/clinic-ticket?canceled=1`,
   },
+  schema: {
+    priceEnv: "STRIPE_PRICE_SCHEMA",
+    successPath: (locale) => `/${locale}/aanbod/schema?success=1#checkout`,
+    cancelPath: (locale) => `/${locale}/aanbod/schema?canceled=1#checkout`,
+  },
 };
 
 const toEnvKey = (value: string) => value.toUpperCase().replace(/-/g, "_");
