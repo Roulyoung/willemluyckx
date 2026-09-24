@@ -34,7 +34,10 @@ export const LocalePageView = ({ locale, section, slug, content, loaded }: {
     const oldSlugs: Record<string, string> = { premium: "schema", basis: "schema", base: "schema", "clinic-ticket": "clinic", "physical-training-80": "fysiek" };
     return <Navigate to={`${offerPath(locale, slug ? oldSlugs[slug] : undefined)}${location.search}${location.hash}`} replace />;
   }
-  if (section === "aanbod" || section === "offers") return slug ? <OfferDetailPage locale={locale} slug={slug} /> : <OffersPage locale={locale} />;
+  if (section === "aanbod" || section === "offers") {
+    if (slug === "schema/afrekenen") return <OfferDetailPage locale={locale} slug="schema-checkout" />;
+    return slug ? <OfferDetailPage locale={locale} slug={slug} /> : <OffersPage locale={locale} />;
+  }
   if (detailRoutes[section]) return <OfferDetailPage locale={locale} slug={detailRoutes[section]} />;
   if (section === "looptechniek" || section === "running-technique") return <TechniquePage locale={locale} highlight={highlight} loaded={loaded} />;
   if (section === "mukti-running") return <MuktiPage locale={locale} highlight={highlight} loaded={loaded} />;

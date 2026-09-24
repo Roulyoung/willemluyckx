@@ -73,7 +73,7 @@ const LocalePage = () => {
   const parts = location.pathname.split("/").filter(Boolean);
   const rawSection = parts[1] ?? "home";
   const section = sectionAliases[rawSection] ?? rawSection;
-  const slug = parts[2];
+  const slug = parts.slice(2).join("/") || undefined;
 
   const hashTarget = useMemo(() => {
     const rawHash = location.hash?.replace(/^#/, "").trim();
