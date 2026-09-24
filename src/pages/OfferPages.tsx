@@ -107,7 +107,7 @@ export const OfferDetailPage = ({ locale, slug }: { locale: Locale; slug: string
         <p className="text-3xl font-bold text-blue-700">{offer.price}</p>
         <p className="text-lg leading-8 text-slate-600">{offer.summary}</p>
         <ul className="space-y-3">{offer.bullets.map(bullet => <li key={bullet} className="flex gap-3 leading-7 text-slate-700"><Check className="mt-1 h-5 w-5 shrink-0 text-blue-600" />{bullet}</li>)}</ul>
-        <Button id={schema ? "trainingplans-next" : undefined} variant="hero" size="lg" className="h-auto min-h-14 max-w-full whitespace-normal px-6 text-center" asChild><Link to={requestHref}>{schema ? nl ? "Betaal je schema voor €19" : "Pay €19 for your plan" : nl ? "Informeer naar mogelijkheden" : "Ask about availability"}</Link></Button>
+        <Button id={schema ? "trainingplans-next" : undefined} variant="hero" size="lg" className="h-auto min-h-14 whitespace-normal px-6 text-center" asChild><Link to={requestHref}>{schema ? nl ? "Koop nu je persoonlijke schema" : "Buy your personal plan" : nl ? "Informeer naar mogelijkheden" : "Ask about availability"}</Link></Button>
         {schema && <p className="text-sm leading-7 text-slate-600">{nl ? "Vul je intake in. Willem maakt het schema op maat op basis van jouw afstand, niveau, doelen en beschikbare trainingsdagen en stuurt het daarna toe." : "Complete your intake. Willem creates your plan based on your distance, level, goals and available training days, then sends it to you."}</p>}
       </div>
       <img src={runningImage} alt={nl ? "Willem tijdens het hardlopen" : "Willem running"} className="h-[26rem] w-full rounded-3xl object-cover object-center lg:h-full lg:max-h-[38rem]" />
