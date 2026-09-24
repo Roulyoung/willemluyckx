@@ -40,8 +40,8 @@ const productConfig: Record<
   },
   schema: {
     priceEnv: "STRIPE_PRICE_SCHEMA",
-    successPath: (locale) => `/${locale}/aanbod/schema?success=1#checkout`,
-    cancelPath: (locale) => `/${locale}/aanbod/schema?canceled=1#checkout`,
+    successPath: (locale) => `/${locale}/aanbod/schema/afrekenen?success=1`,
+    cancelPath: (locale) => `/${locale}/aanbod/schema/afrekenen?canceled=1`,
   },
 };
 
