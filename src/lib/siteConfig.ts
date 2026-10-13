@@ -21,8 +21,16 @@ export const topFitSiteConfig = {
   },
   contact: {
     email: "info@topfitrunning.com",
+    phone: "+31 6 47264454",
     whatsappHref: "/wa",
     instagramUrl: "",
+  },
+  legal: {
+    tradeName: "TopFit Running",
+    owner: "Willem Luijckx",
+    address: "Mgr. Aengenentlaan 3-03, 2361 GB Warmond, Nederland",
+    chamberOfCommerce: "42106226",
+    vatId: "NL005497974B44",
   },
   social: {
     instagramHandle: "@topfitrunning",

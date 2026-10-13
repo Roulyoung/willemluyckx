@@ -12,6 +12,7 @@ import { HomeHeroBackgroundSection } from "@/pages/HomeHeroBackgroundSection";
 import { localizedPath } from "@/lib/localeRoutes";
 import { offerPath } from "@/lib/proposition";
 import { OfferCards, OfferDetailPage, OffersPage, PropositionIntro } from "./OfferPages";
+import { CookiePage, PrivacyPage, TermsPage, WithdrawalPage } from "./LegalPages";
 
 export const LocalePageView = ({ locale, section, slug, content, loaded }: {
   locale: Locale; section: string; slug?: string; content: LocaleContent; loaded: boolean;
@@ -28,6 +29,10 @@ export const LocalePageView = ({ locale, section, slug, content, loaded }: {
   if (section === "over-willem" || section === "about-willem") return <AboutWillemPage locale={locale} highlight={highlight} loaded={loaded} />;
   if (section === "blog") return <BlogIndexPage locale={locale} content={content} highlight={highlight} loaded={loaded} />;
   if (section === "contact") return <ContactPage locale={locale} loaded={loaded} />;
+  if (section === "privacy") return <PrivacyPage locale={locale} />;
+  if (section === "algemene-voorwaarden" || section === "terms") return <TermsPage locale={locale} />;
+  if (section === "cookies") return <CookiePage locale={locale} />;
+  if (section === "overeenkomst-ontbinden" || section === "withdraw") return <WithdrawalPage locale={locale} />;
   if (section === "hardloopkalender" || section === "running-calendar") return <HardloopCalendarPage locale={locale} content={content} highlight={highlight} loaded={loaded} />;
   if (section === "trainingskampen" || section === "training-camps") return <Navigate to={localizedPath(locale, "clinics")} replace />;
   if (section === "abonnementen" || section === "subscriptions" || section === "shop") {

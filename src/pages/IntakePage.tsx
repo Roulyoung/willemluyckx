@@ -52,6 +52,7 @@ const IntakePage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [healthConsent, setHealthConsent] = useState(false);
   const [values, setValues] = useState<AnswerState>({
     support_type: "Schema",
     coaching_preference: "Combinatie",
@@ -86,6 +87,9 @@ const IntakePage = () => {
           locale: localeNl ? "nl" : "en",
           source: "intake-page",
           product: searchParams.get("product") ?? "",
+          health_consent: true,
+          health_consent_version: "2026-10-13",
+          health_consent_recorded_at: new Date().toISOString(),
         }),
       });
       const rawBody = await response.text();
@@ -234,6 +238,8 @@ const IntakePage = () => {
 
           {error ? <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
 
+          {isLastQuestion ? <label className="flex items-start gap-3 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-slate-700"><input type="checkbox" required checked={healthConsent} onChange={(event) => setHealthConsent(event.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-blue-600"/><span>{localeNl ? "Ik geef uitdrukkelijk toestemming aan TopFit Running om de gegevens die ik over blessures of lichamelijke signalen invul te verwerken voor mijn intake, schema en coaching. Ik kan deze toestemming altijd intrekken via info@topfitrunning.com. Lees de " : "I explicitly consent to TopFit Running processing information I provide about injuries or physical issues for my intake, plan and coaching. I may withdraw this consent at any time via info@topfitrunning.com. Read the "}<Link className="underline" target="_blank" to={`/${localeNl ? "nl" : "en"}/privacy`}>{localeNl ? "privacyverklaring" : "privacy statement"}</Link>.</span></label> : null}
+
           <div className="flex flex-wrap gap-3 pt-2">
             <Button
               variant="heroOutline"
@@ -245,7 +251,7 @@ const IntakePage = () => {
               {localeNl ? "Terug" : "Back"}
             </Button>
             {isLastQuestion ? (
-              <Button variant="hero" onClick={handleSubmit} disabled={!controlValue.trim() || !currentEmailIsValid || loading} className="gap-2">
+              <Button variant="hero" onClick={handleSubmit} disabled={!controlValue.trim() || !currentEmailIsValid || !healthConsent || loading} className="gap-2">
                 {loading ? (localeNl ? "Versturen..." : "Sending...") : localeNl ? "Verstuur intake" : "Submit intake"}
               </Button>
             ) : (

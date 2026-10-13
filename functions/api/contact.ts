@@ -22,6 +22,7 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const message = String(payload.message ?? "").trim();
   const locale = String(payload.locale ?? "nl").trim().toLowerCase();
   const emailLooksValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isWithdrawal = message.startsWith("HERROEPING / WITHDRAWAL");
 
   if (!name || !email || !message || !emailLooksValid) {
     return new Response(JSON.stringify({ ok: false, error: "Missing required fields" }), {
@@ -36,7 +37,7 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const internalResult = await sendBrevoEmail(env, {
     to: [{ email: internalRecipient }],
     replyTo: { email, name },
-    subject: locale === "en" ? `New contact request from ${name}` : `Nieuw contactbericht van ${name}`,
+    subject: isWithdrawal ? `Herroeping overeenkomst door ${name}` : locale === "en" ? `New contact request from ${name}` : `Nieuw contactbericht van ${name}`,
     htmlContent: `
       <h2>${locale === "en" ? "New contact request" : "Nieuw contactbericht"}</h2>
       <p><strong>${locale === "en" ? "Name" : "Naam"}:</strong> ${escapeHtml(name)}</p>
@@ -64,16 +65,24 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const customerResult = await sendBrevoEmail(env, {
     to: [{ email, name }],
     replyTo: { email: replyToEmail, name: "TopFit Running" },
-    subject: locale === "en" ? "We received your message" : "We hebben je bericht ontvangen",
+    subject: isWithdrawal ? (locale === "en" ? "Confirmation of your withdrawal" : "Bevestiging van je herroeping") : locale === "en" ? "We received your message" : "We hebben je bericht ontvangen",
     htmlContent:
-      locale === "en"
+      isWithdrawal
+        ? locale === "en"
+          ? `<p>Hi ${escapeHtml(name)},</p><p>We received your withdrawal notice. The details you submitted are shown below:</p><p>${escapeHtml(message).replace(/\n/g, "<br />")}</p><p>We will process it in accordance with your statutory rights and our terms.</p><p>Team TopFit Running</p>`
+          : `<p>Hi ${escapeHtml(name)},</p><p>We hebben je herroepingsmelding ontvangen. Hieronder staan de door jou ingevulde gegevens:</p><p>${escapeHtml(message).replace(/\n/g, "<br />")}</p><p>We verwerken de melding volgens je wettelijke rechten en onze voorwaarden.</p><p>Team TopFit Running</p>`
+        : locale === "en"
         ? `<p>Hi ${escapeHtml(name)},</p><p>We received your message and will reply as soon as possible.</p><p>Team TopFit Running</p>`
         : `<p>Hi ${escapeHtml(name)},</p><p>We hebben je bericht ontvangen en reageren zo snel mogelijk.</p><p>Team TopFit Running</p>`,
     textContent:
-      locale === "en"
+      isWithdrawal
+        ? locale === "en"
+          ? `Hi ${name},\n\nWe received your withdrawal notice.\n\n${message}\n\nWe will process it in accordance with your statutory rights and our terms.\n\nTeam TopFit Running`
+          : `Hi ${name},\n\nWe hebben je herroepingsmelding ontvangen.\n\n${message}\n\nWe verwerken de melding volgens je wettelijke rechten en onze voorwaarden.\n\nTeam TopFit Running`
+        : locale === "en"
         ? `Hi ${name},\n\nWe received your message and will reply as soon as possible.\n\nTeam TopFit Running`
         : `Hi ${name},\n\nWe hebben je bericht ontvangen en reageren zo snel mogelijk.\n\nTeam TopFit Running`,
-    tags: ["contact-autoreply", locale],
+    tags: [isWithdrawal ? "withdrawal-confirmation" : "contact-autoreply", locale],
   });
 
   return new Response(

@@ -53,11 +53,20 @@ export const SiteFooter = ({ locale, content }: SiteFooterProps) => {
       </div>
 
       <div className="border-t border-slate-200">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-4 text-xs uppercase tracking-[0.28em] text-slate-500 md:flex-row md:items-center md:justify-between md:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-4 text-xs text-slate-500 md:px-8">
+          <nav aria-label={locale === "nl" ? "Juridisch" : "Legal"} className="flex flex-wrap gap-x-5 gap-y-2">
+            <Link className="underline-offset-4 hover:underline" to={`/${locale}/privacy`}>Privacy</Link>
+            <Link className="underline-offset-4 hover:underline" to={`/${locale}/${locale === "nl" ? "algemene-voorwaarden" : "terms"}`}>{locale === "nl" ? "Algemene voorwaarden" : "Terms"}</Link>
+            <Link className="underline-offset-4 hover:underline" to={`/${locale}/cookies`}>Cookies</Link>
+            <Link className="font-semibold underline-offset-4 hover:underline" to={`/${locale}/${locale === "nl" ? "overeenkomst-ontbinden" : "withdraw"}`}>{locale === "nl" ? "Overeenkomst ontbinden" : "Withdraw from contract"}</Link>
+          </nav>
+          <p className="leading-6">{topFitSiteConfig.legal.tradeName} · {topFitSiteConfig.legal.address} · KvK {topFitSiteConfig.legal.chamberOfCommerce} · Btw-id {topFitSiteConfig.legal.vatId}</p>
+          <div className="flex flex-col gap-2 uppercase tracking-[0.2em] md:flex-row md:items-center md:justify-between">
           <span>&copy; {new Date().getFullYear()} TopFit Running</span>
           <span>
             {locale.toUpperCase()} / {topFitSiteConfig.slogan}
           </span>
+          </div>
         </div>
       </div>
     </footer>

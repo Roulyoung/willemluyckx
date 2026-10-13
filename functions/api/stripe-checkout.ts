@@ -5,6 +5,9 @@ type CheckoutPayload = {
   name?: unknown;
   phone?: unknown;
   embedded?: unknown;
+  termsAccepted?: unknown;
+  earlyStartRequested?: unknown;
+  termsVersion?: unknown;
 };
 
 const readJson = async (request: Request): Promise<CheckoutPayload> => {
@@ -64,9 +67,15 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const phone = String(payload.phone ?? "").trim();
   const product = productConfig[normalizedSlug];
   const embedded = wantsEmbeddedCheckout(payload.embedded);
+  const termsAccepted = payload.termsAccepted === true;
+  const earlyStartRequested = payload.earlyStartRequested === true;
+  const termsVersion = String(payload.termsVersion ?? "").trim();
 
   if (!product) {
     return Response.json({ ok: false, error: "Unknown product" }, { status: 400 });
+  }
+  if (!termsAccepted || !earlyStartRequested || !termsVersion) {
+    return Response.json({ ok: false, error: "Required legal confirmations are missing" }, { status: 400 });
   }
 
   const stripeSecretKey = String(env.STRIPE_SECRET_KEY ?? "").trim();
@@ -89,6 +98,10 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   form.set("metadata[product_slug]", normalizedSlug);
   form.set("metadata[requested_slug]", slug || normalizedSlug);
   form.set("metadata[locale]", locale);
+  form.set("metadata[terms_accepted]", "true");
+  form.set("metadata[terms_version]", termsVersion);
+  form.set("metadata[early_start_requested]", "true");
+  form.set("metadata[consent_recorded_at]", new Date().toISOString());
   if (email) form.set("customer_email", email);
   if (name) form.set("metadata[customer_name]", name);
   if (email) form.set("metadata[customer_email]", email);

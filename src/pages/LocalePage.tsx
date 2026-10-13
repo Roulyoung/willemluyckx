@@ -37,6 +37,12 @@ const pageTitleMap: Record<string, string> = {
   contact: "Contact",
   shop: "Shop",
   blog: "Blog",
+  privacy: "Privacy",
+  "algemene-voorwaarden": "Algemene voorwaarden",
+  terms: "Terms of service",
+  cookies: "Cookies",
+  "overeenkomst-ontbinden": "Overeenkomst ontbinden",
+  withdraw: "Withdraw from contract",
 };
 
 const sectionAliases: Record<string, string> = {

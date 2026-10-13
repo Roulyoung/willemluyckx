@@ -4,6 +4,9 @@ type IntakePayload = {
   name?: unknown;
   email?: unknown;
   phone?: unknown;
+  health_consent?: unknown;
+  health_consent_version?: unknown;
+  health_consent_recorded_at?: unknown;
   goal?: unknown;
   race_distance?: unknown;
   weekly_volume?: unknown;
@@ -39,6 +42,9 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   if (!name || !email || !phone || !emailLooksValid) {
     return Response.json({ ok: false, error: "Missing required fields" }, { status: 400 });
   }
+  if (payload.health_consent !== true || !String(payload.health_consent_version ?? "").trim()) {
+    return Response.json({ ok: false, error: "Explicit health-data consent required" }, { status: 400 });
+  }
 
   const serviceAccount = parseServiceAccount(env as Record<string, unknown>);
   if (!serviceAccount?.client_email || !serviceAccount.private_key) {
@@ -60,7 +66,10 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
       String(payload.runs_per_week ?? ""),
       String(payload.timeline ?? ""),
       String(payload.coaching_preference ?? ""),
-      String(payload.extra_notes ?? ""),
+      [
+        String(payload.extra_notes ?? ""),
+        `Explicit health-data consent: yes; version: ${String(payload.health_consent_version ?? "")}; recorded by server: ${new Date().toISOString()}`,
+      ].filter(Boolean).join("\n"),
     ],
   ];
 
