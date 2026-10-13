@@ -17,6 +17,25 @@ type IntakePayload = {
   timeline?: unknown;
   coaching_preference?: unknown;
   extra_notes?: unknown;
+  birth_date?: unknown;
+  training_years?: unknown;
+  sports_history?: unknown;
+  pr_5k?: unknown;
+  pr_10k?: unknown;
+  pr_half?: unknown;
+  pr_marathon?: unknown;
+  recent_times?: unknown;
+  training_log?: unknown;
+  training_overview_url?: unknown;
+  available_days?: unknown;
+  session_duration?: unknown;
+  strength_training?: unknown;
+  technique_training?: unknown;
+  target_time?: unknown;
+  race_date?: unknown;
+  goal_other?: unknown;
+  online_guidance?: unknown;
+  product?: unknown;
   locale?: unknown;
   source?: unknown;
 };
@@ -37,9 +56,10 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const name = String(payload.name ?? "").trim();
   const email = String(payload.email ?? "").trim();
   const phone = String(payload.phone ?? "").trim();
+  const birthDate = String(payload.birth_date ?? "").trim();
   const emailLooksValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  if (!name || !email || !phone || !emailLooksValid) {
+  if (!name || !email || !phone || !birthDate || !emailLooksValid) {
     return Response.json({ ok: false, error: "Missing required fields" }, { status: 400 });
   }
   if (payload.health_consent !== true || !String(payload.health_consent_version ?? "").trim()) {
@@ -52,29 +72,91 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   }
 
   const token = await getAccessToken(serviceAccount);
+  const availableDays = Array.isArray(payload.available_days)
+    ? payload.available_days.map((day) => String(day)).join(", ")
+    : String(payload.available_days ?? "");
+  const goal = [String(payload.goal ?? ""), String(payload.goal_other ?? "")].filter(Boolean).join(": ");
   const values = [
     [
       name,
       email,
       phone,
-      String(payload.goal ?? ""),
-      String(payload.race_distance ?? ""),
-      String(payload.weekly_volume ?? ""),
-      String(payload.main_challenge ?? ""),
+      goal,
+      String(payload.race_distance ?? payload.goal ?? ""),
+      String(payload.weekly_volume ?? payload.training_years ?? ""),
+      String(payload.main_challenge ?? payload.training_log ?? ""),
       String(payload.injuries ?? ""),
-      String(payload.support_type ?? ""),
+      String(payload.support_type ?? payload.online_guidance ?? ""),
       String(payload.runs_per_week ?? ""),
-      String(payload.timeline ?? ""),
-      String(payload.coaching_preference ?? ""),
+      String(payload.timeline ?? payload.race_date ?? ""),
+      String(payload.coaching_preference ?? availableDays),
       [
         String(payload.extra_notes ?? ""),
         `Explicit health-data consent: yes; version: ${String(payload.health_consent_version ?? "")}; recorded by server: ${new Date().toISOString()}`,
       ].filter(Boolean).join("\n"),
+      birthDate,
+      String(payload.training_years ?? ""),
+      String(payload.sports_history ?? ""),
+      String(payload.pr_5k ?? ""),
+      String(payload.pr_10k ?? ""),
+      String(payload.pr_half ?? ""),
+      String(payload.pr_marathon ?? ""),
+      String(payload.recent_times ?? ""),
+      String(payload.training_log ?? ""),
+      String(payload.training_overview_url ?? ""),
+      availableDays,
+      String(payload.session_duration ?? ""),
+      String(payload.strength_training ?? ""),
+      String(payload.technique_training ?? ""),
+      String(payload.target_time ?? ""),
+      String(payload.race_date ?? ""),
+      String(payload.online_guidance ?? ""),
+      String(payload.product ?? ""),
     ],
   ];
 
+  const extendedHeaders = [[
+    "Geboortedatum",
+    "Jaren training",
+    "Sportverleden",
+    "PR 5 km",
+    "PR 10 km",
+    "PR halve marathon",
+    "PR marathon",
+    "Beste tijden laatste 6 maanden",
+    "Trainingslogboek laatste maand",
+    "Link trainingsoverzicht",
+    "Beschikbare trainingsdagen",
+    "Tijd per training",
+    "Krachttraining",
+    "Looptechniektraining",
+    "Gewenste eindtijd",
+    "Wedstrijddatum",
+    "Online gesprek",
+    "Product",
+  ]];
+
+  const headerResponse = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Intake!N1:AE1")}?valueInputOption=RAW`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ values: extendedHeaders }),
+    },
+  );
+  if (!headerResponse.ok) {
+    const headerJson = await headerResponse.json().catch(() => ({}));
+    return Response.json(
+      { ok: false, error: `Google Sheets header update failed (${headerResponse.status}): ${JSON.stringify(headerJson)}` },
+      { status: 500 },
+    );
+  }
+
   const appendResponse = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Intake!A:M")}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Intake!A:AE")}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
     {
       method: "POST",
       headers: {

@@ -9,6 +9,7 @@ import runningImage from "@/assets/topfit/photos/willem-running.jpg";
 import { getBlogMedia } from "@/lib/blogMedia";
 import { type Locale } from "@/lib/i18n";
 import { localizedPath } from "@/lib/localeRoutes";
+import { offerPath } from "@/lib/proposition";
 import { topFitSiteConfig } from "@/lib/siteConfig";
 import { getLocaleContent } from "@/lib/topfitContent";
 import type { LocaleContent } from "@/lib/topfitContent";
@@ -915,7 +916,7 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
             </div>
             <div className="flex flex-wrap gap-3">
               <Button variant="hero" asChild>
-                <Link to="/intake">Begin nu met je intake</Link>
+                <Link to={offerPath(locale, "schema")}>Bekijk het persoonlijke schema</Link>
               </Button>
               <Button variant="heroOutline" asChild>
                 <Link to={subscriptionsHref}>Bekijk aanbod</Link>
@@ -929,7 +930,7 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
             <Link to={blogHref}>Terug naar blog</Link>
           </Button>
           <Button variant="heroOutline" asChild>
-            <Link to="/intake">Start intake</Link>
+            <Link to={offerPath(locale, "schema")}>Bekijk het persoonlijke schema</Link>
           </Button>
           <Button variant="heroOutline" asChild>
             <a href={topFitSiteConfig.contact.whatsappHref} target="_blank" rel="noreferrer">
@@ -1189,7 +1190,7 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
             </div>
             <div className="flex flex-wrap gap-3">
               <Button variant="hero" asChild>
-                <Link to="/intake">Begin nu met je intake</Link>
+                <Link to={offerPath(locale, "schema")}>Bekijk het persoonlijke schema</Link>
               </Button>
               <Button variant="heroOutline" asChild>
                 <Link to={subscriptionsHref}>Bekijk aanbod</Link>
@@ -1203,7 +1204,7 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
             <Link to={blogHref}>Terug naar blog</Link>
           </Button>
           <Button variant="heroOutline" asChild>
-            <Link to="/intake">Start intake</Link>
+            <Link to={offerPath(locale, "schema")}>Bekijk het persoonlijke schema</Link>
           </Button>
           <Button variant="heroOutline" asChild>
             <a href={topFitSiteConfig.contact.whatsappHref} target="_blank" rel="noreferrer">
@@ -1448,7 +1449,7 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
             </div>
             <div className="flex flex-wrap gap-3">
               <Button variant="hero" asChild>
-                <Link to="/intake">Begin nu met je intake</Link>
+                <Link to={offerPath(locale, "schema")}>Bekijk het persoonlijke schema</Link>
               </Button>
               <Button variant="heroOutline" asChild>
                 <Link to={subscriptionsHref}>Bekijk aanbod</Link>
@@ -1462,7 +1463,7 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
             <Link to={blogHref}>Terug naar blog</Link>
           </Button>
           <Button variant="heroOutline" asChild>
-            <Link to="/intake">Start intake</Link>
+            <Link to={offerPath(locale, "schema")}>Bekijk het persoonlijke schema</Link>
           </Button>
           <Button variant="heroOutline" asChild>
             <a href={topFitSiteConfig.contact.whatsappHref} target="_blank" rel="noreferrer">
@@ -1712,7 +1713,7 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
             </div>
             <div className="flex flex-wrap gap-3">
               <Button variant="hero" asChild>
-                <Link to="/intake">Begin nu met je intake</Link>
+                <Link to={offerPath(locale, "schema")}>Bekijk het persoonlijke schema</Link>
               </Button>
               <Button variant="heroOutline" asChild>
                 <Link to={subscriptionsHref}>Bekijk aanbod</Link>
@@ -1726,7 +1727,7 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
             <Link to={blogHref}>Terug naar blog</Link>
           </Button>
           <Button variant="heroOutline" asChild>
-            <Link to="/intake">Start intake</Link>
+            <Link to={offerPath(locale, "schema")}>Bekijk het persoonlijke schema</Link>
           </Button>
           <Button variant="heroOutline" asChild>
             <a href={topFitSiteConfig.contact.whatsappHref} target="_blank" rel="noreferrer">

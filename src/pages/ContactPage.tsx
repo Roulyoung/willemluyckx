@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import { type Locale } from "@/lib/i18n";
 import { topFitSiteConfig } from "@/lib/siteConfig";
+import { offerPath } from "@/lib/proposition";
 
 const fadeClass = (_loaded: boolean) => "animate-fade-up";
 
@@ -78,7 +79,7 @@ export const ContactPage = ({
             </a>
           </Button>
           <Button variant="heroOutline" size="lg" asChild>
-            <Link to="/intake">{locale === "en" ? "Start intake" : "Start intake"}</Link>
+            <Link to={offerPath(locale, "schema")}>{locale === "en" ? "View the personal plan" : "Bekijk het persoonlijke schema"}</Link>
           </Button>
         </div>
       </div>

@@ -1,269 +1,133 @@
-import { offerPath } from "@/lib/proposition";
-import { NewsletterSignup } from "@/components/NewsletterSignup";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, ReactNode, useState } from "react";
+import { CheckCircle2 } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
-import { CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
-import * as ProgressPrimitive from "@radix-ui/react-progress";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { offerPath } from "@/lib/proposition";
 import { localizedPath } from "@/lib/localeRoutes";
 
 type AnswerState = Record<string, string>;
 
-type Question = {
-  key: string;
-  titleNl: string;
-  titleEn: string;
-  placeholderNl: string;
-  placeholderEn: string;
-  type?: "text" | "email" | "tel" | "textarea" | "select";
-  options?: string[];
-};
+const nlGoals = ["Beginnen met hardlopen", "5 km lopen of verbeteren", "10 km lopen of verbeteren", "Halve marathon", "Marathon", "Gezondheid en conditie verbeteren", "Blessurevrij hardlopen", "Ander doel"];
+const enGoals = ["Start running", "Run or improve a 5K", "Run or improve a 10K", "Half marathon", "Marathon", "Improve health and fitness", "Run injury-free", "Other goal"];
+const nlDays = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"];
+const enDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-const questions: Question[] = [
-  { key: "name", titleNl: "Wat is je naam?", titleEn: "What is your name?", placeholderNl: "Voor- en achternaam", placeholderEn: "Full name", type: "text" },
-  { key: "email", titleNl: "Wat is je e-mailadres?", titleEn: "What is your email address?", placeholderNl: "naam@voorbeeld.nl", placeholderEn: "name@example.com", type: "email" },
-  { key: "phone", titleNl: "Wat is je telefoonnummer?", titleEn: "What is your phone number?", placeholderNl: "06 12345678", placeholderEn: "+31 6 12345678", type: "tel" },
-  { key: "goal", titleNl: "Wat is je belangrijkste doel?", titleEn: "What is your main goal?", placeholderNl: "Bijv. 10 km, halve marathon, marathon", placeholderEn: "For example: 10K, half marathon, marathon", type: "text" },
-  { key: "race_distance", titleNl: "Voor welke afstand of wedstrijd train je?", titleEn: "Which distance or race are you training for?", placeholderNl: "Noem afstand of evenement", placeholderEn: "Name the distance or event", type: "text" },
-  { key: "experience", titleNl: "Wat is je huidige hardloopniveau en ervaring?", titleEn: "What is your current running level and experience?", placeholderNl: "Bijv. beginner, 2 jaar ervaring of een recente wedstrijdtijd", placeholderEn: "For example: beginner, 2 years of experience or a recent race time", type: "text" },
-  { key: "weekly_volume", titleNl: "Hoeveel loop je ongeveer per week?", titleEn: "How much do you run per week?", placeholderNl: "Bijv. 3x per week / 30 km", placeholderEn: "For example: 3 runs per week / 30 km", type: "text" },
-  { key: "main_challenge", titleNl: "Wat is op dit moment je grootste uitdaging?", titleEn: "What is your biggest challenge right now?", placeholderNl: "Bijv. structuur, tempo, motivatie, techniek", placeholderEn: "For example: structure, pace, motivation, technique", type: "textarea" },
-  { key: "injuries", titleNl: "Zijn er blessures of signalen waar we rekening mee moeten houden?", titleEn: "Any injuries or physical issues we should consider?", placeholderNl: "Beschrijf kort wat relevant is", placeholderEn: "Describe anything relevant briefly", type: "textarea" },
-  { key: "support_type", titleNl: "Welke ondersteuning zoek je het liefst?", titleEn: "What kind of support do you want?", placeholderNl: "Kies een optie", placeholderEn: "Choose an option", type: "select", options: ["Schema", "Looptechniek", "Online coaching", "Fysieke coaching", "Combinatie"] },
-  { key: "runs_per_week", titleNl: "Hoeveel keer per week wil je idealiter trainen?", titleEn: "How many times per week do you ideally want to train?", placeholderNl: "Bijv. 3, 4 of 5 keer", placeholderEn: "For example: 3, 4 or 5 times", type: "text" },
-  { key: "timeline", titleNl: "Wanneer wil je starten of een doel bereiken?", titleEn: "When do you want to start or reach your goal?", placeholderNl: "Bijv. binnen 8 weken", placeholderEn: "For example: within 8 weeks", type: "text" },
-  { key: "coaching_preference", titleNl: "Wat past het beste bij jou: online, fysiek of een combinatie?", titleEn: "What suits you best: online, physical or a combination?", placeholderNl: "Kies of licht toe", placeholderEn: "Choose or explain briefly", type: "select", options: ["Online", "Fysiek", "Combinatie"] },
-  { key: "extra_notes", titleNl: "Nog iets dat we moeten weten?", titleEn: "Anything else we should know?", placeholderNl: "Eventuele extra context", placeholderEn: "Any additional context", type: "textarea" },
-];
-
-const isDutch = () => {
-  if (typeof navigator === "undefined") return true;
-  return navigator.language.toLowerCase().startsWith("nl");
-};
-
+const isDutch = () => typeof navigator === "undefined" || navigator.language.toLowerCase().startsWith("nl");
 const emailIsValid = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 
 const IntakePage = () => {
   const [searchParams] = useSearchParams();
   const localeParam = searchParams.get("locale")?.toLowerCase();
   const localeNl = localeParam ? localeParam === "nl" : isDutch();
-  const [step, setStep] = useState(0);
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [healthConsent, setHealthConsent] = useState(false);
-  const [values, setValues] = useState<AnswerState>({
-    support_type: "Schema",
-    coaching_preference: "Combinatie",
-  });
-
-  const progress = useMemo(() => ((step + 1) / (questions.length + 1)) * 100, [step]);
-  const currentQuestion = questions[step];
-  const isLastQuestion = step === questions.length - 1;
-  const controlValue = values[currentQuestion.key] ?? "";
-  const currentEmailIsValid = currentQuestion.key !== "email" || emailIsValid(controlValue);
-  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+  const locale = localeNl ? "nl" : "en";
   const isPostPurchaseFlow = searchParams.get("flow") === "checkout" || searchParams.get("paid") === "1";
+  const [values, setValues] = useState<AnswerState>({});
+  const [availableDays, setAvailableDays] = useState<string[]>([]);
+  const [healthConsent, setHealthConsent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [step]);
+  const setValue = (key: string, value: string) => setValues((current) => ({ ...current, [key]: value }));
+  const toggleDay = (day: string) => setAvailableDays((current) => current.includes(day) ? current.filter((item) => item !== day) : [...current, day]);
 
-  const setValue = (key: string, value: string) => {
-    setValues((current) => ({ ...current, [key]: value }));
-  };
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError("");
+    if (!emailIsValid(values.email ?? "")) {
+      setError(localeNl ? "Vul een geldig e-mailadres in." : "Enter a valid email address.");
+      return;
+    }
     try {
       setLoading(true);
-      setError("");
       const response = await fetch("/api/intake", {
         method: "POST",
-        headers: { Accept: "application/json" },
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
         body: JSON.stringify({
           ...values,
-          extra_notes: [values.extra_notes, `${localeNl ? "Niveau en ervaring" : "Level and experience"}: ${values.experience ?? ""}`, searchParams.get("product") === "schema" ? "Aanvraag: persoonlijk schema, 12 weken, €19" : ""].filter(Boolean).join("\n"),
-          locale: localeNl ? "nl" : "en",
-          source: "intake-page",
-          product: searchParams.get("product") ?? "",
-          health_consent: true,
-          health_consent_version: "2026-10-13",
+          available_days: availableDays,
+          locale,
+          source: "post-purchase-intake",
+          product: searchParams.get("product") ?? "schema",
+          health_consent: healthConsent,
+          health_consent_version: "2026-10-14",
           health_consent_recorded_at: new Date().toISOString(),
         }),
       });
-      const rawBody = await response.text();
-      let payload: { ok?: boolean; error?: string } = {};
-      if (rawBody) {
-        try {
-          payload = JSON.parse(rawBody) as { ok?: boolean; error?: string };
-        } catch {
-          payload = { error: rawBody.slice(0, 240) };
-        }
-      }
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || `Submission failed (${response.status})`);
-      }
+      const payload = await response.json().catch(() => ({})) as { ok?: boolean; error?: string };
+      if (!response.ok || !payload.ok) throw new Error(payload.error || `Submission failed (${response.status})`);
       setSubmitted(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : "Submission failed");
+      setError(submitError instanceof Error ? submitError.message : (localeNl ? "Versturen is niet gelukt." : "Submission failed."));
     } finally {
       setLoading(false);
     }
   };
 
-  if (submitted) {
-    const locale = localeNl ? "nl" : "en";
-    const homeHref = localizedPath(locale, "home");
-    const plansHref = localizedPath(locale, localeNl ? "abonnementen" : "subscriptions");
-    const schemaHref = offerPath(locale, "schema");
+  if (!isPostPurchaseFlow) {
     return (
-      <section className="mx-auto flex min-h-screen max-w-3xl items-center px-4 py-8 sm:px-6 sm:py-10 md:px-8">
+      <section className="mx-auto flex min-h-[70vh] max-w-3xl items-center px-4 py-10 sm:px-6">
         <Card className="w-full border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
-          <CardContent className="space-y-6 p-6 sm:p-8 md:p-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-emerald-700">
-              <CheckCircle2 className="h-4 w-4" />
-              {localeNl ? "Ingestuurd" : "Submitted"}
-            </div>
-            <h1 className="text-3xl font-black uppercase tracking-[0.04em] text-slate-950 sm:text-4xl md:text-6xl">
-              {isPostPurchaseFlow
-                ? localeNl
-                  ? "Bedankt, we hebben je intake ontvangen."
-                  : "Thanks, we received your intake."
-                : localeNl
-                  ? "Bedankt, we hebben je intake ontvangen."
-                  : "Thanks, we received your intake."}
-            </h1>
-            <p className="max-w-2xl text-lg leading-8 text-slate-600">
-              {isPostPurchaseFlow
-                ? localeNl
-                  ? "Willem gebruikt je antwoorden om je schema op maat te maken en stuurt het daarna toe. Als er iets ontbreekt, nemen we contact op."
-                  : "Willem uses your answers to create your personal plan and sends it to you afterwards. We will contact you if we need more information."
-                : localeNl
-                  ? "Willem bekijkt je antwoorden en neemt contact met je op. Vraag je het schema van €19 aan? Dan maakt hij het op maat en stuurt het daarna toe."
-                  : "Willem will review your answers and get in touch. Requesting the €19 plan? He will create it personally and send it to you afterwards."}
-            </p>
-            <div className="flex flex-wrap gap-3">
-              {isPostPurchaseFlow ? (
-                <Button variant="hero" asChild>
-                  <Link to={homeHref}>{localeNl ? "Terug naar home" : "Back home"}</Link>
-                </Button>
-              ) : (
-                <>
-                  <Button variant="hero" asChild>
-                    <Link to={schemaHref}>{localeNl ? "Bekijk het schema van €19" : "View the €19 plan"}</Link>
-                  </Button>
-                  <Button variant="heroOutline" asChild>
-                    <Link to={plansHref}>{localeNl ? "Bekijk begeleiding" : "Explore guidance"}</Link>
-                  </Button>
-                </>
-              )}
-            </div>
-            <NewsletterSignup locale={locale} />
+          <CardContent className="space-y-5 p-6 sm:p-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">TopFit Running</p>
+            <h1 className="text-3xl font-black uppercase tracking-[0.04em] text-slate-950 sm:text-5xl">{localeNl ? "De intake volgt na betaling" : "The intake follows payment"}</h1>
+            <p className="text-lg leading-8 text-slate-600">{localeNl ? "Na aankoop van je persoonlijke hardloopschema krijg je direct toegang tot het intakeformulier. Zo kan Willem jouw schema voor 12 weken op maat maken." : "After purchasing your personal running plan, you will get direct access to the intake form so Willem can create your tailored 12-week plan."}</p>
+            <Button variant="hero" asChild><Link to={offerPath(locale, "schema")}>{localeNl ? "Bekijk het persoonlijke schema" : "View the personal plan"}</Link></Button>
           </CardContent>
         </Card>
       </section>
     );
   }
 
+  if (submitted) {
+    return (
+      <section className="mx-auto flex min-h-[70vh] max-w-3xl items-center px-4 py-10 sm:px-6">
+        <Card className="w-full border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
+          <CardContent className="space-y-6 p-6 sm:p-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-emerald-700"><CheckCircle2 className="h-4 w-4" />{localeNl ? "Ingestuurd" : "Submitted"}</div>
+            <h1 className="text-3xl font-black uppercase tracking-[0.04em] text-slate-950 sm:text-5xl">{localeNl ? "We hebben je intake ontvangen" : "We received your intake"}</h1>
+            <p className="text-lg leading-8 text-slate-600">{localeNl ? "Willem gebruikt je antwoorden om je persoonlijke schema te maken. Als er nog iets ontbreekt, neemt hij contact met je op." : "Willem will use your answers to create your personal plan. He will contact you if any information is missing."}</p>
+            <Button variant="hero" asChild><Link to={localizedPath(locale, "home")}>{localeNl ? "Terug naar home" : "Back home"}</Link></Button>
+          </CardContent>
+        </Card>
+      </section>
+    );
+  }
+
+  const Input = ({ name, label, type = "text", required = false, placeholder }: { name: string; label: string; type?: string; required?: boolean; placeholder?: string }) => (
+    <label className="space-y-2 text-sm font-semibold text-slate-700"><span>{label}{required ? " *" : ""}</span><input name={name} type={type} required={required} value={values[name] ?? ""} onChange={(event) => setValue(name, event.target.value)} placeholder={placeholder} className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 font-normal text-slate-950 outline-none transition-colors focus:border-blue-500 focus:bg-white" /></label>
+  );
+  const Textarea = ({ name, label, help, required = false }: { name: string; label: string; help?: string; required?: boolean }) => (
+    <label className="space-y-2 text-sm font-semibold text-slate-700"><span>{label}{required ? " *" : ""}</span>{help ? <span className="block font-normal leading-6 text-slate-500">{help}</span> : null}<textarea name={name} required={required} value={values[name] ?? ""} onChange={(event) => setValue(name, event.target.value)} rows={5} className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 font-normal text-slate-950 outline-none transition-colors focus:border-blue-500 focus:bg-white" /></label>
+  );
+  const RadioGroup = ({ name, label, options, required = false }: { name: string; label: string; options: string[]; required?: boolean }) => (
+    <fieldset className="space-y-3"><legend className="text-sm font-semibold text-slate-700">{label}{required ? " *" : ""}</legend><div className="grid gap-2 sm:grid-cols-2">{options.map((option) => <label key={option} className={`flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 text-sm ${values[name] === option ? "border-blue-500 bg-blue-50 text-blue-800" : "border-slate-200 bg-slate-50 text-slate-700"}`}><input type="radio" name={name} value={option} required={required} checked={values[name] === option} onChange={(event) => setValue(name, event.target.value)} className="accent-blue-600" />{option}</label>)}</div></fieldset>
+  );
+  const Section = ({ number, title, children }: { number: number; title: string; children: ReactNode }) => (
+    <section className="space-y-5 rounded-3xl border border-slate-200 p-5 sm:p-7"><div className="flex items-center gap-3"><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">{number}</span><h2 className="text-xl font-black text-slate-950 sm:text-2xl">{title}</h2></div>{children}</section>
+  );
+
   return (
-    <section className="mx-auto min-h-screen max-w-3xl px-4 py-8 sm:px-6 sm:py-10 md:px-8">
-      <Card className="border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
-        <CardContent className="space-y-6 p-5 sm:p-6 md:p-8">
-          <p className="text-sm leading-7 text-slate-600">{localeNl ? "Jouw schema op maat: €19 voor 12 weken. Vertel Willem over je doel, niveau en trainingsmogelijkheden. Hij maakt je schema en stuurt het daarna toe." : "Your tailored plan: €19 for 12 weeks. Tell Willem about your goal, level and training availability. He will create your plan and send it to you."}</p>
-          <div className="flex items-center justify-between gap-4">
-            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
-              {localeNl ? "Stap" : "Step"} {step + 1}/{questions.length}
-            </div>
-            <div className="rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">
-              {Math.round(progress)}%
-            </div>
-          </div>
-
-          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
-            <ProgressPrimitive.Root value={progress} className="h-full w-full overflow-hidden rounded-full bg-slate-100">
-              <ProgressPrimitive.Indicator
-                className="h-full rounded-full bg-blue-600 transition-transform duration-300"
-                style={{ transform: `translateX(-${100 - progress}%)` }}
-              />
-            </ProgressPrimitive.Root>
-          </div>
-
-          <div className="space-y-5">
-            <div className="text-lg font-semibold leading-8 text-slate-950 sm:text-xl">
-              {localeNl ? currentQuestion.titleNl : currentQuestion.titleEn}
-            </div>
-            {currentQuestion.type === "select" ? (
-              <div className="grid gap-3">
-                {currentQuestion.options?.map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => setValue(currentQuestion.key, option)}
-                    className={`rounded-2xl border px-4 py-4 text-left text-sm font-medium transition-colors ${
-                      controlValue === option
-                        ? "border-blue-600 bg-blue-50 text-blue-700"
-                        : "border-slate-200 bg-slate-50 text-slate-700 hover:border-blue-300 hover:bg-blue-50/50"
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
-            ) : currentQuestion.type === "textarea" ? (
-              <textarea
-                ref={element => { inputRef.current = element; }}
-                value={controlValue}
-                onChange={(event) => setValue(currentQuestion.key, event.target.value)}
-                placeholder={localeNl ? currentQuestion.placeholderNl : currentQuestion.placeholderEn}
-                rows={6}
-                className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-950 outline-none transition-colors placeholder:text-slate-400 focus:border-blue-500 focus:bg-white"
-              />
-            ) : (
-              <input
-                ref={element => { inputRef.current = element; }}
-                type={currentQuestion.type ?? "text"}
-                value={controlValue}
-                onChange={(event) => setValue(currentQuestion.key, event.target.value)}
-                placeholder={localeNl ? currentQuestion.placeholderNl : currentQuestion.placeholderEn}
-                className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-950 outline-none transition-colors placeholder:text-slate-400 focus:border-blue-500 focus:bg-white"
-              />
-            )}
-            {currentQuestion.key === "email" && controlValue.trim() && !currentEmailIsValid ? (
-              <p className="text-xs font-medium text-red-600">
-                {localeNl ? "Gebruik een geldig e-mailadres." : "Use a valid email address."}
-              </p>
-            ) : null}
-          </div>
-
+    <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+      <Card className="border-slate-200 bg-white shadow-2xl shadow-blue-950/10"><CardContent className="space-y-8 p-5 sm:p-8 md:p-10">
+        <header className="space-y-3 border-b border-slate-200 pb-7"><p className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">TopFit Running</p><p className="font-semibold text-slate-600">{localeNl ? "Persoonlijke begeleiding • Gezond en verantwoord hardlopen" : "Personal coaching • Healthy and responsible running"}</p><h1 className="text-3xl font-black uppercase tracking-[0.04em] text-slate-950 sm:text-5xl">{localeNl ? "Intakeformulier – Persoonlijk hardloopschema (12 weken)" : "Intake form – Personal running plan (12 weeks)"}</h1><p className="leading-7 text-slate-600">{localeNl ? "Vul onderstaande vragen zo volledig mogelijk in. Het invullen duurt ongeveer 10–15 minuten." : "Please answer the questions below as fully as possible. This takes about 10–15 minutes."}</p></header>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <Section number={1} title={localeNl ? "Persoonlijke gegevens" : "Personal details"}><div className="grid gap-5 sm:grid-cols-2"><Input name="name" label={localeNl ? "Naam en achternaam" : "Full name"} required /><Input name="email" label={localeNl ? "E-mailadres" : "Email address"} type="email" required /><Input name="phone" label={localeNl ? "Mobiel telefoonnummer" : "Mobile phone number"} type="tel" required /><Input name="birth_date" label={localeNl ? "Geboortedatum" : "Date of birth"} type="date" required /></div></Section>
+          <Section number={2} title={localeNl ? "Sportervaring en blessures" : "Sports experience and injuries"}><RadioGroup name="training_years" label={localeNl ? "Hoeveel jaar train je al regelmatig?" : "How many years have you trained regularly?"} options={localeNl ? ["Minder dan 1 jaar", "1–3 jaar", "3–5 jaar", "Meer dan 5 jaar"] : ["Less than 1 year", "1–3 years", "3–5 years", "More than 5 years"]} required /><Textarea name="sports_history" label={localeNl ? "Welke sporten beoefen je of heb je beoefend?" : "Which sports do you currently or previously practise?"} /><Textarea name="injuries" label={localeNl ? "Heb je momenteel of recent blessures gehad?" : "Do you currently have, or have you recently had, any injuries?"} /></Section>
+          <Section number={3} title={localeNl ? "Persoonlijke records en recente prestaties" : "Personal records and recent performances"}><p className="text-sm leading-6 text-slate-500">{localeNl ? "Vul je beste officiële of gemeten tijden in. Laat leeg wat niet van toepassing is." : "Enter your best official or measured times. Leave fields blank if they do not apply."}</p><div className="grid gap-5 sm:grid-cols-2"><Input name="pr_5k" label={localeNl ? "5 km – persoonlijk record" : "5K – personal best"} placeholder="00:00:00" /><Input name="pr_10k" label={localeNl ? "10 km – persoonlijk record" : "10K – personal best"} placeholder="00:00:00" /><Input name="pr_half" label={localeNl ? "Halve marathon – persoonlijk record" : "Half marathon – personal best"} placeholder="00:00:00" /><Input name="pr_marathon" label={localeNl ? "Marathon – persoonlijk record" : "Marathon – personal best"} placeholder="00:00:00" /></div><Textarea name="recent_times" label={localeNl ? "Wat zijn je beste tijden van de afgelopen 6 maanden?" : "What are your best times from the past 6 months?"} /></Section>
+          <Section number={4} title={localeNl ? "Trainingen van de afgelopen maand" : "Training over the past month"}><Textarea name="training_log" label={localeNl ? "Trainingslogboek" : "Training log"} help={localeNl ? "Beschrijf je trainingen van de afgelopen vier weken. Vermeld per training de afstand, tijd, gemiddelde hartslag en soort training." : "Describe your training over the past four weeks. Include distance, time, average heart rate and training type for each session."} required /><Input name="training_overview_url" label={localeNl ? "Deelbare link naar Garmin-, Strava- of Excel-overzicht (optioneel)" : "Share link to Garmin, Strava or Excel overview (optional)"} type="url" placeholder="https://" /><p className="text-sm leading-6 text-slate-500">{localeNl ? "Vermeld bij intervaltraining zo mogelijk de tempo’s en hartslag per herhaling. Controleer of Willem de gedeelde link kan openen." : "For interval sessions, include pace and heart rate per repetition where possible. Make sure Willem can open the shared link."}</p></Section>
+          <Section number={5} title={localeNl ? "Beschikbaarheid en aanvullende training" : "Availability and additional training"}><RadioGroup name="runs_per_week" label={localeNl ? "Hoe vaak wil je per week hardlopen?" : "How often do you want to run each week?"} options={localeNl ? ["2 keer", "3 keer", "4 keer", "5 keer", "6 keer of meer"] : ["2 times", "3 times", "4 times", "5 times", "6 times or more"]} required /><fieldset className="space-y-3"><legend className="text-sm font-semibold text-slate-700">{localeNl ? "Op welke dagen kun je trainen? (Meerdere keuzes mogelijk)" : "Which days can you train? (Select all that apply)"} *</legend><div className="grid grid-cols-2 gap-2 sm:grid-cols-4">{(localeNl ? nlDays : enDays).map((day) => <label key={day} className={`flex cursor-pointer items-center gap-2 rounded-2xl border px-3 py-3 text-sm ${availableDays.includes(day) ? "border-blue-500 bg-blue-50 text-blue-800" : "border-slate-200 bg-slate-50 text-slate-700"}`}><input type="checkbox" checked={availableDays.includes(day)} onChange={() => toggleDay(day)} className="accent-blue-600" />{day}</label>)}</div></fieldset><RadioGroup name="session_duration" label={localeNl ? "Hoeveel tijd heb je gemiddeld per training?" : "How much time do you usually have per session?"} options={localeNl ? ["30–45 minuten", "45–60 minuten", "60–90 minuten", "Meer dan 90 minuten"] : ["30–45 minutes", "45–60 minutes", "60–90 minutes", "More than 90 minutes"]} required /><Textarea name="strength_training" label={localeNl ? "Wat doe je aan krachttraining?" : "What strength training do you do?"} /><Textarea name="technique_training" label={localeNl ? "Doe je aan looptechniektraining?" : "Do you do running technique training?"} /></Section>
+          <Section number={6} title={localeNl ? "Persoonlijk hardloopdoel" : "Personal running goal"}><RadioGroup name="goal" label={localeNl ? "Wat is je belangrijkste doel voor de komende 12 weken?" : "What is your main goal for the next 12 weeks?"} options={localeNl ? nlGoals : enGoals} required />{values.goal === (localeNl ? "Ander doel" : "Other goal") ? <Input name="goal_other" label={localeNl ? "Omschrijf je andere doel" : "Describe your other goal"} required /> : null}<div className="grid gap-5 sm:grid-cols-2"><Input name="target_time" label={localeNl ? "Wat is je gewenste eindtijd (indien van toepassing)?" : "What is your target finish time (if applicable)?"} /><Input name="race_date" label={localeNl ? "Datum van je wedstrijd (indien bekend)" : "Race date (if known)"} type="date" /></div><Textarea name="extra_notes" label={localeNl ? "Andere wensen of opmerkingen" : "Other wishes or comments"} /></Section>
+          <Section number={7} title={localeNl ? "Persoonlijke online begeleiding" : "Personal online coaching"}><p className="leading-7 text-slate-600">{localeNl ? "Wil je een persoonlijk online gesprek van 30 minuten met een TopFit Running-trainer? Tijdens dit Zoom-gesprek krijg je uitleg over je trainingsschema en kun je vragen stellen over training, techniek, herstel en blessures. Prijs: € 40." : "Would you like a personal 30-minute online conversation with a TopFit Running trainer? During this Zoom call, you will receive an explanation of your training plan and can ask questions about training, technique, recovery and injuries. Price: €40."}</p><RadioGroup name="online_guidance" label={localeNl ? "Kies een optie" : "Choose an option"} options={localeNl ? ["Ja, ik wil een online gesprek (€ 40)", "Nee, alleen het trainingsschema", "Misschien later"] : ["Yes, I want an online conversation (€40)", "No, the training plan only", "Maybe later"]} required /></Section>
+          <label className="flex items-start gap-3 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-slate-700"><input type="checkbox" required checked={healthConsent} onChange={(event) => setHealthConsent(event.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-blue-600" /><span>{localeNl ? "Ik geef uitdrukkelijk toestemming aan TopFit Running om de gegevens die ik over blessures of lichamelijke signalen invul te verwerken voor mijn intake, schema en coaching. Ik kan deze toestemming altijd intrekken via info@topfitrunning.com. Lees de " : "I explicitly consent to TopFit Running processing information I provide about injuries or physical issues for my intake, plan and coaching. I may withdraw this consent at any time via info@topfitrunning.com. Read the "}<Link className="underline" target="_blank" to={`/${locale}/privacy`}>{localeNl ? "privacyverklaring" : "privacy statement"}</Link>.</span></label>
+          {availableDays.length === 0 ? <p className="text-sm text-amber-700">{localeNl ? "Kies minimaal één beschikbare trainingsdag." : "Select at least one available training day."}</p> : null}
           {error ? <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
-
-          {isLastQuestion ? <label className="flex items-start gap-3 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-slate-700"><input type="checkbox" required checked={healthConsent} onChange={(event) => setHealthConsent(event.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-blue-600"/><span>{localeNl ? "Ik geef uitdrukkelijk toestemming aan TopFit Running om de gegevens die ik over blessures of lichamelijke signalen invul te verwerken voor mijn intake, schema en coaching. Ik kan deze toestemming altijd intrekken via info@topfitrunning.com. Lees de " : "I explicitly consent to TopFit Running processing information I provide about injuries or physical issues for my intake, plan and coaching. I may withdraw this consent at any time via info@topfitrunning.com. Read the "}<Link className="underline" target="_blank" to={`/${localeNl ? "nl" : "en"}/privacy`}>{localeNl ? "privacyverklaring" : "privacy statement"}</Link>.</span></label> : null}
-
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Button
-              variant="heroOutline"
-              onClick={() => setStep((current) => Math.max(current - 1, 0))}
-              disabled={step === 0 || loading}
-              className="gap-2"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              {localeNl ? "Terug" : "Back"}
-            </Button>
-            {isLastQuestion ? (
-              <Button variant="hero" onClick={handleSubmit} disabled={!controlValue.trim() || !currentEmailIsValid || !healthConsent || loading} className="gap-2">
-                {loading ? (localeNl ? "Versturen..." : "Sending...") : localeNl ? "Verstuur intake" : "Submit intake"}
-              </Button>
-            ) : (
-              <Button variant="hero" onClick={() => setStep((current) => Math.min(current + 1, questions.length - 1))} disabled={!controlValue.trim() || !currentEmailIsValid} className="gap-2">
-                {localeNl ? "Volgende" : "Next"}
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    </section>
+          <Button variant="hero" type="submit" disabled={loading || !healthConsent || availableDays.length === 0}>{loading ? (localeNl ? "Versturen..." : "Sending...") : (localeNl ? "Verstuur intake" : "Submit intake")}</Button>
+        </form>
+      </CardContent></Card>
+    </main>
   );
 };
 
