@@ -138,6 +138,7 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const amount = formatAmount(session.amount_total, session.currency);
   const siteUrl = String(env.SITE_URL ?? "https://topfitrunning.com").trim().replace(/\/$/, "");
   const intakeUrl = `${siteUrl}/intake?locale=${locale}&flow=checkout&product=${encodeURIComponent(productSlug)}`;
+  const bookUrl = `${siteUrl}/downloads/TopFit-Running-Boek.pdf`;
   const internalRecipient = String(env.BREVO_TO_EMAIL ?? "info@topfitrunning.com").trim();
   const replyToEmail = String(env.BREVO_REPLY_TO_EMAIL ?? "info@topfitrunning.com").trim();
   const productLabel = getProductLabel(productSlug, locale);
@@ -158,6 +159,7 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
       <p><strong>Stripe event:</strong> ${escapeHtml(event.id)}</p>
       <p><strong>Stripe session:</strong> ${escapeHtml(session.id ?? "-")}</p>
       <p><strong>${locale === "nl" ? "Vervolgstap" : "Next step"}:</strong> <a href="${escapeHtml(intakeUrl)}">${escapeHtml(intakeUrl)}</a></p>
+      <p><strong>TopFit Running Boek:</strong> <a href="${escapeHtml(bookUrl)}">${escapeHtml(bookUrl)}</a></p>
     `,
     textContent:
       `${locale === "nl" ? "Nieuwe Stripe betaling" : "New Stripe payment"}\n\n` +
@@ -170,7 +172,8 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
       `${locale === "nl" ? "Bedrag" : "Amount"}: ${amount || "-"}\n` +
       `Stripe event: ${event.id}\n` +
       `Stripe session: ${session.id || "-"}\n` +
-      `${locale === "nl" ? "Vervolgstap" : "Next step"}: ${intakeUrl}`,
+      `${locale === "nl" ? "Vervolgstap" : "Next step"}: ${intakeUrl}\n` +
+      `TopFit Running Boek: ${bookUrl}`,
     tags: ["stripe-payment", productSlug, locale, "internal"],
   });
 
@@ -184,12 +187,12 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
             : `Your payment has been received${productLabel ? ` - ${productLabel}` : ""}`,
         htmlContent:
           locale === "nl"
-            ? `<p>Hi ${escapeHtml(customerName || "daar")},</p><p>Je betaling voor <strong>${escapeHtml(productLabel)}</strong> is ontvangen.</p><p>De volgende stap is je intake invullen:</p><p><a href="${escapeHtml(intakeUrl)}">${escapeHtml(intakeUrl)}</a></p><p>Daarmee kan Willem jouw doelen, achtergrond en belastbaarheid vertalen naar een passend traject.</p><p>Team TopFit Running</p>`
-            : `<p>Hi ${escapeHtml(customerName || "there")},</p><p>Your payment for <strong>${escapeHtml(productLabel)}</strong> has been received.</p><p>Your next step is to complete the intake:</p><p><a href="${escapeHtml(intakeUrl)}">${escapeHtml(intakeUrl)}</a></p><p>That helps Willem turn your goals, background and training load into the right path.</p><p>Team TopFit Running</p>`,
+            ? `<p>Hi ${escapeHtml(customerName || "daar")},</p><p>Je betaling voor <strong>${escapeHtml(productLabel)}</strong> is ontvangen.</p><p>De volgende stap is je intake invullen:</p><p><a href="${escapeHtml(intakeUrl)}">${escapeHtml(intakeUrl)}</a></p><p>Daarmee kan Willem jouw doelen, achtergrond en belastbaarheid vertalen naar een passend traject.</p><h3>Jouw TopFit Running Boek</h3><p>Als onderdeel van je aankoop kun je het boek van Willem hier downloaden:</p><p><a href="${escapeHtml(bookUrl)}">Download het TopFit Running Boek (pdf)</a></p><p>Bewaar deze e-mail, zodat je de downloadlink later terug kunt vinden.</p><p>Team TopFit Running</p>`
+            : `<p>Hi ${escapeHtml(customerName || "there")},</p><p>Your payment for <strong>${escapeHtml(productLabel)}</strong> has been received.</p><p>Your next step is to complete the intake:</p><p><a href="${escapeHtml(intakeUrl)}">${escapeHtml(intakeUrl)}</a></p><p>That helps Willem turn your goals, background and training load into the right path.</p><h3>Your TopFit Running Book</h3><p>Your purchase includes Willem's book. Download it here:</p><p><a href="${escapeHtml(bookUrl)}">Download the TopFit Running Book (PDF)</a></p><p>Keep this email so you can find the download link later.</p><p>Team TopFit Running</p>`,
         textContent:
           locale === "nl"
-            ? `Hi ${customerName || "daar"},\n\nJe betaling voor ${productLabel} is ontvangen.\n\nVolgende stap: vul je intake in:\n${intakeUrl}\n\nTeam TopFit Running`
-            : `Hi ${customerName || "there"},\n\nYour payment for ${productLabel} has been received.\n\nNext step: complete your intake:\n${intakeUrl}\n\nTeam TopFit Running`,
+            ? `Hi ${customerName || "daar"},\n\nJe betaling voor ${productLabel} is ontvangen.\n\nVolgende stap: vul je intake in:\n${intakeUrl}\n\nJouw aankoop bevat ook het TopFit Running Boek van Willem. Download de pdf hier:\n${bookUrl}\n\nBewaar deze e-mail, zodat je de downloadlink later terug kunt vinden.\n\nTeam TopFit Running`
+            : `Hi ${customerName || "there"},\n\nYour payment for ${productLabel} has been received.\n\nNext step: complete your intake:\n${intakeUrl}\n\nYour purchase also includes Willem's TopFit Running Book. Download the PDF here:\n${bookUrl}\n\nKeep this email so you can find the download link later.\n\nTeam TopFit Running`,
         tags: ["stripe-payment", productSlug, locale, "customer"],
       })
     : { ok: false as const, skipped: true as const, error: "No customer email available" };
