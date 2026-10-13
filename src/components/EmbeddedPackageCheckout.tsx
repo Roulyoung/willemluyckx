@@ -29,7 +29,7 @@ const EmbeddedPackageCheckout = ({ locale, slug, isSuccess, intakePath, loaded, 
         if (!configResponse.ok || !config.ok || !config.publishableKey) throw new Error(config.error || (nl ? "Stripe-configuratie ontbreekt" : "Stripe configuration is missing"));
         const stripe = await loadStripe(config.publishableKey);
         if (!stripe) throw new Error(nl ? "Stripe kon niet worden geladen" : "Stripe could not be loaded");
-        const checkout = await stripe.initEmbeddedCheckout({
+        const checkout = await stripe.createEmbeddedCheckoutPage({
           fetchClientSecret: async () => {
             const response = await fetch("/api/stripe-checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ locale, slug, embedded: true, termsVersion: "2026-10-13", termsAccepted: true, earlyStartRequested: true }) });
             const result = (await response.json()) as CheckoutResult;
