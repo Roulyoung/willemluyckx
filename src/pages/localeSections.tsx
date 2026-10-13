@@ -326,10 +326,10 @@ export const AboutWillemPage = ({
 
             <div className="grid gap-3 sm:grid-cols-3">
               {focusCards.map((card) => (
-                <Card key={card.label} className="border-slate-200 bg-white shadow-sm">
-                  <CardContent className="space-y-2 p-5">
+                <Card key={card.label} className="min-w-0 border-slate-200 bg-white shadow-sm">
+                  <CardContent className="min-w-0 space-y-2 p-5">
                     <div className="text-[10px] font-semibold uppercase tracking-[0.35em] text-slate-500">{card.label}</div>
-                    <div className="text-lg font-black uppercase tracking-[0.04em] text-slate-950">{card.value}</div>
+                    <div className="break-words text-base font-black uppercase tracking-[0.03em] text-slate-950 [overflow-wrap:anywhere] xl:text-lg">{card.value}</div>
                   </CardContent>
                 </Card>
               ))}
@@ -950,7 +950,7 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
       },
       {
         title: "Progressieve belasting",
-        text: "Je moet genoeg prikkel geven om beter te worden, maar niet zo veel dat herstel achterblijft.",
+        text: "Je moet genoeg prikkels geven om beter te worden, maar niet zo veel dat herstel achterblijft.",
       },
       {
         title: "Specificiteit",
