@@ -20,7 +20,7 @@ export const HomeHeroBackgroundSection = ({ locale, content, subscriptionsHref, 
       <div id="hero" className="relative min-h-[88vh] overflow-hidden bg-slate-950 text-white shadow-[0_30px_80px_rgba(13,46,102,0.2)] md:min-h-[92vh]">
         <img
           src={darkRunImage}
-          alt="Willem running in the dark"
+          alt={locale === "he" ? "וילם רץ בחשכה" : locale === "nl" ? "Willem rent in het donker" : "Willem running in the dark"}
           className="absolute inset-0 h-full w-full object-cover object-[center_22%] opacity-60 brightness-[0.68] contrast-[1.08] sm:object-[center_18%]"
         />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(23,120,242,0.32),transparent_38%),linear-gradient(180deg,rgba(8,26,58,0.2)_0%,rgba(8,26,58,0.9)_100%)]" />
@@ -61,9 +61,7 @@ export const HomeHeroBackgroundSection = ({ locale, content, subscriptionsHref, 
               </Button>
             </div>
             <p className="max-w-2xl text-sm leading-7 text-slate-200">
-              {locale === "nl"
-                ? "Niet méér trainen, maar beter trainen."
-                : "Train better, not just more."}
+              {locale === "nl" ? "Niet méér trainen, maar beter trainen." : locale === "he" ? "להתאמן טוב יותר, לא רק יותר." : "Train better, not just more."}
             </p>
           </div>
         </div>

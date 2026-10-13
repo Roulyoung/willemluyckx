@@ -63,7 +63,7 @@ export const BlogFeatureCard = ({
       <div className="space-y-4 p-6">
         <p className="text-sm leading-7 text-slate-600">{post.excerpt}</p>
         <div className="flex items-center gap-2 text-sm font-semibold text-blue-700">
-          {locale === "en" ? "Read article" : "Lees artikel"}
+          {locale === "he" ? "קריאת המאמר" : locale === "en" ? "Read article" : "Lees artikel"}
           <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </div>
       </div>

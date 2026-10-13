@@ -60,28 +60,27 @@ const copy = {
     ctaSecondary: "View subscriptions",
   },
   he: {
-    eyebrow: "Healthy Running",
-    title: "Why TopFit Running chooses health over performance",
+    eyebrow: "ריצה בריאה במאה ה־21",
+    title: "מדוע TopFit Running בוחרת בבריאות לפני הישגים",
     lead:
-      "Running should first support health, vitality, energy and joy. Not extra stress, pressure or chronic fatigue.",
+      "הריצה צריכה בראש ובראשונה לתרום לבריאות, לחיוניות, לאנרגיה ולשמחת החיים — ולא להוסיף מתח, לחץ הישגי או עייפות כרונית.",
     science: {
-      title: "What the science says",
+      title: "מה המדע מלמד אותנו",
       text:
-        "Regular running lowers the risk of cardiovascular disease, type 2 diabetes, high blood pressure and early death. Mentally, running reduces stress, improves mood and creates more calm.",
+        "ריצה קבועה מפחיתה את הסיכון למחלות לב וכלי דם, לסוכרת מסוג 2, ללחץ דם גבוה ולתמותה מוקדמת. מבחינה נפשית היא מפחיתה מתח, משפרת מצב רוח ומעניקה בהירות ורוגע.",
     },
     danger: {
-      title: "When does running become unhealthy?",
+      title: "מתי הריצה הופכת ללא בריאה?",
       text:
-        "When every session must be faster and recovery gets pushed aside, running can become a source of stress instead of health.",
+        "כאשר כל אימון חייב להיות מהיר יותר, כל מרוץ טוב יותר וההתאוששות נדחקת הצידה, הריצה עלולה להפוך ממקור לבריאות למקור של מתח.",
     },
     philosophy: {
       title: "Mukti Running",
-      text:
-        "Mukti means liberation. The focus is breathing, presence, nature and the feeling that running gives energy back.",
+      text: "Mukti פירושו שחרור. המוקד הוא בנשימה, בנוכחות, בטבע ובתחושה שהריצה מחזירה לכם אנרגיה.",
     },
-    bullets: ["Health over performance", "Consistency over extremes", "Recovery is part of training", "Listen to the body"],
-    ctaPrimary: "Read about Mukti Running",
-    ctaSecondary: "View subscriptions",
+    bullets: ["בריאות לפני הישגים", "עקביות לפני קיצוניות", "התאוששות היא חלק מהאימון", "להקשיב לגוף"],
+    ctaPrimary: "קראו על Mukti Running",
+    ctaSecondary: "לצפייה בהצעות",
   },
 } satisfies Record<
   Locale,
@@ -179,9 +178,7 @@ export const HomeHealthyRunningSection = ({ locale, loaded }: HomeHealthyRunning
               TopFit Running
             </span>
             <span className="ml-3">
-              {locale === "nl"
-                ? "Gezondheid mag leidend zijn; prestaties mogen volgen."
-                : "Health can lead; performance can follow."}
+              {locale === "nl" ? "Gezondheid mag leidend zijn; prestaties mogen volgen." : locale === "he" ? "הבריאות יכולה להוביל; ההישגים יבואו בעקבותיה." : "Health can lead; performance can follow."}
             </span>
           </div>
         </CardContent>

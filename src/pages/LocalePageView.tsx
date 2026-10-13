@@ -19,6 +19,8 @@ export const LocalePageView = ({ locale, section, slug, content, loaded }: {
 }) => {
   const location = useLocation();
   const nl = locale === "nl";
+  const he = locale === "he";
+  const t = (nlText: string, enText: string, heText: string) => he ? heText : nl ? nlText : enText;
   const highlight = content.pageHighlights[section] ?? content.pageHighlights[nl ? "aanbod" : "offers"];
   const detailRoutes: Record<string, string> = {
     trainingsschemas: "schema", "training-plans": "schema",
@@ -53,30 +55,30 @@ export const LocalePageView = ({ locale, section, slug, content, loaded }: {
     <PropositionIntro locale={locale} />
     <section id="offers" className="mx-auto max-w-7xl space-y-7 px-5 py-12 md:px-8">
       <div className="max-w-3xl space-y-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-700">{nl ? "Van schema naar persoonlijke begeleiding" : "From a plan to personal guidance"}</p>
-        <h2 className="text-3xl font-black text-slate-950 md:text-5xl">{nl ? "Jouw start. Jouw volgende stap." : "Your start. Your next step."}</h2>
-        <p className="text-lg leading-8 text-slate-600">{nl ? "Begin betaalbaar met een schema op maat. Persoonlijke begeleiding helpt je verder met vragen, techniek en trainingsopbouw. Clinics en lezingen brengen onze visie tot leven." : "Start with an affordable tailored plan. Personal guidance helps you with questions, technique and training progression. Clinics and talks bring our approach to life."}</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-700">{t("Van schema naar persoonlijke begeleiding", "From a plan to personal guidance", "מתוכנית לליווי אישי")}</p>
+        <h2 className="text-3xl font-black text-slate-950 md:text-5xl">{t("Jouw start. Jouw volgende stap.", "Your start. Your next step.", "נקודת הפתיחה שלכם. הצעד הבא שלכם.")}</h2>
+        <p className="text-lg leading-8 text-slate-600">{t("Begin betaalbaar met een schema op maat. Persoonlijke begeleiding helpt je verder met vragen, techniek en trainingsopbouw. Clinics en lezingen brengen onze visie tot leven.", "Start with an affordable tailored plan. Personal guidance helps you with questions, technique and training progression. Clinics and talks bring our approach to life.", "התחילו בתוכנית מותאמת ונגישה. ליווי אישי מסייע בשאלות, בטכניקה ובבניית האימון. הסדנאות וההרצאות הופכות את הגישה שלנו למעשה.")}</p>
       </div>
       <OfferCards locale={locale} />
     </section>
     <section id="about" className="mx-auto grid max-w-7xl gap-8 px-5 py-12 md:px-8 lg:grid-cols-2">
-      <img src={portraitImage} alt={nl ? "Willem Luijckx, hardloopcoach" : "Willem Luijckx, running coach"} className="h-[32rem] w-full rounded-3xl object-cover object-center" />
+      <img src={portraitImage} alt={t("Willem Luijckx, hardloopcoach", "Willem Luijckx, running coach", "וילם לויצקס, מאמן ריצה")} className="h-[32rem] w-full rounded-3xl object-cover object-center" />
       <div className="flex flex-col justify-center space-y-6">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-700">{content.about.eyebrow}</p>
         <h2 className="text-3xl font-black text-slate-950 md:text-5xl">{content.about.title}</h2>
         {content.about.paragraphs.map(paragraph => <p key={paragraph} className="text-lg leading-8 text-slate-600">{paragraph}</p>)}
         <div className="flex flex-wrap gap-6">{content.proof.stats.map(stat => <div key={stat.label}><p className="text-2xl font-black text-blue-700">{stat.value}</p><p className="text-sm text-slate-600">{stat.label}</p></div>)}</div>
-        <Button asChild variant="heroOutline" className="self-start"><Link to={localizedPath(locale, "over-willem")}>{nl ? "Meer over Willem" : "More about Willem"}</Link></Button>
+        <Button asChild variant="heroOutline" className="self-start"><Link to={localizedPath(locale, "over-willem")}>{t("Meer over Willem", "More about Willem", "עוד על וילם")}</Link></Button>
       </div>
     </section>
     <section id="blog-teaser" className="mx-auto max-w-7xl space-y-6 px-5 py-12 md:px-8">
-      <h2 className="text-3xl font-black text-slate-950 md:text-5xl">{nl ? "Kennis voor beter trainen" : "Knowledge for better training"}</h2>
+      <h2 className="text-3xl font-black text-slate-950 md:text-5xl">{t("Kennis voor beter trainen", "Knowledge for better training", "ידע לאימון טוב יותר")}</h2>
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{content.blog.map(post => <BlogFeatureCard key={post.slug} locale={locale} post={post} imageHeightClassName="min-h-[16rem]" />)}</div>
     </section>
     <section id="race-calendar" className="mx-auto max-w-7xl px-5 py-12 md:px-8">
       <Card><CardContent className="flex flex-col justify-between gap-6 p-7 md:flex-row md:items-center md:p-9">
-        <div className="max-w-3xl space-y-4"><h2 className="text-3xl font-black text-slate-950">{nl ? "Vind je volgende wedstrijd" : "Find your next race"}</h2><p className="leading-8 text-slate-600">{nl ? "Bekijk de volledige wedstrijdlijst uit onze hardloopkalender en kies een doel dat bij je past." : "Browse the complete race list in our calendar and choose a goal that suits you."}</p></div>
-        <Button asChild variant="hero"><Link to={localizedPath(locale, "hardloopkalender")}>{nl ? "Bekijk de loopkalender" : "Explore the calendar"}</Link></Button>
+        <div className="max-w-3xl space-y-4"><h2 className="text-3xl font-black text-slate-950">{t("Vind je volgende wedstrijd", "Find your next race", "מצאו את המרוץ הבא שלכם")}</h2><p className="leading-8 text-slate-600">{t("Bekijk de volledige wedstrijdlijst uit onze hardloopkalender en kies een doel dat bij je past.", "Browse the complete race list in our calendar and choose a goal that suits you.", "עיינו ברשימת המרוצים המלאה ובחרו מטרה שמתאימה לכם.")}</p></div>
+        <Button asChild variant="hero"><Link to={localizedPath(locale, "hardloopkalender")}>{t("Bekijk de loopkalender", "Explore the calendar", "לצפייה בלוח המרוצים")}</Link></Button>
       </CardContent></Card>
     </section>
     <section id="footer-cta" className="mx-auto max-w-7xl px-5 pb-12 md:px-8">
