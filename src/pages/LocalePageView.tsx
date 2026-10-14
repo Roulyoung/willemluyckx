@@ -13,6 +13,7 @@ import { localizedPath } from "@/lib/localeRoutes";
 import { offerPath } from "@/lib/proposition";
 import { OfferCards, OfferDetailPage, OffersPage, PropositionIntro } from "./OfferPages";
 import { CookiePage, HebrewCookiePage, HebrewWithdrawalPage, PrivacyPage, TermsPage, WithdrawalPage } from "./LegalPages";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 export const LocalePageView = ({ locale, section, slug, content, loaded }: {
   locale: Locale; section: string; slug?: string; content: LocaleContent; loaded: boolean;
@@ -28,7 +29,7 @@ export const LocalePageView = ({ locale, section, slug, content, loaded }: {
     "fysieke-coaching": "fysiek", "physical-coaching": "fysiek",
     clinics: "clinic", lezingen: "lezing", talks: "lezing",
   };
-  if (section === "over-willem" || section === "about-willem") return <AboutWillemPage locale={locale} highlight={highlight} loaded={loaded} />;
+  if (section === "over-willem" || section === "about-willem") return <><AboutWillemPage locale={locale} highlight={highlight} loaded={loaded} /><TestimonialsSection locale={locale} full /></>;
   if (section === "blog") return <BlogIndexPage locale={locale} content={content} highlight={highlight} loaded={loaded} />;
   if (section === "contact") return <ContactPage locale={locale} loaded={loaded} />;
   if (section === "privacy") return <PrivacyPage locale={locale} />;
@@ -71,6 +72,7 @@ export const LocalePageView = ({ locale, section, slug, content, loaded }: {
         <Button asChild variant="heroOutline" className="self-start"><Link to={localizedPath(locale, "over-willem")}>{t("Meer over Willem", "More about Willem", "עוד על וילם")}</Link></Button>
       </div>
     </section>
+    <TestimonialsSection locale={locale} />
     <section id="blog-teaser" className="mx-auto max-w-7xl space-y-6 px-5 py-12 md:px-8">
       <h2 className="text-3xl font-black text-slate-950 md:text-5xl">{t("Kennis voor beter trainen", "Knowledge for better training", "ידע לאימון טוב יותר")}</h2>
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{content.blog.map(post => <BlogFeatureCard key={post.slug} locale={locale} post={post} imageHeightClassName="min-h-[16rem]" />)}</div>
