@@ -17,6 +17,9 @@ export const ContactPage = ({
   locale: Locale;
   loaded: boolean;
 }) => {
+  const nl = locale === "nl";
+  const he = locale === "he";
+  const t = (nlText: string, enText: string, heText: string) => he ? heText : nl ? nlText : enText;
   const [searchParams] = useSearchParams();
   const subject = searchParams.get("onderwerp") ?? "";
   const [name, setName] = useState("");
@@ -25,7 +28,7 @@ export const ContactPage = ({
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    setMessage(subject ? `${locale === "nl" ? "Ik ontvang graag meer informatie over" : "I would like more information about"} ${subject}.` : "");
+    setMessage(subject ? `${t("Ik ontvang graag meer informatie over", "I would like more information about", "ברצוני לקבל מידע נוסף על")} ${subject}.` : "");
   }, [subject, locale]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -48,9 +51,9 @@ export const ContactPage = ({
       setName("");
       setEmail("");
       setMessage("");
-      toast.success(locale === "en" ? "Message sent" : "Bericht verstuurd");
+      toast.success(t("Bericht verstuurd", "Message sent", "ההודעה נשלחה"));
     } catch {
-      toast.error(locale === "en" ? "Message could not be sent" : "Bericht kon niet worden verstuurd");
+      toast.error(t("Bericht kon niet worden verstuurd", "Message could not be sent", "לא ניתן היה לשלוח את ההודעה"));
     } finally {
       setSubmitting(false);
     }
@@ -61,15 +64,13 @@ export const ContactPage = ({
       <div className="min-w-0 space-y-6">
         <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/85 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-blue-700 shadow-sm shadow-blue-950/5">
           <MessageCircle className="h-4 w-4" />
-          Contact
+          {t("Contact", "Contact", "יצירת קשר")}
         </div>
         <h1 className="max-w-4xl text-4xl font-black uppercase tracking-[0.04em] text-slate-950 sm:text-5xl md:text-7xl lg:text-[5.5rem] lg:leading-[0.92]">
-          {locale === "en" ? "Get in touch" : "Neem contact op"}
+          {t("Neem contact op", "Get in touch", "צרו קשר")}
         </h1>
         <p className="max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">
-          {locale === "en"
-            ? "Send your name, email address and message. We will reply as soon as possible."
-            : "Stuur je naam, e-mailadres en boodschap. We reageren zo snel mogelijk."}
+          {t("Stuur je naam, e-mailadres en boodschap. We reageren zo snel mogelijk.", "Send your name, email address and message. We will reply as soon as possible.", "שלחו את שמכם, כתובת הדוא״ל וההודעה. נחזור אליכם בהקדם האפשרי.")}
         </p>
         <div className="flex flex-wrap gap-3">
           <Button variant="heroOutline" size="lg" asChild>
@@ -79,7 +80,7 @@ export const ContactPage = ({
             </a>
           </Button>
           <Button variant="heroOutline" size="lg" asChild>
-            <Link to={offerPath(locale, "schema")}>{locale === "en" ? "View the personal plan" : "Bekijk het persoonlijke schema"}</Link>
+            <Link to={offerPath(locale, "schema")}>{t("Bekijk het persoonlijke schema", "View the personal plan", "לתוכנית האישית")}</Link>
           </Button>
         </div>
       </div>
@@ -89,7 +90,7 @@ export const ContactPage = ({
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-semibold text-slate-700">
-                {locale === "en" ? "Name" : "Naam"}
+                {t("Naam", "Name", "שם")}
               </label>
               <input
                 id="name"
@@ -115,7 +116,7 @@ export const ContactPage = ({
             </div>
             <div className="space-y-2">
               <label htmlFor="message" className="text-sm font-semibold text-slate-700">
-                {locale === "en" ? "Message" : "Boodschap"}
+                {t("Boodschap", "Message", "הודעה")}
               </label>
               <textarea
                 id="message"
@@ -127,13 +128,11 @@ export const ContactPage = ({
               />
             </div>
             <Button type="submit" disabled={submitting} variant="hero" size="lg" className="h-auto min-h-14 w-full whitespace-normal px-4 text-center">
-              {submitting ? (locale === "en" ? "Sending..." : "Versturen...") : locale === "en" ? "Send message" : "Verstuur bericht"}
+              {submitting ? t("Versturen...", "Sending...", "שולח...") : t("Verstuur bericht", "Send message", "שליחת הודעה")}
             </Button>
           </form>
           <p className="mt-4 text-sm leading-7 text-slate-500">
-            {locale === "en"
-              ? "Or use WhatsApp or the intake if you want a quicker route."
-              : "Of gebruik WhatsApp of de intake als je sneller verder wilt."}
+            {t("Of gebruik WhatsApp of bekijk het persoonlijke schema als je sneller verder wilt.", "Or use WhatsApp or view the personal plan if you want a quicker route.", "אפשר גם להשתמש ב־WhatsApp או לצפות בתוכנית האישית למענה מהיר יותר.")}
           </p>
         </CardContent>
       </Card>

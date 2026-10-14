@@ -83,6 +83,21 @@ export const AboutWillemPage = ({
   highlight: { title: string; intro: string; bullets: string[] };
   loaded: boolean;
 }) => {
+  if (locale === "he") return (
+    <>
+      <section className={`mx-auto grid max-w-7xl gap-10 px-5 py-12 md:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center ${fadeClass(loaded)}`}>
+        <div className="space-y-6"><p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-700">אודות וילם לויצקס</p><h1 className="text-4xl font-black text-slate-950 md:text-6xl">מאמן, מרצה ומורה עם יותר מ־40 שנות ניסיון</h1><p className="text-xl font-semibold text-blue-800">מאמן אתלטיקה | מאמן כושר | מכשיר מאמנים | מורה | סופר</p><p className="text-lg leading-8 text-slate-600">וילם חי ועבד בישראל בשנים 1990–2023. תחומי המומחיות שלו כוללים ריצה למרחקים, תורת האימון, טכניקת ריצה, כושר גופני, פיתוח כישרונות והכשרת מאמנים.</p><Button variant="hero" asChild><Link to={offerPath(locale, "schema")}>לתוכנית הריצה האישית</Link></Button></div>
+        <img src={portraitImage} alt="וילם לויצקס, מאמן ריצה" className="h-[34rem] w-full rounded-3xl object-cover object-center shadow-2xl" />
+      </section>
+      <section className="mx-auto max-w-7xl px-5 py-10 md:px-8"><div className="grid gap-5 md:grid-cols-3">{[
+        ["ספורט ואימון ברמה הגבוהה ביותר", "וילם עבד עם ספורטאים פאראלימפיים, משתתפי ספיישל אולימפיקס, קבוצות כדורגל ורצים שנזקקו למבנה, משוב והתקדמות בת־קיימא."],
+        ["הכשרת דור המאמנים הבא", "הוא הכשיר מאמני ריצה, לימד תורת אימון במשך יותר מ־20 שנה ובנה תוכניות למאמני כושר ולמאמני ריצה למרחקים."],
+        ["ביצועים על בסיס הוליסטי", "הביצועים חשובים, אך התפתחות ארוכת טווח, בריאות, הנאה, איזון נפשי ומניעת פציעות הם הבסיס."],
+      ].map(([title,text]) => <Card key={title}><CardContent className="space-y-3 p-7"><h2 className="text-2xl font-black">{title}</h2><p className="leading-7 text-slate-600">{text}</p></CardContent></Card>)}</div></section>
+      <section className="mx-auto grid max-w-7xl gap-8 px-5 py-10 md:px-8 lg:grid-cols-2"><Card><CardContent className="space-y-5 p-7"><h2 className="text-3xl font-black">ניסיון מקצועי</h2><ul className="list-disc space-y-3 pe-6 leading-7 text-slate-700">{["מאמן ראשי של נבחרת ישראל בריצות בינוניות וארוכות במשך שנים רבות","מאמן ראשי של נבחרת האתלטיקה הפאראלימפית של ישראל","עשר שנות אימון לרצים למרחקים בינוניים וארוכים ב־A.V. Castricum וב־DEM בהולנד","מאמן אתלטיקה ראשי בספיישל אולימפיקס ישראל","מאמן כושר במועדוני הליגה הבכירה בישראל, כולל בית״ר ירושלים","אלוף ישראל בריצת 800 מטר בשנת 1993"].map(item => <li key={item}>{item}</li>)}</ul></CardContent></Card><Card><CardContent className="space-y-5 p-7"><h2 className="text-3xl font-black">הוראה וכתיבה</h2><ul className="list-disc space-y-3 pe-6 leading-7 text-slate-700">{["יותר מ־20 שנות הוראת תורת האימון במכון וינגייט","מייסד תוכנית מאמני הכושר לכדורגל","מייסד תוכנית הכשרת מאמנים לריצה למרחקים","מחבר הספר Fitness voor Voetbal","מחבר ספר הריצה TopFit","כותב מאמרים רבים על אימון, ריצה, כושר וטכניקה"].map(item => <li key={item}>{item}</li>)}</ul></CardContent></Card></section>
+      <section className="mx-auto max-w-7xl px-5 py-10 md:px-8"><Card className="bg-slate-950 text-white"><CardContent className="space-y-5 p-7 md:p-9"><h2 className="text-3xl font-black">החזון של וילם</h2><p className="max-w-4xl text-lg leading-8 text-slate-200">בלב עבודתו של וילם עומדת גישה הוליסטית לספורט ולבריאות. ביצועים חשובים, אך התפתחות בת־קיימא, בריאות, הנאה, איזון נפשי ומניעת פציעות יוצרים הצלחה שנמשכת לאורך זמן.</p><Button variant="hero" asChild><Link to={`/${locale}/contact`}>יצירת קשר</Link></Button></CardContent></Card></section>
+    </>
+  );
   const heroRoles =
     locale === "en"
       ? "Athletics coach | Conditioning coach | Coach educator | Teacher | Author"

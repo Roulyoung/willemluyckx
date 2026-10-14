@@ -43,8 +43,8 @@ const productConfig: Record<
   },
   schema: {
     priceEnv: "STRIPE_PRICE_SCHEMA",
-    successPath: (locale) => `/${locale}/aanbod/schema/afrekenen?success=1`,
-    cancelPath: (locale) => `/${locale}/aanbod/schema/afrekenen?canceled=1`,
+    successPath: (locale) => `/${locale}/${locale === "nl" ? "aanbod" : "offers"}/schema/afrekenen?success=1`,
+    cancelPath: (locale) => `/${locale}/${locale === "nl" ? "aanbod" : "offers"}/schema/afrekenen?canceled=1`,
   },
 };
 
