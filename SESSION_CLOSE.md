@@ -4,6 +4,32 @@
 
 Date: 2026-08-28
 
+## Session Update - 2026-10-15 - Hardloopkalenderimport
+
+- Added the supplied running-race list to the `Hardloopwedstrijden` Google Sheets tab.
+- Parsed 217 supplied race blocks and added 215 unique rows.
+- Skipped the two embedded advertisement blocks beginning with `Vandaag!`.
+- Merged the two `LPR - Last Pirate Running` rows into one event with both distance sets.
+- Removed the exact duplicate `RDG Night trail 2027` row.
+- Stored every new row in the existing 27-column multilingual format with `active=true`.
+- Verified the result in Sheets:
+  - new rows: `A14:AA228`
+  - first event: `Amsterdam Marathon SHAKE-OUT`, `15/10/2026`
+  - last event: `Jasperloop`, `28/11/2027`
+  - all new rows have 27 columns
+  - no advertisement text was imported
+  - no duplicate RDG row remains
+- The source list did not contain event detail URLs, so `website_url`, `registration_url` and `contact_url` remain empty.
+- The source values were preserved as supplied, including entries that may need later editorial checking such as `200 km` and `Maasloop 2025` dated in 2026.
+
+### Code checkpoint and rollback
+
+- Commit containing the import tooling fix: `003fd41` (`Support full-width Google Sheets imports`).
+- The admin importer now supports `--values-file` and appends through column `AA`, matching the sheet schema.
+- Local rollback of the code change: revert commit `003fd41` or restore the preceding commit `666e8ad`.
+- The Google Sheets change is external to Git. To undo only this import before adding later rows, remove rows `14:228` from the `Hardloopwedstrijden` tab. Keep rows `1:13` intact; those were the pre-existing rows.
+- No repository files containing credentials or the temporary import JSON were committed.
+
 ## Rollback Snapshots - 2026-08-24
 
 - On Monday, August 24, 2026, two local rollback snapshots were captured around the about-page publish.

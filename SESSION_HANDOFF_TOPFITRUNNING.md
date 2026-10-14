@@ -6,6 +6,17 @@
 
 Last updated: 2026-08-28
 
+## Update 2026-10-15
+
+- The `Hardloopwedstrijden` Google Sheets tab now contains 215 unique events from the supplied list covering 15 October 2026 through 28 November 2027.
+- The import used the existing 27-column multilingual schema and is active on the site data source.
+- The exact duplicate RDG Night Trail was removed and the two LPR distance rows were combined.
+- The two embedded `Vandaag!` advertisement blocks were excluded.
+- Verification found 215 new rows in `A14:AA228`; all have 27 columns and `active=true`.
+- Code checkpoint for the import tooling: `003fd41`.
+- To roll back the sheet import only, remove rows 14 through 228 in `Hardloopwedstrijden`; keep the header and the original rows 2 through 13.
+- The importer now supports `--values-file` and writes through column `AA`.
+
 ## Current State
 
 - Project: `willemluyckx / TopFit Running`
