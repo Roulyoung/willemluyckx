@@ -80,14 +80,14 @@ const formatAmount = (amountTotal?: number | null, currency?: string | null) => 
 };
 
 const getProductLabel = (productSlug: string, locale: string) => {
-  const labels: Record<string, { nl: string; en: string }> = {
-    schema: { nl: "Persoonlijk hardloopschema (12 weken)", en: "Personal running plan (12 weeks)" },
-    premium: { nl: "Premium abonnement", en: "Premium subscription" },
-    base: { nl: "Basis abonnement", en: "Base subscription" },
-    "clinic-ticket": { nl: "Clinic ticket", en: "Clinic ticket" },
+  const labels: Record<string, { nl: string; en: string; he: string }> = {
+    schema: { nl: "Persoonlijk hardloopschema (12 weken)", en: "Personal running plan (12 weeks)", he: "תוכנית ריצה אישית (12 שבועות)" },
+    premium: { nl: "Premium abonnement", en: "Premium subscription", he: "מנוי פרימיום" },
+    base: { nl: "Basis abonnement", en: "Base subscription", he: "מנוי בסיסי" },
+    "clinic-ticket": { nl: "Clinic ticket", en: "Clinic ticket", he: "כרטיס לסדנה" },
   };
 
-  const language = locale === "nl" ? "nl" : "en";
+  const language = locale === "he" ? "he" : locale === "nl" ? "nl" : "en";
   return labels[productSlug]?.[language] ?? productSlug;
 };
 
@@ -184,15 +184,15 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
         subject:
           locale === "nl"
             ? `Je betaling is ontvangen${productLabel ? ` - ${productLabel}` : ""}`
-            : `Your payment has been received${productLabel ? ` - ${productLabel}` : ""}`,
+            : locale === "he" ? `התשלום התקבל${productLabel ? ` - ${productLabel}` : ""}` : `Your payment has been received${productLabel ? ` - ${productLabel}` : ""}`,
         htmlContent:
           locale === "nl"
             ? `<p>Hi ${escapeHtml(customerName || "daar")},</p><p>Je betaling voor <strong>${escapeHtml(productLabel)}</strong> is ontvangen.</p><p>De volgende stap is je intake invullen:</p><p><a href="${escapeHtml(intakeUrl)}">${escapeHtml(intakeUrl)}</a></p><p>Daarmee kan Willem jouw doelen, achtergrond en belastbaarheid vertalen naar een passend traject.</p><h3>Jouw TopFit Running Boek</h3><p>Als onderdeel van je aankoop kun je het boek van Willem hier downloaden:</p><p><a href="${escapeHtml(bookUrl)}">Download het TopFit Running Boek (pdf)</a></p><p>Bewaar deze e-mail, zodat je de downloadlink later terug kunt vinden.</p><p>Team TopFit Running</p>`
-            : `<p>Hi ${escapeHtml(customerName || "there")},</p><p>Your payment for <strong>${escapeHtml(productLabel)}</strong> has been received.</p><p>Your next step is to complete the intake:</p><p><a href="${escapeHtml(intakeUrl)}">${escapeHtml(intakeUrl)}</a></p><p>That helps Willem turn your goals, background and training load into the right path.</p><h3>Your TopFit Running Book</h3><p>Your purchase includes Willem's book. Download it here:</p><p><a href="${escapeHtml(bookUrl)}">Download the TopFit Running Book (PDF)</a></p><p>Keep this email so you can find the download link later.</p><p>Team TopFit Running</p>`,
+            : locale === "he" ? `<div dir="rtl"><p>שלום ${escapeHtml(customerName || "")},</p><p>התשלום עבור <strong>${escapeHtml(productLabel)}</strong> התקבל.</p><p>השלב הבא הוא מילוי שאלון הקליטה:</p><p><a href="${escapeHtml(intakeUrl)}">${escapeHtml(intakeUrl)}</a></p><p>כך וילם יוכל להתאים את התוכנית למטרות, לרקע ולעומס האימונים שלכם.</p><h3>ספר TopFit Running שלכם</h3><p>הספר של וילם כלול ברכישה. אפשר להוריד אותו כאן:</p><p><a href="${escapeHtml(bookUrl)}">הורדת ספר TopFit Running (PDF)</a></p><p>שמרו את ההודעה כדי למצוא את הקישור בהמשך.</p><p>צוות TopFit Running</p></div>` : `<p>Hi ${escapeHtml(customerName || "there")},</p><p>Your payment for <strong>${escapeHtml(productLabel)}</strong> has been received.</p><p>Your next step is to complete the intake:</p><p><a href="${escapeHtml(intakeUrl)}">${escapeHtml(intakeUrl)}</a></p><p>That helps Willem turn your goals, background and training load into the right path.</p><h3>Your TopFit Running Book</h3><p>Your purchase includes Willem's book. Download it here:</p><p><a href="${escapeHtml(bookUrl)}">Download the TopFit Running Book (PDF)</a></p><p>Keep this email so you can find the download link later.</p><p>Team TopFit Running</p>`,
         textContent:
           locale === "nl"
             ? `Hi ${customerName || "daar"},\n\nJe betaling voor ${productLabel} is ontvangen.\n\nVolgende stap: vul je intake in:\n${intakeUrl}\n\nJouw aankoop bevat ook het TopFit Running Boek van Willem. Download de pdf hier:\n${bookUrl}\n\nBewaar deze e-mail, zodat je de downloadlink later terug kunt vinden.\n\nTeam TopFit Running`
-            : `Hi ${customerName || "there"},\n\nYour payment for ${productLabel} has been received.\n\nNext step: complete your intake:\n${intakeUrl}\n\nYour purchase also includes Willem's TopFit Running Book. Download the PDF here:\n${bookUrl}\n\nKeep this email so you can find the download link later.\n\nTeam TopFit Running`,
+            : locale === "he" ? `שלום ${customerName || ""},\n\nהתשלום עבור ${productLabel} התקבל.\n\nהשלב הבא: מלאו את שאלון הקליטה:\n${intakeUrl}\n\nהרכישה כוללת גם את ספר TopFit Running. הורידו אותו כאן:\n${bookUrl}\n\nצוות TopFit Running` : `Hi ${customerName || "there"},\n\nYour payment for ${productLabel} has been received.\n\nNext step: complete your intake:\n${intakeUrl}\n\nYour purchase also includes Willem's TopFit Running Book. Download the PDF here:\n${bookUrl}\n\nKeep this email so you can find the download link later.\n\nTeam TopFit Running`,
         tags: ["stripe-payment", productSlug, locale, "customer"],
       })
     : { ok: false as const, skipped: true as const, error: "No customer email available" };

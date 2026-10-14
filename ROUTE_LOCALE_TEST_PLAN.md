@@ -36,8 +36,8 @@ Gebruik dit document voor elke release of klantfeedbackronde om taalwissels en U
 ### Detailroutes
 
 - Blogartikel openen in NL, EN en HE
-- Abonnementdetail openen in NL en EN
-- Shopdetail openen in NL en EN
+- Aanboddetail openen in NL, EN en HE
+- Shopdetail openen in NL, EN en HE
 
 ## Testlijst
 
@@ -95,6 +95,8 @@ Gebruik dit document voor elke release of klantfeedbackronde om taalwissels en U
 
 - Geen 404 of wit scherm bij locale switch
 - Geen NL-link op een EN-pagina tenzij het bewust een vaste route is
+- Geen Nederlandse of Engelse fallbacktekst op een HE-pagina
+- HE-pagina's gebruiken RTL en behouden correcte product-, intake- en betaalroutes
 - Blog, shop en abonnementen blijven inhoudelijk consistent tussen talen
 - Alle belangrijke routes werken op mobiel en desktop
 

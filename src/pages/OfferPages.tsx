@@ -80,6 +80,11 @@ export const OfferDetailPage = ({ locale, slug }: { locale: Locale; slug: string
     ["Trainingsleer", "Verantwoord opbouwen, belasting en herstel in balans en slimmer trainen in plaats van alleen méér."],
     ["Voeding voor hardlopers", "Praktische inzichten over voeding, energie, herstel en gezonde voedingsgewoonten voor sporters."],
     ["Blessurepreventie", "Duurzaam hardlopen met aandacht voor looptechniek, trainingsopbouw, kracht, mobiliteit en herstel."],
+  ] : he ? [
+    ["Mukti Running", "בריאות, תנועה מודעת, רוגע והנאה, במבט רחב יותר מביצועים וזמנים בלבד."],
+    ["עקרונות אימון", "בנייה אחראית ואיזון בין עומס להתאוששות."],
+    ["תזונה לרצים", "תובנות מעשיות על תזונה, אנרגיה והתאוששות."],
+    ["מניעת פציעות", "ריצה לאורך זמן בעזרת טכניקה, כוח, תנועתיות והתאוששות."],
   ] : [
     ["Mukti Running", "Health, conscious movement, relaxation and enjoyment, with a broader view than performance and times alone."],
     ["Training principles", "Responsible progression, balancing load and recovery, and training smarter rather than simply more."],
@@ -93,6 +98,13 @@ export const OfferDetailPage = ({ locale, slug }: { locale: Locale; slug: string
     ["13.15–13.30", "Pauze en voorbereiding op de lezing."],
     ["13.30–15.30", "Lezing, bijvoorbeeld over Mukti Running, met ruimte voor vragen."],
     ["15.30–16.00", "Persoonlijke aanwijzingen, terugblik en afsluiting."],
+  ] : he ? [
+    ["10:00–12:00", "תרגול: חימום, טכניקת ריצה, פארטלק ושחרור עם מתיחות ותרגילי כוח."],
+    ["12:00–12:30", "התאוששות וזמן לשאלות אישיות."],
+    ["12:30–13:15", "ארוחת צהריים משותפת (כלולה)."],
+    ["13:15–13:30", "הפסקה והכנה להרצאה."],
+    ["13:30–15:30", "הרצאה עם זמן לשאלות."],
+    ["15:30–16:00", "הנחיות אישיות, סיכום וסיום."],
   ] : [
     ["10:00–12:00", "Practical session: warm-up, running technique, fartlek training and cool-down with stretching and bodyweight strength exercises."],
     ["12:00–12:30", "Recovery and personal questions."],

@@ -174,15 +174,15 @@ export const BlogIndexPage = ({
               {highlight.title}
             </div>
             <h1 className="max-w-4xl text-4xl font-black uppercase tracking-[0.04em] text-slate-950 sm:text-5xl md:text-7xl lg:text-[5.5rem] lg:leading-[0.92]">
-              {locale === "en" ? "Blog / knowledge base" : "Blog / kennisbank"}
+              {locale === "he" ? "בלוג / מרכז ידע" : locale === "en" ? "Blog / knowledge base" : "Blog / kennisbank"}
             </h1>
             <p className="max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">{highlight.intro}</p>
             <div className="flex flex-wrap gap-3">
               <Button variant="hero" asChild>
-                <Link to={`/${locale}/contact`}>{locale === "en" ? "Ask a question" : "Stel een vraag"}</Link>
+                <Link to={`/${locale}/contact`}>{locale === "he" ? "שאלו שאלה" : locale === "en" ? "Ask a question" : "Stel een vraag"}</Link>
               </Button>
               <Button variant="heroOutline" asChild>
-                <Link to={offerPath(locale)}>{locale === "en" ? "View offers" : "Bekijk aanbod"}</Link>
+                <Link to={offerPath(locale)}>{locale === "he" ? "לצפייה בהצעות" : locale === "en" ? "View offers" : "Bekijk aanbod"}</Link>
               </Button>
             </div>
           </div>
@@ -202,16 +202,16 @@ export const BlogIndexPage = ({
           <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between md:p-8">
             <div className="max-w-3xl space-y-3">
               <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-300">
-                {locale === "en" ? "Need a direct answer?" : "Direct antwoord nodig?"}
+                {locale === "he" ? "צריכים תשובה ישירה?" : locale === "en" ? "Need a direct answer?" : "Direct antwoord nodig?"}
               </div>
               <p className="text-lg leading-8 text-slate-200">
-                {locale === "en"
+                {locale === "he" ? "השתמשו בבלוג להעמקה ובערוץ יצירת הקשר לצעד הבא." : locale === "en"
                   ? "Use the blog for depth and the contact route for the next step."
                   : "Gebruik de blog voor verdieping en het contactkanaal voor de volgende stap."}
               </p>
             </div>
             <Button variant="hero" asChild>
-              <Link to={`/${locale}/contact`}>{locale === "en" ? "Contact" : "Contact"}</Link>
+              <Link to={`/${locale}/contact`}>{locale === "he" ? "יצירת קשר" : "Contact"}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -222,16 +222,16 @@ export const BlogIndexPage = ({
           <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between md:p-8">
             <div className="max-w-3xl space-y-2">
               <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
-                {locale === "en" ? "Race calendar" : "Wedstrijdkalender"}
+                {locale === "he" ? "לוח מרוצים" : locale === "en" ? "Race calendar" : "Wedstrijdkalender"}
               </div>
               <p className="text-sm leading-7 text-slate-600">
-                {locale === "en"
+                {locale === "he" ? "השתמשו בלוח המרוצים לסקירה מהירה, ולאחר מכן קראו בבלוג עצות לתכנון ולבחירה." : locale === "en"
                   ? "Use the hardloopkalender for a quick race overview, then read the blog for planning tips and selection advice."
                   : "Gebruik de hardloopkalender voor een snel wedstrijdoverzicht en lees de blog voor planningstips en keuzeadvies."}
               </p>
             </div>
             <Button variant="heroOutline" asChild>
-              <Link to={`/${locale}/hardloopkalender`}>{locale === "en" ? "Open calendar" : "Open kalender"}</Link>
+              <Link to={localizedPath(locale, "hardloopkalender")}>{locale === "he" ? "פתיחת הלוח" : locale === "en" ? "Open calendar" : "Open kalender"}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -297,6 +297,11 @@ export const HardloopCalendarPage = ({
     })
     .filter((row) => row.title || row.location || row.date);
   const columns = isEn ? ["Race / location", "Date", "Distance", "Surface"] : ["Wedstrijd / locatie", "Datum", "Afstand", "Ondergrond"];
+
+  if (locale === "he") return <>
+    <section className={`mx-auto grid max-w-7xl gap-8 px-5 py-12 md:px-8 lg:grid-cols-2 ${fadeClass(loaded)}`}><div className="space-y-6"><div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-xs font-semibold text-blue-700"><CalendarDays className="h-4 w-4" />לוח מרוצים</div><h1 className="text-4xl font-black md:text-7xl">בחרו את המרוץ הבא שלכם</h1><p className="text-xl leading-8 text-slate-600">בחרו מרוץ ומטרת אימון, והפכו את המטרה לתוכנית מסודרת עם ליווי.</p><div className="flex flex-wrap gap-3"><Button variant="hero" asChild><Link to={offerPath(locale,"schema")}>לתוכנית האישית ב־€19</Link></Button><Button variant="heroOutline" asChild><Link to={offerPath(locale,"zoom")}>לפגישת Zoom</Link></Button></div></div><Card><CardContent className="space-y-4 p-7"><h2 className="text-2xl font-black">איך להשתמש בלוח</h2>{highlight.bullets.map(bullet=><div key={bullet} className="flex gap-3 rounded-2xl bg-slate-50 p-4"><ChevronRight className="h-5 w-5 text-blue-600"/><span>{bullet}</span></div>)}</CardContent></Card></section>
+    <section className="mx-auto max-w-7xl px-5 pb-12 md:px-8"><Card className="overflow-hidden"><CardContent className="p-0"><div className="border-b bg-slate-50 px-6 py-4 font-bold">מרוצים נבחרים</div><div className="divide-y">{calendarRows.map(row=><div key={`${row.title}-${row.date}`} className="grid gap-3 p-6 md:grid-cols-4"><div><div className="font-black">{row.title}</div><div className="text-sm text-blue-700">{row.location} · {row.country}</div></div><div><span className="text-xs text-slate-500">תאריך</span><div>{formatCalendarDate(row.date,locale)}</div></div><div><span className="text-xs text-slate-500">מרחק</span><div>{row.distance}</div></div><div><span className="text-xs text-slate-500">משטח</span><div>{row.surface}</div></div></div>)}</div></CardContent></Card></section>
+  </>;
 
   return (
     <>
@@ -500,7 +505,13 @@ export const TechniquePage = ({
   loaded: boolean;
 }) => {
   const process =
-    locale === "en"
+    locale === "he"
+      ? [
+          { step: "שלחו סרטון קצר", detail: "צלמו כמה דקות של ריצה מהצד ומאחור." },
+          { step: "קבלו את הניתוח", detail: "תקבלו משוב על היציבה, תדירות הצעדים, נחיתת כף הרגל והקצב." },
+          { step: "יישמו את התרגילים", detail: "תקבלו תרגילים ממוקדים ונקודות לשיפור באימונים." },
+        ]
+      : locale === "en"
       ? [
           { step: "Send a short video", detail: "Record a few minutes of running from the side and back." },
           { step: "Receive the analysis", detail: "You get feedback on posture, cadence, foot strike and rhythm." },
@@ -512,7 +523,9 @@ export const TechniquePage = ({
           { step: "Voer de oefeningen uit", detail: "Je krijgt gerichte drills en duidelijke aandachtspunten mee." },
         ];
   const deliverables =
-    locale === "en"
+    locale === "he"
+      ? ["סקירת וידאו קצרה עם משוב ברור", "תרגילים מעשיים לקצב, ליציבה ולנחיתה", "סדרי עדיפויות ליישום כבר בשבוע האימון הבא"]
+      : locale === "en"
       ? [
           "Short video review with clear feedback",
           "Concrete drills for cadence, posture and landing",
@@ -534,16 +547,16 @@ export const TechniquePage = ({
           </div>
           <div className="space-y-6">
             <h1 className="max-w-4xl text-4xl font-black uppercase tracking-[0.04em] text-slate-950 sm:text-5xl md:text-7xl lg:text-[5.5rem] lg:leading-[0.92]">
-              {locale === "en" ? "Running technique" : "Looptechniek"}
+              {locale === "he" ? "טכניקת ריצה" : locale === "en" ? "Running technique" : "Looptechniek"}
             </h1>
             <p className="max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">{highlight.intro}</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Button variant="hero" size="lg" asChild>
-              <Link to={`/${locale}/contact`}>{locale === "en" ? "Request analysis" : "Vraag analyse aan"}</Link>
+              <Link to={`/${locale}/contact`}>{locale === "he" ? "בקשת ניתוח" : locale === "en" ? "Request analysis" : "Vraag analyse aan"}</Link>
             </Button>
             <Button variant="heroOutline" size="lg" asChild>
-              <Link to={`/${locale}/online-coaching`}>{locale === "en" ? "Discuss coaching" : "Bespreek coaching"}</Link>
+              <Link to={`/${locale}/online-coaching`}>{locale === "he" ? "שיחה על ליווי" : locale === "en" ? "Discuss coaching" : "Bespreek coaching"}</Link>
             </Button>
           </div>
         </div>
@@ -551,12 +564,12 @@ export const TechniquePage = ({
         <Card className="overflow-hidden border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
           <CardContent className="p-0">
             <div className="relative min-h-[24rem]">
-              <img src={techniqueImage} alt="Running technique analysis" className="h-full w-full object-cover" />
+              <img src={techniqueImage} alt={locale === "he" ? "ניתוח טכניקת ריצה" : "Running technique analysis"} className="h-full w-full object-cover" />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03)_0%,rgba(8,26,58,0.42)_100%)]" />
               <div className="absolute bottom-5 left-5 right-5 rounded-[1.75rem] border border-white/20 bg-slate-950/70 p-5 text-white backdrop-blur">
-                <div className="text-xs uppercase tracking-[0.35em] text-blue-300">{locale === "en" ? "Technique first" : "Techniek eerst"}</div>
+                <div className="text-xs uppercase tracking-[0.35em] text-blue-300">{locale === "he" ? "הטכניקה תחילה" : locale === "en" ? "Technique first" : "Techniek eerst"}</div>
                 <p className="mt-3 text-sm leading-7 text-slate-200">
-                  {locale === "en"
+                  {locale === "he" ? "הטכניקה היא הגשר בין כישרון ליעילות." : locale === "en"
                     ? "Technique is the bridge between talent and efficiency."
                     : "Techniek is de brug tussen talent en efficiëntie."}
                 </p>
@@ -569,7 +582,7 @@ export const TechniquePage = ({
     <section id="technique-deliverables" className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
         <Card className="border-slate-200 bg-white shadow-sm">
           <CardContent className="space-y-5 p-6 md:p-8">
-            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "What you get" : "Wat je krijgt"}</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "he" ? "מה תקבלו" : locale === "en" ? "What you get" : "Wat je krijgt"}</div>
             <div className="grid gap-3 md:grid-cols-3">
               {deliverables.map((item) => (
                 <div key={item} className="rounded-3xl bg-slate-50 p-5">
@@ -583,16 +596,16 @@ export const TechniquePage = ({
 
       <section id="technique-benefits" className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
         <div className="mb-6 max-w-3xl">
-          <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Why it helps you" : "Waarom dit jou helpt"}</div>
+          <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "he" ? "איך זה עוזר" : locale === "en" ? "Why it helps you" : "Waarom dit jou helpt"}</div>
           <h2 className="mt-3 text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
-            {locale === "en" ? "Small corrections, big gains" : "Kleine aanpassingen, grote winst"}
+            {locale === "he" ? "תיקונים קטנים, שיפור גדול" : locale === "en" ? "Small corrections, big gains" : "Kleine aanpassingen, grote winst"}
           </h2>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {highlight.bullets.map((bullet) => (
             <Card key={bullet} className="border-slate-200 bg-white shadow-sm">
               <CardContent className="space-y-3 p-6">
-                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">{locale === "en" ? "Benefit" : "Voordeel"}</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">{locale === "he" ? "יתרון" : locale === "en" ? "Benefit" : "Voordeel"}</div>
                 <p className="text-lg font-bold text-slate-950">{bullet}</p>
               </CardContent>
             </Card>
@@ -603,7 +616,7 @@ export const TechniquePage = ({
       <section id="technique-process" className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
         <Card className="border-slate-200 bg-white shadow-sm">
           <CardContent className="space-y-5 p-6 md:p-8">
-            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "How it works" : "Hoe het werkt"}</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "he" ? "איך זה עובד" : locale === "en" ? "How it works" : "Hoe het werkt"}</div>
             <div className="grid gap-3 md:grid-cols-3">
               {process.map((item, index) => (
                 <div key={item.step} className="rounded-3xl bg-slate-50 p-5">
@@ -633,7 +646,13 @@ export const MuktiPage = ({
   loaded: boolean;
 }) => {
   const blocks =
-    locale === "en"
+    locale === "he"
+      ? [
+          { title: "ממספרים לחוויה", text: "Mukti Running היא תשובה ללחץ של קצב, דופק, קילומטרים ושיאים אישיים." },
+          { title: "ריצה כאיזון למתח", text: "במקום לכפות הישגים, תשומת הלב עוברת לנשימה, לרוגע ולחזרה לעצמכם." },
+          { title: "גם נושא להרצאה", text: "הגישה מתאימה להרצאה, למפגש השראה או לסדנה עבור רצים וקבוצות." },
+        ]
+      : locale === "en"
       ? [
           {
             title: "From numbers to experience",
@@ -664,7 +683,9 @@ export const MuktiPage = ({
         ];
 
   const principles =
-    locale === "en"
+    locale === "he"
+      ? ["לנוע", "לנשום", "להיות נוכחים", "לרוץ בחופשיות"]
+      : locale === "en"
       ? ["Move", "Breathe", "Feel present", "Run free"]
       : ["Bewegen", "Ademen", "Aanwezig zijn", "Vrij lopen"];
 
@@ -684,10 +705,10 @@ export const MuktiPage = ({
           </div>
           <div className="flex flex-wrap gap-3">
             <Button variant="hero" size="lg" asChild>
-              <Link to={`/${locale}/contact`}>{locale === "en" ? "Book a lecture" : "Boek een lezing"}</Link>
+              <Link to={`/${locale}/contact`}>{locale === "he" ? "הזמנת הרצאה" : locale === "en" ? "Book a lecture" : "Boek een lezing"}</Link>
             </Button>
             <Button variant="heroOutline" size="lg" asChild>
-              <Link to={`/${locale}/online-coaching`}>{locale === "en" ? "Discuss coaching" : "Bespreek coaching"}</Link>
+              <Link to={`/${locale}/online-coaching`}>{locale === "he" ? "שיחה על ליווי" : locale === "en" ? "Discuss coaching" : "Bespreek coaching"}</Link>
             </Button>
           </div>
         </div>
@@ -700,7 +721,7 @@ export const MuktiPage = ({
               <div className="absolute bottom-5 left-5 right-5 rounded-[1.75rem] border border-white/20 bg-slate-950/70 p-5 text-white backdrop-blur">
                 <div className="text-xs uppercase tracking-[0.35em] text-blue-300">Mukti</div>
                 <p className="mt-3 text-sm leading-7 text-slate-200">
-                  {locale === "en"
+                  {locale === "he" ? "חופש. נשימה. נוכחות. הריצה הופכת לדרך להתחבר מחדש." : locale === "en"
                     ? "Freedom. Breathing. Presence. Running becomes a way to reconnect."
                     : "Vrijheid. Ademen. Aanwezig zijn. Hardlopen wordt een manier om opnieuw verbinding te maken."}
                 </p>
@@ -715,7 +736,7 @@ export const MuktiPage = ({
           {blocks.map((block) => (
             <Card key={block.title} className="border-slate-200 bg-white shadow-sm">
               <CardContent className="space-y-3 p-6">
-                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Theme" : "Thema"}</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "he" ? "נושא" : locale === "en" ? "Theme" : "Thema"}</div>
                 <h2 className="text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{block.title}</h2>
                 <p className="text-sm leading-7 text-slate-600">{block.text}</p>
               </CardContent>
@@ -727,7 +748,7 @@ export const MuktiPage = ({
       <section id="mukti-principles" className={`mx-auto max-w-7xl px-5 py-10 md:px-8 ${fadeClass(loaded)}`}>
         <Card className="border-slate-200 bg-white shadow-sm">
           <CardContent className="space-y-5 p-6 md:p-8">
-            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Core principles" : "Kernprincipes"}</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "he" ? "עקרונות יסוד" : locale === "en" ? "Core principles" : "Kernprincipes"}</div>
             <div className="flex flex-wrap gap-3">
               {principles.map((principle) => (
                 <span key={principle} className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">
@@ -736,7 +757,7 @@ export const MuktiPage = ({
               ))}
             </div>
             <p className="max-w-4xl text-lg leading-8 text-slate-600">
-              {locale === "en"
+              {locale === "he" ? "Mukti Running מתאימה למתחילים, לרצים מנוסים ולרצים תחרותיים שרוצים יותר מרחב, פחות לחץ ויותר הנאה." : locale === "en"
                 ? "Mukti Running is for beginners, experienced runners and competition runners who want more room, less pressure and more enjoyment."
                 : "Mukti Running is er voor beginners, ervaren lopers en wedstrijdlopers die meer ruimte, minder druk en meer plezier willen."}
             </p>

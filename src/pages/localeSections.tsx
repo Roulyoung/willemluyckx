@@ -691,6 +691,17 @@ export const BlogArticle = ({ locale, slug }: { locale: Locale; slug: string }) 
   const isInjuryFreeArticle = slug === "blessurevrij-opbouwen";
   const isTechniqueArticle = slug === "waarom-looptechniek-loont";
 
+  if (locale === "he") {
+    const articles: Record<string, { sections: Array<[string,string]> }> = {
+      "mukti-running-what-it-is-and-why-it-fits-topfit": { sections: [["מחופש מביצועים לחופש בתנועה","Mukti פירושו שחרור. בגישה הזאת הריצה אינה רק מרדף אחר קצב, דופק ושיאים אישיים, אלא דרך לנשום, להיות נוכחים ולנוע עם פחות מתח."],["ריצה כאיזון למתח","במקום לכפות הישגים בכל אימון, לומדים להקשיב לגוף, להתאושש ולתת לאיכות התנועה מקום מרכזי."],["למי זה מתאים?","למתחילים, לרצים מנוסים ולרצים תחרותיים שרוצים מבנה מקצועי לצד יותר רוגע והנאה לאורך זמן."]] },
+      "training-principles-in-practice": { sections: [["עומס מתקדם","כדי להשתפר צריך לתת לגוף גירויים חזקים מספיק, אך להשאיר זמן להתאוששות. העלייה בעומס צריכה להיות הדרגתית ומתאימה לרמה האישית."],["עומס והתאוששות","השיפור מתרחש כאשר אימון, מנוחה, שינה ותזונה עובדים יחד. יותר אימונים אינם תמיד טובים יותר."],["עקביות לפני קיצוניות","תוכנית טובה בנויה משבועות שאפשר לבצע באופן עקבי. התאמות קטנות לאורך זמן יוצרות התקדמות יציבה ומפחיתות את הסיכון לפציעה."]] },
+      "building-without-injury": { sections: [["בנייה הדרגתית","הגדילו מרחק, תדירות או עצימות בצעדים קטנים. אל תשנו את כל המשתנים באותו שבוע."],["הקשבה לאותות הגוף","כאב מתמשך, עייפות חריגה וירידה בביצועים הם מידע חשוב. התאמה בזמן עדיפה על הפסקה ארוכה בגלל פציעה."],["הגוף כולו משתתף","כוח, תנועתיות, טכניקה, שינה ותזונה משפיעים יחד על היכולת לשאת את עומס הריצה."]] },
+      "why-running-technique-pays-off": { sections: [["יעילות בכל צעד","יציבה, קצב צעדים, נחיתה ותנועת הידיים משפיעים על כמות האנרגיה שנדרשת בכל צעד."],["אין סגנון אחד לכולם","טכניקה טובה מותאמת למבנה הגוף, לניסיון, למהירות ולמטרה של הרץ. המטרה היא לשפר בלי לכפות תנועה מלאכותית."],["משוב ותרגול","ניתוח וידאו ותרגילים ממוקדים עוזרים לזהות את השינויים החשובים ולשלב אותם בהדרגה באימונים."]] },
+    };
+    const article = articles[slug];
+    return <section className="mx-auto max-w-5xl px-5 py-12 md:px-8"><BlogHeroBanner eyebrow="TopFit Running" category={post?.category ?? "בלוג"} readTime={post?.readTime ?? ""} title={post?.title ?? "מאמר"} summary={post?.excerpt ?? ""} imageSrc={blogMedia.imageSrc} imageAlt={post?.title ?? "מאמר על ריצה"} asideLabel="הרעיון המרכזי" asideText="להתאמן טוב יותר, בבריאות ובהנאה, באמצעות ידע מעשי וליווי אישי."/><div className="mt-10 space-y-6">{article?.sections.map(([title,text])=><Card key={title}><CardContent className="space-y-3 p-6 md:p-8"><h2 className="text-2xl font-black md:text-3xl">{title}</h2><p className="text-base leading-8 text-slate-600">{text}</p></CardContent></Card>)}</div><div className="mt-10 flex flex-wrap gap-3"><Button variant="hero" asChild><Link to={blogHref}>חזרה לבלוג</Link></Button><Button variant="heroOutline" asChild><Link to={offerPath(locale,"schema")}>לתוכנית האישית</Link></Button><Button variant="heroOutline" asChild><Link to={contactHref}>יצירת קשר</Link></Button></div></section>;
+  }
+
   if (isNutritionArticle && locale === "nl") {
     const foundationFoods = [
       "vers fruit",

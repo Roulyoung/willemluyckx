@@ -28,7 +28,8 @@ export const ContactPage = ({
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    setMessage(subject ? `${t("Ik ontvang graag meer informatie over", "I would like more information about", "ברצוני לקבל מידע נוסף על")} ${subject}.` : "");
+    const subjectIntro = locale === "he" ? "ברצוני לקבל מידע נוסף על" : locale === "nl" ? "Ik ontvang graag meer informatie over" : "I would like more information about";
+    setMessage(subject ? `${subjectIntro} ${subject}.` : "");
   }, [subject, locale]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

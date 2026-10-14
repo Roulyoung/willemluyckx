@@ -23,7 +23,7 @@ export const SiteFooter = ({ locale, content }: SiteFooterProps) => {
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Navigatie</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">{locale === "he" ? "ניווט" : locale === "en" ? "Navigation" : "Navigatie"}</h3>
           <div className="mt-4 grid gap-3">
             {menuItems.map((item) => (
               <Link key={item.href} to={item.href} className="text-sm text-slate-700 transition-colors hover:text-blue-600">
@@ -46,7 +46,7 @@ export const SiteFooter = ({ locale, content }: SiteFooterProps) => {
             </a>
             <Link to={`/${locale}/contact`} className="flex items-center gap-3 transition-colors hover:text-blue-600">
               <MessageCircle className="h-4 w-4 text-blue-600" />
-              <span>{locale === "en" ? "Contact page" : "Contactpagina"}</span>
+              <span>{locale === "he" ? "עמוד יצירת קשר" : locale === "en" ? "Contact page" : "Contactpagina"}</span>
             </Link>
           </div>
         </div>
@@ -54,11 +54,11 @@ export const SiteFooter = ({ locale, content }: SiteFooterProps) => {
 
       <div className="border-t border-slate-200">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-4 text-xs text-slate-500 md:px-8">
-          <nav aria-label={locale === "nl" ? "Juridisch" : "Legal"} className="flex flex-wrap gap-x-5 gap-y-2">
-            <Link className="underline-offset-4 hover:underline" to={`/${locale}/privacy`}>Privacy</Link>
-            <Link className="underline-offset-4 hover:underline" to={`/${locale}/${locale === "nl" ? "algemene-voorwaarden" : "terms"}`}>{locale === "nl" ? "Algemene voorwaarden" : "Terms"}</Link>
-            <Link className="underline-offset-4 hover:underline" to={`/${locale}/cookies`}>Cookies</Link>
-            <Link className="font-semibold underline-offset-4 hover:underline" to={`/${locale}/${locale === "nl" ? "overeenkomst-ontbinden" : "withdraw"}`}>{locale === "nl" ? "Overeenkomst ontbinden" : "Withdraw from contract"}</Link>
+          <nav aria-label={locale === "he" ? "מידע משפטי" : locale === "nl" ? "Juridisch" : "Legal"} className="flex flex-wrap gap-x-5 gap-y-2">
+            <Link className="underline-offset-4 hover:underline" to={`/${locale}/privacy`}>{locale === "he" ? "פרטיות" : "Privacy"}</Link>
+            <Link className="underline-offset-4 hover:underline" to={`/${locale}/${locale === "nl" ? "algemene-voorwaarden" : "terms"}`}>{locale === "he" ? "תנאי שימוש" : locale === "nl" ? "Algemene voorwaarden" : "Terms"}</Link>
+            <Link className="underline-offset-4 hover:underline" to={`/${locale}/cookies`}>{locale === "he" ? "קובצי Cookie" : "Cookies"}</Link>
+            <Link className="font-semibold underline-offset-4 hover:underline" to={`/${locale}/${locale === "nl" ? "overeenkomst-ontbinden" : "withdraw"}`}>{locale === "he" ? "ביטול ההסכם" : locale === "nl" ? "Overeenkomst ontbinden" : "Withdraw from contract"}</Link>
           </nav>
           <p className="leading-6">{topFitSiteConfig.legal.tradeName} · {topFitSiteConfig.legal.address} · KvK {topFitSiteConfig.legal.chamberOfCommerce} · Btw-id {topFitSiteConfig.legal.vatId}</p>
           <div className="flex flex-col gap-2 uppercase tracking-[0.2em] md:flex-row md:items-center md:justify-between">

@@ -66,7 +66,7 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
           </DropdownMenuLabel>
           <DropdownMenuItem asChild>
             <Link to={item.href} className="rounded-2xl px-3 py-3 text-sm font-semibold text-blue-700 hover:bg-blue-50">
-              {locale === "nl" ? "Bekijk overzicht" : locale === "he" ? "View overview" : "View overview"}
+              {locale === "nl" ? "Bekijk overzicht" : locale === "he" ? "לצפייה בסקירה" : "View overview"}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator className="my-2 bg-slate-100" />
@@ -124,7 +124,7 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
           type="button"
           onClick={() => setOpen((value) => !value)}
           className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-900 shadow-sm xl:hidden"
-          aria-label="Toggle navigation"
+          aria-label={locale === "he" ? "פתיחה או סגירה של הניווט" : locale === "nl" ? "Navigatie openen of sluiten" : "Toggle navigation"}
           aria-expanded={open}
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -141,7 +141,7 @@ export const SiteHeader = ({ locale, content, currentPath }: SiteHeaderProps) =>
                     {item.label}
                   </Link>
                   <Link to={item.href} onClick={closeMenu} className="text-sm font-semibold text-blue-700">
-                    {locale === "nl" ? "Bekijk" : "Open"}
+                    {locale === "nl" ? "Bekijk" : locale === "he" ? "פתיחה" : "Open"}
                   </Link>
                 </div>
                 <div className="mt-3 grid gap-2">
