@@ -26,13 +26,21 @@ const SERVICE_ACCOUNT_PATH =
 const RANGE = getArg("--range", "");
 const TAB = getArg("--tab", "");
 const VALUES_RAW = getArg("--values", "");
+const VALUES_FILE = getArg("--values-file", "");
+
+function getValues() {
+  if (VALUES_FILE) {
+    return JSON.parse(fs.readFileSync(path.resolve(VALUES_FILE), "utf8"));
+  }
+  return JSON.parse(VALUES_RAW);
+}
 
 if (!command || !["info", "read", "write", "append", "bootstrap-topfit", "seed-topfit"].includes(command)) {
   console.error("Usage:");
   console.error("  node scripts/google-sheets-admin.js info --sheet-id <id>");
   console.error("  node scripts/google-sheets-admin.js read --range <Sheet!A1:B10>");
-  console.error('  node scripts/google-sheets-admin.js write --range <Sheet!A1:B10> --values \'[["a","b"]]\'');
-  console.error('  node scripts/google-sheets-admin.js append --tab <Sheet> --values \'[["a","b"]]\'');
+  console.error('  node scripts/google-sheets-admin.js write --range <Sheet!A1:B10> --values \'[["a","b"]]\' [--values-file <path>]');
+  console.error('  node scripts/google-sheets-admin.js append --tab <Sheet> --values \'[["a","b"]]\' [--values-file <path>]');
   console.error("  node scripts/google-sheets-admin.js bootstrap-topfit");
   console.error("  node scripts/google-sheets-admin.js seed-topfit");
   process.exit(1);
@@ -749,7 +757,7 @@ async function appendRows(token, tab, values) {
   if (!tab) throw new Error("--tab is required for append");
   if (!Array.isArray(values)) throw new Error("--values must be a JSON array of rows");
 
-  const range = `${tab}!A:Z`;
+  const range = `${tab}!A:AA`;
   const data = await requestJson(
     `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}:append?valueInputOption=USER_ENTERED`,
     token,
@@ -828,10 +836,10 @@ async function main() {
       await readRange(token, RANGE);
       break;
     case "write":
-      await writeRange(token, RANGE, JSON.parse(VALUES_RAW));
+      await writeRange(token, RANGE, getValues());
       break;
     case "append":
-      await appendRows(token, TAB, JSON.parse(VALUES_RAW));
+      await appendRows(token, TAB, getValues());
       break;
     case "bootstrap-topfit":
       await bootstrapTopfit(token);
