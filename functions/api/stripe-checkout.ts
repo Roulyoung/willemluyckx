@@ -1,3 +1,5 @@
+import { getActiveShopProduct } from "../lib/shopProducts";
+
 type CheckoutPayload = {
   locale?: unknown;
   slug?: unknown;
@@ -46,6 +48,11 @@ const productConfig: Record<
     successPath: (locale) => `/${locale}/${locale === "nl" ? "aanbod" : "offers"}/schema/afrekenen?success=1`,
     cancelPath: (locale) => `/${locale}/${locale === "nl" ? "aanbod" : "offers"}/schema/afrekenen?canceled=1`,
   },
+  "stripe-test-1-eur": {
+    priceEnv: "STRIPE_PRICE_TEST",
+    successPath: (locale) => `/${locale}/stripe-test-1-eur?success=1`,
+    cancelPath: (locale) => `/${locale}/stripe-test-1-eur?canceled=1`,
+  },
 };
 
 const toEnvKey = (value: string) => value.toUpperCase().replace(/-/g, "_");
@@ -83,16 +90,32 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const overrideKey = toEnvKey(normalizedSlug);
   const successUrl = String(env[`STRIPE_SUCCESS_URL_${overrideKey}`] ?? `${siteUrl}${product.successPath(locale)}`).trim();
   const cancelUrl = String(env[`STRIPE_CANCEL_URL_${overrideKey}`] ?? `${siteUrl}${product.cancelPath(locale)}`).trim();
+  let shopProduct: Awaited<ReturnType<typeof getActiveShopProduct>> = null;
+  try {
+    shopProduct = await getActiveShopProduct(env as Record<string, unknown>, normalizedSlug, locale);
+  } catch (error) {
+    return Response.json({ ok: false, error: error instanceof Error ? error.message : "Shop product lookup failed" }, { status: 503 });
+  }
   const priceId = String(env[product.priceEnv] ?? "").trim();
 
-  if (!stripeSecretKey || !priceId) {
+  if (!stripeSecretKey || (!priceId && !shopProduct)) {
     return Response.json({ ok: false, error: "Stripe configuration missing" }, { status: 503 });
   }
 
   const form = new URLSearchParams();
   form.set("mode", "payment");
-  form.set("line_items[0][price]", priceId);
+  if (shopProduct) {
+    form.set("line_items[0][price_data][currency]", shopProduct.currency);
+    form.set("line_items[0][price_data][unit_amount]", String(shopProduct.amount));
+    form.set("line_items[0][price_data][product_data][name]", shopProduct.name);
+    if (shopProduct.description) form.set("line_items[0][price_data][product_data][description]", shopProduct.description);
+    form.set("line_items[0][price_data][product_data][metadata][product_id]", shopProduct.productId);
+  } else {
+    form.set("line_items[0][price]", priceId);
+  }
   form.set("line_items[0][quantity]", "1");
+  form.set("payment_method_types[0]", "card");
+  form.set("payment_method_types[1]", "ideal");
   form.set("allow_promotion_codes", "true");
   form.set("phone_number_collection[enabled]", "true");
   form.set("metadata[product_slug]", normalizedSlug);
@@ -110,7 +133,8 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
 
   if (embedded) {
     form.set("ui_mode", "embedded_page");
-    form.set("redirect_on_completion", "never");
+    form.set("redirect_on_completion", "if_required");
+    form.set("return_url", `${successUrl}${successUrl.includes("?") ? "&" : "?"}session_id={CHECKOUT_SESSION_ID}`);
   } else {
     form.set("success_url", successUrl);
     form.set("cancel_url", cancelUrl);

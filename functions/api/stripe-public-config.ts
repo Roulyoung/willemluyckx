@@ -1,5 +1,5 @@
 export const onRequestGet: PagesFunction = async ({ env }) => {
-  const publishableKey = String(env.VITE_STRIPE_PUBLISHABLE_KEY ?? env.STRIPE_PUBLISHABLE_KEY ?? "").trim();
+  const publishableKey = String(env.STRIPE_PUBLISHABLE_KEY ?? env.VITE_STRIPE_PUBLISHABLE_KEY ?? "").trim();
 
   if (!publishableKey) {
     return Response.json(

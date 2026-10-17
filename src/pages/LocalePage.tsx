@@ -43,6 +43,7 @@ const pageTitleMap: Record<string, string> = {
   cookies: "Cookies",
   "overeenkomst-ontbinden": "Overeenkomst ontbinden",
   withdraw: "Withdraw from contract",
+  "stripe-test-1-eur": "Stripe live test",
 };
 
 const sectionAliases: Record<string, string> = {
@@ -121,6 +122,8 @@ const LocalePage = () => {
     setMeta('meta[property="og:description"]', description);
     setMeta('meta[name="twitter:title"]', title);
     setMeta('meta[name="twitter:description"]', description);
+    const robots = document.head.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    if (robots) robots.setAttribute("content", section === "stripe-test-1-eur" ? "noindex,nofollow,noarchive" : "index,follow");
   }, [content, locale, section, slug]);
 
   useEffect(() => {

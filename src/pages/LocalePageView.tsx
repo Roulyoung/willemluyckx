@@ -14,6 +14,7 @@ import { offerPath } from "@/lib/proposition";
 import { OfferCards, OfferDetailPage, OffersPage, PropositionIntro } from "./OfferPages";
 import { CookiePage, HebrewCookiePage, HebrewWithdrawalPage, PrivacyPage, TermsPage, WithdrawalPage } from "./LegalPages";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import StripeTestPage from "@/pages/StripeTestPage";
 
 export const LocalePageView = ({ locale, section, slug, content, loaded }: {
   locale: Locale; section: string; slug?: string; content: LocaleContent; loaded: boolean;
@@ -22,6 +23,7 @@ export const LocalePageView = ({ locale, section, slug, content, loaded }: {
   const nl = locale === "nl";
   const he = locale === "he";
   const t = (nlText: string, enText: string, heText: string) => he ? heText : nl ? nlText : enText;
+  if (section === "stripe-test-1-eur") return <StripeTestPage locale={locale} />;
   const highlight = content.pageHighlights[section] ?? content.pageHighlights[nl ? "aanbod" : "offers"];
   const detailRoutes: Record<string, string> = {
     trainingsschemas: "schema", "training-plans": "schema",

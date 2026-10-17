@@ -4,6 +4,131 @@
 
 Date: 2026-08-28
 
+## Mandatory Session-Close Rollback Rule
+
+Every session close must leave an exact, named rollback point before the session is considered closed.
+
+- For code changes, create a focused checkpoint commit or an exact patch plus status file.
+- Never include unrelated dirty files such as `CON` or `TopFit Running Boek.pdf` in that checkpoint.
+- Record the checkpoint commit/patch, changed files, deployment to restore, and any external Google Sheets changes.
+- For Google Sheets changes, record the exact tab and row/range and the safe reversal action.
+- Confirm `npm run build` and `git diff --check` before closing when code was changed.
+- Do not store secrets in the checkpoint, patch, status file or session document.
+
+## Session Update - 2026-10-18 - Stripe live and Sheets-driven checkout
+
+### Final outcome
+
+- Stripe Live mode is active and was verified with a real successful test payment.
+- The successful payment was made through a Stripe Live Payment Link for the €1 test product. It was a real payment, not a test-mode payment.
+- Do not store or write any Stripe secret values in this document, chat, source code or git.
+
+### Secure Stripe configuration
+
+- Wrangler OAuth login was completed using the device flow and Windows keyring:
+  - `npx wrangler login --device --use-keyring`
+- Cloudflare Pages project: `willemluyckx`
+- Runtime secrets configured through Wrangler Pages secrets:
+  - `STRIPE_SECRET_KEY`
+  - `STRIPE_WEBHOOK_SECRET`
+  - `STRIPE_PUBLISHABLE_KEY`
+- The public config function now prefers `STRIPE_PUBLISHABLE_KEY` over the older `VITE_STRIPE_PUBLISHABLE_KEY`, preventing the old `pk_test_...` value from overriding the Live key.
+- The live webhook endpoint is:
+  - `https://topfitrunning.com/api/stripe-webhook`
+- Webhook events selected in Stripe:
+  - `checkout.session.completed`
+  - `checkout.session.async_payment_succeeded`
+  - `checkout.session.expired` and `checkout.session.async_payment_failed` may also be selected; the current handler safely ignores them.
+
+### Google Sheets product catalog
+
+- `ShopProducts` now contains the €1 test product in row 7:
+  - `product_id`: `stripe-test-1-eur`
+  - `price`: `1`
+  - `currency`: `EUR`
+  - `active`: `TRUE`
+- `ShopProducts` now contains the real personal-plan product in row 8:
+  - `product_id`: `schema`
+  - slug: `schema`
+  - name: `Persoonlijk hardloopschema (12 weken)`
+  - `price`: `19`
+  - `currency`: `EUR`
+  - `active`: `TRUE`
+- The €19 product does not need a manually maintained Stripe Product or Price in the dashboard.
+- `functions/lib/shopProducts.ts` reads active product data server-side from `ShopProducts` using the existing Google service-account runtime secret.
+- `functions/api/stripe-checkout.ts` uses the Sheets value to create Stripe `price_data` dynamically. The browser cannot provide or override the amount.
+- The existing `STRIPE_PRICE_TEST` value in `wrangler.toml` remains only as a fallback; active matching `ShopProducts` rows take precedence. `STRIPE_PRICE_SCHEMA` is no longer required for the €19 product.
+
+### Hidden Stripe test page
+
+- Route:
+  - `https://topfitrunning.com/nl/stripe-test-1-eur`
+- It is not linked from navigation or public content.
+- It sets `noindex,nofollow,noarchive` dynamically.
+- It uses the `stripe-test-1-eur` ShopProducts row and the same embedded Checkout flow.
+- It is intended only for controlled payment checks and must not be exposed through menus or CTAs.
+
+### Checkout compatibility findings
+
+- The deployed account/API environment rejected `automatic_payment_methods`; the live endpoint returned `Received unknown parameter: automatic_payment_methods`.
+- The final implementation therefore explicitly sends:
+  - `payment_method_types[0]=card`
+  - `payment_method_types[1]=ideal`
+- The live API environment requires `ui_mode=embedded_page` for the existing embedded Checkout integration. Keep this value unless the Stripe API version is deliberately upgraded and tested.
+- Embedded Checkout uses `redirect_on_completion=if_required` and a `return_url` so redirect-based methods such as iDEAL can work.
+- A live Checkout Session was successfully created from the production endpoint using `slug=schema`; the response was `ok=true`, `productSlug=schema`, and contained a live client secret. No payment was made during that diagnostic request.
+
+### Latest deployment and verification
+
+- Latest deployment after the Sheets-driven checkout change:
+  - `https://8c56f984.willemluyckx.pages.dev`
+- `npm run build` passed after the final checkout changes.
+- The production publishable-key endpoint was previously verified to return a `pk_live_...` key without exposing the full value.
+- The final live Checkout Session creation was verified against:
+  - `https://topfitrunning.com/api/stripe-checkout`
+  - payload slug: `schema`
+  - amount source: `ShopProducts` row 8
+
+### Next session: safest remaining smoke test
+
+1. Open the real €19 checkout page:
+   - `https://topfitrunning.com/nl/aanbod/schema/afrekenen`
+2. Start a fresh checkout session.
+3. Confirm the Stripe panel shows €19,00 and the enabled payment methods.
+4. Complete one controlled real payment only if needed.
+5. Confirm the Stripe webhook, internal email, customer email and intake flow.
+6. Refund the payment immediately if it was only a test.
+
+### Files changed in this Stripe/Sheets session
+
+- `functions/api/stripe-checkout.ts`
+- `functions/api/stripe-webhook.ts`
+- `functions/api/stripe-public-config.ts`
+- `functions/lib/shopProducts.ts`
+- `src/pages/StripeTestPage.tsx`
+- `src/pages/LocalePageView.tsx`
+- `src/pages/LocalePage.tsx`
+- `index.html`
+- `wrangler.toml`
+
+### Working-tree reminder
+
+- Existing unrelated untracked files remain:
+  - `CON`
+  - `TopFit Running Boek.pdf`
+- Do not modify the sibling `rolexbugatti` project.
+
+### Rollback checkpoint for this session
+
+- This session's focused checkpoint commit: `50b23b3` (`Checkpoint live Stripe Sheets checkout`).
+- The checkpoint includes only the Stripe/Sheets implementation and session documentation.
+- It intentionally excludes the unrelated untracked files `CON` and `TopFit Running Boek.pdf`.
+- Code rollback target: revert the focused checkpoint commit, or restore its parent commit and keep the external Sheet rows under review.
+- External Sheet rollback rows created in this session:
+  - `ShopProducts!A7:S7`: `stripe-test-1-eur`
+  - `ShopProducts!A8:S8`: `schema`
+- To remove only the new catalog rows, clear rows 7 and 8 after confirming no later data was added below them. Prefer a targeted row-level edit over resetting the entire tab.
+
 ## Session Update - 2026-10-15 - Hardloopkalenderimport
 
 - Added the supplied running-race list to the `Hardloopwedstrijden` Google Sheets tab.

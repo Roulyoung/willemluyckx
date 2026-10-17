@@ -85,6 +85,7 @@ const getProductLabel = (productSlug: string, locale: string) => {
     premium: { nl: "Premium abonnement", en: "Premium subscription", he: "מנוי פרימיום" },
     base: { nl: "Basis abonnement", en: "Base subscription", he: "מנוי בסיסי" },
     "clinic-ticket": { nl: "Clinic ticket", en: "Clinic ticket", he: "כרטיס לסדנה" },
+    "stripe-test-1-eur": { nl: "Stripe live testproduct €1", en: "Stripe live test product €1", he: "מוצר בדיקה של Stripe €1" },
   };
 
   const language = locale === "he" ? "he" : locale === "nl" ? "nl" : "en";
