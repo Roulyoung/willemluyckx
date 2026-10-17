@@ -120,7 +120,7 @@ Every session close must leave an exact, named rollback point before the session
 
 ### Rollback checkpoint for this session
 
-- This session's focused checkpoint commit: `50b23b3` (`Checkpoint live Stripe Sheets checkout`).
+- This session's focused checkpoint commit: `a592edb` (`Checkpoint live Stripe Sheets checkout`).
 - The checkpoint includes only the Stripe/Sheets implementation and session documentation.
 - It intentionally excludes the unrelated untracked files `CON` and `TopFit Running Boek.pdf`.
 - Code rollback target: revert the focused checkpoint commit, or restore its parent commit and keep the external Sheet rows under review.
