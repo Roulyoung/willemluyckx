@@ -8,7 +8,6 @@ type CheckoutPayload = {
   phone?: unknown;
   embedded?: unknown;
   termsAccepted?: unknown;
-  earlyStartRequested?: unknown;
   termsVersion?: unknown;
 };
 
@@ -75,13 +74,12 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const product = productConfig[normalizedSlug];
   const embedded = wantsEmbeddedCheckout(payload.embedded);
   const termsAccepted = payload.termsAccepted === true;
-  const earlyStartRequested = payload.earlyStartRequested === true;
   const termsVersion = String(payload.termsVersion ?? "").trim();
 
   if (!product) {
     return Response.json({ ok: false, error: "Unknown product" }, { status: 400 });
   }
-  if (!termsAccepted || !earlyStartRequested || !termsVersion) {
+  if (!termsAccepted || !termsVersion) {
     return Response.json({ ok: false, error: "Required legal confirmations are missing" }, { status: 400 });
   }
 
@@ -114,8 +112,9 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
     form.set("line_items[0][price]", priceId);
   }
   form.set("line_items[0][quantity]", "1");
-  form.set("payment_method_types[0]", "card");
-  form.set("payment_method_types[1]", "ideal");
+  // Put iDEAL first so Dutch customers see it as the default payment method.
+  form.set("payment_method_types[0]", "ideal");
+  form.set("payment_method_types[1]", "card");
   form.set("allow_promotion_codes", "true");
   form.set("phone_number_collection[enabled]", "true");
   form.set("metadata[product_slug]", normalizedSlug);
@@ -123,7 +122,6 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   form.set("metadata[locale]", locale);
   form.set("metadata[terms_accepted]", "true");
   form.set("metadata[terms_version]", termsVersion);
-  form.set("metadata[early_start_requested]", "true");
   form.set("metadata[consent_recorded_at]", new Date().toISOString());
   if (email) form.set("customer_email", email);
   if (name) form.set("metadata[customer_name]", name);
