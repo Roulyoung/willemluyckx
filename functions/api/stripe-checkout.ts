@@ -7,7 +7,6 @@ type CheckoutPayload = {
   name?: unknown;
   phone?: unknown;
   embedded?: unknown;
-  termsAccepted?: unknown;
   termsVersion?: unknown;
 };
 
@@ -73,13 +72,12 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const phone = String(payload.phone ?? "").trim();
   const product = productConfig[normalizedSlug];
   const embedded = wantsEmbeddedCheckout(payload.embedded);
-  const termsAccepted = payload.termsAccepted === true;
   const termsVersion = String(payload.termsVersion ?? "").trim();
 
   if (!product) {
     return Response.json({ ok: false, error: "Unknown product" }, { status: 400 });
   }
-  if (!termsAccepted || !termsVersion) {
+  if (!termsVersion) {
     return Response.json({ ok: false, error: "Required legal confirmations are missing" }, { status: 400 });
   }
 
@@ -117,6 +115,7 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   form.set("payment_method_types[1]", "card");
   form.set("allow_promotion_codes", "true");
   form.set("phone_number_collection[enabled]", "true");
+  form.set("consent_collection[terms_of_service]", "required");
   form.set("metadata[product_slug]", normalizedSlug);
   form.set("metadata[requested_slug]", slug || normalizedSlug);
   form.set("metadata[locale]", locale);

@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import type { Locale } from "@/lib/i18n";
 
 const StripeTestPage = ({ locale }: { locale: Locale }) => {
-  const [termsAccepted, setTermsAccepted] = useState(false);
   const [ready, setReady] = useState(false);
   const [success, setSuccess] = useState(new URLSearchParams(window.location.search).get("success") === "1");
   const [error, setError] = useState("");
@@ -15,7 +14,7 @@ const StripeTestPage = ({ locale }: { locale: Locale }) => {
   const checkoutRef = useRef<{ mount: (element: HTMLElement) => void; destroy: () => void | Promise<void> } | null>(null);
 
   useEffect(() => {
-    if (success || !termsAccepted) return;
+    if (success) return;
     let active = true;
     const openCheckout = async () => {
       try {
@@ -29,7 +28,7 @@ const StripeTestPage = ({ locale }: { locale: Locale }) => {
             const response = await fetch("/api/stripe-checkout", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ locale, slug: "stripe-test-1-eur", embedded: true, termsVersion: "stripe-live-test-2026-10-15", termsAccepted: true }),
+              body: JSON.stringify({ locale, slug: "stripe-test-1-eur", embedded: true, termsVersion: "stripe-live-test-2026-10-15" }),
             });
             const result = await response.json() as { ok?: boolean; clientSecret?: string; error?: string };
             if (!response.ok || !result.ok || !result.clientSecret) throw new Error(result.error || "Checkout could not be started");
@@ -55,13 +54,13 @@ const StripeTestPage = ({ locale }: { locale: Locale }) => {
       checkoutRef.current = null;
       if (checkout) void checkout.destroy();
     };
-  }, [locale, success, termsAccepted]);
+  }, [locale, success]);
 
   if (success) {
     return <section className="mx-auto max-w-3xl space-y-5 px-5 py-12 md:px-8"><Card className="border-emerald-200 bg-emerald-50"><CardContent className="space-y-4 p-7"><p className="text-xs font-bold uppercase tracking-[.3em] text-emerald-700">Stripe live test</p><h1 className="text-3xl font-black text-slate-950">Betaling ontvangen</h1><p className="text-slate-700">De betaling van EUR 1 is door Stripe voltooid. Controleer nu de webhook, de twee e-mails en de terugbetaling in Stripe.</p><Button variant="heroOutline" onClick={() => { setSuccess(false); window.history.replaceState({}, "", window.location.pathname); }}>Nogmaals testen</Button></CardContent></Card></section>;
   }
 
-  return <section className="mx-auto max-w-4xl space-y-6 px-5 py-12 md:px-8"><div className="space-y-3"><p className="text-xs font-bold uppercase tracking-[.3em] text-amber-700">Niet gelinkt - live test</p><h1 className="text-4xl font-black text-slate-950 md:text-6xl">Stripe testbetaling van EUR 1</h1><p className="text-lg leading-8 text-slate-600">Deze verborgen pagina is alleen bedoeld voor een gecontroleerde productiecheck. Er wordt een echte betaling van EUR 1 gestart.</p></div><Card className="bg-slate-950 text-white"><CardContent className="space-y-6 p-6 md:p-8"><div className="flex items-center justify-between gap-4"><span className="flex items-center gap-2 font-bold"><Check className="text-blue-300" /> Stripe live testproduct</span><strong className="text-2xl">EUR 1,00</strong></div><div className="space-y-4 rounded-2xl bg-white p-5 text-slate-950"><label className="flex items-start gap-3 text-sm"><input type="checkbox" checked={termsAccepted} onChange={(event) => setTermsAccepted(event.target.checked)} /><span>Ik begrijp dat dit een echte livebetaling van EUR 1 is.</span></label></div>{termsAccepted ? <div ref={mountRef} className="min-h-[680px] overflow-hidden rounded-xl bg-white" /> : <p className="text-slate-300">Vink de bevestiging aan om Stripe te laden.</p>}{termsAccepted && !ready && !error ? <p className="text-center text-slate-300">Stripe laden...</p> : null}{error ? <p className="rounded-xl bg-rose-950 p-4 text-rose-100">{error}</p> : null}</CardContent></Card></section>;
+  return <section className="mx-auto max-w-4xl space-y-6 px-5 py-12 md:px-8"><div className="space-y-3"><p className="text-xs font-bold uppercase tracking-[.3em] text-amber-700">Niet gelinkt - live test</p><h1 className="text-4xl font-black text-slate-950 md:text-6xl">Stripe testbetaling van EUR 1</h1><p className="text-lg leading-8 text-slate-600">Deze verborgen pagina is alleen bedoeld voor een gecontroleerde productiecheck. Er wordt een echte betaling van EUR 1 gestart.</p></div><Card className="bg-slate-950 text-white"><CardContent className="space-y-6 p-6 md:p-8"><div className="flex items-center justify-between gap-4"><span className="flex items-center gap-2 font-bold"><Check className="text-blue-300" /> Stripe live testproduct</span><strong className="text-2xl">EUR 1,00</strong></div><div ref={mountRef} className="min-h-[680px] overflow-hidden rounded-xl bg-white" />{!ready && !error ? <p className="text-center text-slate-300">Stripe laden...</p> : null}{error ? <p className="rounded-xl bg-rose-950 p-4 text-rose-100">{error}</p> : null}</CardContent></Card></section>;
 };
 
 export default StripeTestPage;
