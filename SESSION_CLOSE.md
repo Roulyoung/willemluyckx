@@ -15,6 +15,37 @@ Every session close must leave an exact, named rollback point before the session
 - Confirm `npm run build` and `git diff --check` before closing when code was changed.
 - Do not store secrets in the checkpoint, patch, status file or session document.
 
+## Session Update - 2026-10-27 - Checkout consent and iDEAL ordering
+
+### Final outcome
+
+- Removed the separate early-start-during-the-cooling-off-period checkbox from the public checkout.
+- Checkout now opens directly without that pre-checkout conversion barrier.
+- Stripe Checkout now collects the required terms-of-service consent inside the payment form through `consent_collection[terms_of_service]=required`.
+- iDEAL is sent as the first payment method and card as the fallback method.
+- Stripe Link remains an account-level Dashboard setting; it was not changed from this repository.
+
+### Verification
+
+- `npm run build` passed on 2026-10-27.
+- `npm run lint` passed with the two existing review-page hook warnings only.
+- `git diff --check` passed.
+- No Google Sheets tabs, rows or ranges were changed in this session.
+
+### Rollback and deployment
+
+- Focused rollback commit: `5d9bd82` (`Move checkout consent into Stripe`).
+- To roll back only this session's code, revert commit `5d9bd82`.
+- Changed files:
+  - `functions/api/stripe-checkout.ts`
+  - `src/components/EmbeddedPackageCheckout.tsx`
+  - `src/pages/StripeTestPage.tsx`
+- The code was pushed to `origin/main`.
+- No new Cloudflare Pages deployment was executed or verified in this session.
+- Existing unrelated untracked files remain untouched:
+  - `CON`
+  - `TopFit Running Boek.pdf`
+
 ## Session Update - 2026-10-18 - Stripe live and Sheets-driven checkout
 
 ### Final outcome
