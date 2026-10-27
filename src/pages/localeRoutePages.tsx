@@ -270,7 +270,16 @@ export const HardloopCalendarPage = ({
         if (!active || !payload?.ok) return;
         const rows = payload.content?.hardloopwedstrijden;
         if (Array.isArray(rows) && rows.length > 0) {
-          setLiveRows(rows);
+          const fallbackByKey = new Map(
+            fallbackRows.map((row) => [`${row.title}|${row.location}|${row.date}`, row.websiteUrl]),
+          );
+          setLiveRows(
+            rows.map((row) => ({
+              ...row,
+              websiteUrl:
+                row.websiteUrl || fallbackByKey.get(`${row.title}|${row.location}|${row.date}`) || "",
+            })),
+          );
         }
       })
       .catch(() => undefined);
