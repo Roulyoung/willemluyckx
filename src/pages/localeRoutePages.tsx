@@ -418,19 +418,18 @@ export const HardloopCalendarPage = ({
                 <div key={`${row.title}-${row.location}-${row.date}-${row.distance}`} className="grid gap-3 px-6 py-5 md:grid-cols-[1.4fr_0.85fr_0.8fr_0.8fr] md:items-start md:px-8">
                   <div className="text-left">
                     <div className="flex flex-wrap items-center gap-3 text-lg font-black uppercase tracking-[0.04em] text-slate-950">
-                      <span>{row.title}</span>
                       {row.websiteUrl ? (
                         <a
                           href={row.websiteUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-blue-700 transition-colors hover:border-blue-300 hover:bg-blue-100"
+                          className="inline-flex items-center gap-2 transition-colors hover:text-blue-700 hover:underline hover:decoration-2 hover:underline-offset-4"
                           aria-label={`${isEn ? "Open website for" : "Bekijk website van"} ${row.title}`}
                         >
-                          <ExternalLink className="h-3.5 w-3.5" />
-                          {isEn ? "View website" : "Bekijk website"}
+                          {row.title}
+                          <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
                         </a>
-                      ) : null}
+                      ) : <span>{row.title}</span>}
                     </div>
                     <div className="mt-1 text-xs font-semibold uppercase tracking-[0.28em] text-blue-700">{row.location}</div>
                     <div className="mt-2 text-xs font-medium uppercase tracking-[0.24em] text-slate-500">
