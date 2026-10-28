@@ -8,6 +8,7 @@ import type { LocaleContent } from "@/lib/topfitContent";
 import { AboutWillemPage } from "@/pages/localeSections";
 import { ContactPage } from "@/pages/ContactPage";
 import { BlogIndexPage, HardloopCalendarPage, MuktiPage, TechniquePage } from "@/pages/localeRoutePages";
+import { ExampleTrainingPlanPage } from "@/pages/ExampleTrainingPlanPage";
 import { HomeHeroBackgroundSection } from "@/pages/HomeHeroBackgroundSection";
 import { localizedPath } from "@/lib/localeRoutes";
 import { offerPath } from "@/lib/proposition";
@@ -39,6 +40,7 @@ export const LocalePageView = ({ locale, section, slug, content, loaded }: {
   if (section === "cookies") return locale === "he" ? <HebrewCookiePage /> : <CookiePage locale={locale} />;
   if (section === "overeenkomst-ontbinden" || section === "withdraw") return locale === "he" ? <HebrewWithdrawalPage /> : <WithdrawalPage locale={locale} />;
   if (section === "hardloopkalender" || section === "running-calendar") return <HardloopCalendarPage locale={locale} content={content} highlight={highlight} loaded={loaded} />;
+  if (section === "voorbeeldschema" || section === "example-plan") return <ExampleTrainingPlanPage locale={locale} />;
   if (section === "trainingskampen" || section === "training-camps") return <Navigate to={localizedPath(locale, "clinics")} replace />;
   if (section === "abonnementen" || section === "subscriptions" || section === "shop") {
     const oldSlugs: Record<string, string> = { premium: "schema", basis: "schema", base: "schema", "clinic-ticket": "clinic", "physical-training-80": "fysiek" };
