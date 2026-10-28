@@ -1,5 +1,5 @@
 import { offerPath } from "@/lib/proposition";
-import { CalendarDays, ChevronRight, Check, Clock3, ExternalLink, Globe2, MapPin, MessageCircle, Users } from "lucide-react";
+import { CalendarDays, ChevronRight, Check, Clock3, ExternalLink, Globe2, MapPin, MessageCircle, Search, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BlogFeatureCard } from "@/components/BlogFeatureCard";
@@ -253,6 +253,9 @@ export const HardloopCalendarPage = ({
 }) => {
   const isEn = locale === "en";
   const [liveRows, setLiveRows] = useState<CalendarRow[] | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [distanceFilter, setDistanceFilter] = useState("");
+  const [surfaceFilter, setSurfaceFilter] = useState("");
   const fallbackRows = staticHardloopwedstrijden;
 
   useEffect(() => {
@@ -305,6 +308,15 @@ export const HardloopCalendarPage = ({
       return parseCalendarDateKey(a.date) - parseCalendarDateKey(b.date);
     })
     .filter((row) => row.title || row.location || row.date);
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const distanceOptions = [...new Set(calendarRows.map((row) => row.distance).filter(Boolean))].sort();
+  const surfaceOptions = [...new Set(calendarRows.map((row) => row.surface).filter(Boolean))].sort();
+  const filteredCalendarRows = calendarRows.filter((row) => {
+    const searchMatches = !normalizedSearch || [row.title, row.location, row.country].some((value) => value.toLowerCase().includes(normalizedSearch));
+    const distanceMatches = !distanceFilter || row.distance === distanceFilter;
+    const surfaceMatches = !surfaceFilter || row.surface === surfaceFilter;
+    return searchMatches && distanceMatches && surfaceMatches;
+  });
   const columns = isEn ? ["Race / location", "Date", "Distance", "Surface"] : ["Wedstrijd / locatie", "Datum", "Afstand", "Ondergrond"];
 
   if (locale === "he") {
@@ -314,7 +326,7 @@ export const HardloopCalendarPage = ({
           <CardContent className="p-0">
             <div className="border-b bg-slate-50 px-6 py-4 font-bold">מרוצים נבחרים</div>
             <div className="divide-y">
-              {calendarRows.map((row) => (
+              {filteredCalendarRows.map((row) => (
                 <div key={`${row.title}-${row.date}`} className="grid gap-3 p-6 md:grid-cols-4">
                   <div>
                     {row.websiteUrl ? (
@@ -442,6 +454,46 @@ export const HardloopCalendarPage = ({
                 {isEn ? "Selected races" : "Geselecteerde wedstrijden"}
               </div>
             </div>
+            <div className="grid gap-3 border-b border-slate-200 bg-white px-6 py-4 md:grid-cols-[minmax(0,1.5fr)_minmax(10rem,0.75fr)_minmax(10rem,0.75fr)] md:px-8">
+              <label className="relative block">
+                <span className="sr-only">{isEn ? "Search races" : "Zoek wedstrijden"}</span>
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+                <input
+                  type="search"
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  placeholder={isEn ? "Search race, place or country" : "Zoek op wedstrijd, plaats of land"}
+                  className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-10 text-sm text-slate-900 outline-none transition focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                />
+                {searchTerm ? (
+                  <button
+                    type="button"
+                    onClick={() => setSearchTerm("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-700"
+                    aria-label={isEn ? "Clear search" : "Zoekopdracht wissen"}
+                  >
+                    <X className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                ) : null}
+              </label>
+              <label>
+                <span className="sr-only">{isEn ? "Filter by distance" : "Filter op afstand"}</span>
+                <select value={distanceFilter} onChange={(event) => setDistanceFilter(event.target.value)} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100">
+                  <option value="">{isEn ? "All distances" : "Alle afstanden"}</option>
+                  {distanceOptions.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+              </label>
+              <label>
+                <span className="sr-only">{isEn ? "Filter by surface" : "Filter op ondergrond"}</span>
+                <select value={surfaceFilter} onChange={(event) => setSurfaceFilter(event.target.value)} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100">
+                  <option value="">{isEn ? "All surfaces" : "Alle ondergronden"}</option>
+                  {surfaceOptions.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+              </label>
+            </div>
+            <div className="border-b border-slate-200 bg-white px-6 pb-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 md:px-8">
+              {isEn ? `${filteredCalendarRows.length} races found` : `${filteredCalendarRows.length} wedstrijden gevonden`}
+            </div>
             <div className="hidden border-b border-slate-200 bg-white px-6 py-3 md:grid md:grid-cols-[1.4fr_0.85fr_0.8fr_0.8fr] md:px-8">
               {columns.map((column) => (
                 <div key={column} className="text-left text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">
@@ -450,7 +502,7 @@ export const HardloopCalendarPage = ({
               ))}
             </div>
             <div className="divide-y divide-slate-200">
-              {calendarRows.map((row) => (
+              {filteredCalendarRows.map((row) => (
                 <div key={`${row.title}-${row.location}-${row.date}-${row.distance}`} className="grid gap-3 px-6 py-5 md:grid-cols-[1.4fr_0.85fr_0.8fr_0.8fr] md:items-start md:px-8">
                   <div className="text-left">
                     <div className="flex flex-wrap items-center gap-3 text-lg font-black uppercase tracking-[0.04em] text-slate-950">
@@ -495,6 +547,11 @@ export const HardloopCalendarPage = ({
                   </div>
                 </div>
               ))}
+              {filteredCalendarRows.length === 0 ? (
+                <div className="px-6 py-12 text-center text-sm text-slate-500 md:px-8">
+                  {isEn ? "No races match these filters." : "Geen wedstrijden gevonden met deze filters."}
+                </div>
+              ) : null}
             </div>
           </CardContent>
         </Card>
