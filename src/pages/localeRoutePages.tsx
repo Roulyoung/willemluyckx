@@ -307,6 +307,42 @@ export const HardloopCalendarPage = ({
     .filter((row) => row.title || row.location || row.date);
   const columns = isEn ? ["Race / location", "Date", "Distance", "Surface"] : ["Wedstrijd / locatie", "Datum", "Afstand", "Ondergrond"];
 
+  if (locale === "he") {
+    return (
+      <section className={`mx-auto max-w-7xl px-5 py-12 md:px-8 ${fadeClass(loaded)}`} dir="rtl">
+        <Card className="overflow-hidden">
+          <CardContent className="p-0">
+            <div className="border-b bg-slate-50 px-6 py-4 font-bold">מרוצים נבחרים</div>
+            <div className="divide-y">
+              {calendarRows.map((row) => (
+                <div key={`${row.title}-${row.date}`} className="grid gap-3 p-6 md:grid-cols-4">
+                  <div>
+                    {row.websiteUrl ? (
+                      <a
+                        href={row.websiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-lg font-black transition-colors hover:text-blue-700 hover:underline hover:decoration-2 hover:underline-offset-4"
+                        aria-label={`פתחו את אתר ${row.title}`}
+                      >
+                        <span>{row.title}</span>
+                        <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      </a>
+                    ) : <div className="text-lg font-black">{row.title}</div>}
+                    <div className="text-sm text-blue-700">{row.location} · {row.country}</div>
+                  </div>
+                  <div><span className="text-xs text-slate-500">תאריך</span><div>{formatCalendarDate(row.date, locale)}</div></div>
+                  <div><span className="text-xs text-slate-500">מרחק</span><div>{row.distance}</div></div>
+                  <div><span className="text-xs text-slate-500">משטח</span><div>{row.surface}</div></div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+    );
+  }
+
   if (locale === "he") return <>
     <section className={`mx-auto grid max-w-7xl gap-8 px-5 py-12 md:px-8 lg:grid-cols-2 ${fadeClass(loaded)}`}><div className="space-y-6"><div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-xs font-semibold text-blue-700"><CalendarDays className="h-4 w-4" />לוח מרוצים</div><h1 className="text-4xl font-black md:text-7xl">בחרו את המרוץ הבא שלכם</h1><p className="text-xl leading-8 text-slate-600">בחרו מרוץ ומטרת אימון, והפכו את המטרה לתוכנית מסודרת עם ליווי.</p><div className="flex flex-wrap gap-3"><Button variant="hero" asChild><Link to={offerPath(locale,"schema")}>לתוכנית האישית ב־€19</Link></Button><Button variant="heroOutline" asChild><Link to={offerPath(locale,"zoom")}>לפגישת Zoom</Link></Button></div></div><Card><CardContent className="space-y-4 p-7"><h2 className="text-2xl font-black">איך להשתמש בלוח</h2>{highlight.bullets.map(bullet=><div key={bullet} className="flex gap-3 rounded-2xl bg-slate-50 p-4"><ChevronRight className="h-5 w-5 text-blue-600"/><span>{bullet}</span></div>)}</CardContent></Card></section>
     <section className="mx-auto max-w-7xl px-5 pb-12 md:px-8"><Card className="overflow-hidden"><CardContent className="p-0"><div className="border-b bg-slate-50 px-6 py-4 font-bold">מרוצים נבחרים</div><div className="divide-y">{calendarRows.map(row=><div key={`${row.title}-${row.date}`} className="grid gap-3 p-6 md:grid-cols-4"><div><div className="font-black">{row.title}</div><div className="text-sm text-blue-700">{row.location} · {row.country}</div></div><div><span className="text-xs text-slate-500">תאריך</span><div>{formatCalendarDate(row.date,locale)}</div></div><div><span className="text-xs text-slate-500">מרחק</span><div>{row.distance}</div></div><div><span className="text-xs text-slate-500">משטח</span><div>{row.surface}</div></div></div>)}</div></CardContent></Card></section>
