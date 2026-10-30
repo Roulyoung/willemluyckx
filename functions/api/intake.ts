@@ -76,6 +76,7 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
     ? payload.available_days.map((day) => String(day)).join(", ")
     : String(payload.available_days ?? "");
   const goal = [String(payload.goal ?? ""), String(payload.goal_other ?? "")].filter(Boolean).join(": ");
+  const submittedAt = new Date().toISOString();
   const values = [
     [
       name,
@@ -112,6 +113,12 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
       String(payload.race_date ?? ""),
       String(payload.online_guidance ?? ""),
       String(payload.product ?? ""),
+      String(payload.locale ?? "nl"),
+      String(payload.source ?? "intake-page"),
+      submittedAt,
+      "TRUE",
+      String(payload.health_consent_version ?? ""),
+      String(payload.health_consent_recorded_at ?? ""),
     ],
   ];
 
@@ -134,10 +141,16 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
     "Wedstrijddatum",
     "Online gesprek",
     "Product",
+    "Taal",
+    "Bron",
+    "Ingediend op",
+    "Gezondheidstoestemming",
+    "Toestemmingsversie",
+    "Toestemming geregistreerd op",
   ]];
 
   const headerResponse = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Intake!N1:AE1")}?valueInputOption=RAW`,
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Intake!N1:AK1")}?valueInputOption=RAW`,
     {
       method: "PUT",
       headers: {
