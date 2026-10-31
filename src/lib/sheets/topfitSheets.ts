@@ -26,7 +26,7 @@ export const TOPFIT_SHEETS_RANGES = {
   blogCategories: "BlogCategories!A:Z",
   blogPosts: "BlogPosts!A:Z",
   hardloopwedstrijden: "Hardloopwedstrijden!A:Z",
-  intake: "Intake!A:AK",
+  intake: "Intake!A:AM",
   testimonials: "Testimonials!A:Z",
   faq: "FAQ!A:Z",
   media: "Media!A:Z",

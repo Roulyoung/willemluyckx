@@ -18,6 +18,8 @@ type IntakePayload = {
   coaching_preference?: unknown;
   extra_notes?: unknown;
   birth_date?: unknown;
+  height_cm?: unknown;
+  weight_kg?: unknown;
   training_years?: unknown;
   sports_history?: unknown;
   pr_5k?: unknown;
@@ -57,9 +59,11 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const email = String(payload.email ?? "").trim();
   const phone = String(payload.phone ?? "").trim();
   const birthDate = String(payload.birth_date ?? "").trim();
+  const heightCm = String(payload.height_cm ?? "").trim();
+  const weightKg = String(payload.weight_kg ?? "").trim();
   const emailLooksValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  if (!name || !email || !phone || !birthDate || !emailLooksValid) {
+  if (!name || !email || !phone || !birthDate || !heightCm || !weightKg || !emailLooksValid) {
     return Response.json({ ok: false, error: "Missing required fields" }, { status: 400 });
   }
   if (payload.health_consent !== true || !String(payload.health_consent_version ?? "").trim()) {
@@ -119,6 +123,8 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
       "TRUE",
       String(payload.health_consent_version ?? ""),
       String(payload.health_consent_recorded_at ?? ""),
+      heightCm,
+      weightKg,
     ],
   ];
 
@@ -147,10 +153,12 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
     "Gezondheidstoestemming",
     "Toestemmingsversie",
     "Toestemming geregistreerd op",
+    "Lengte (cm)",
+    "Gewicht (kg)",
   ]];
 
   const headerResponse = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Intake!N1:AK1")}?valueInputOption=RAW`,
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Intake!N1:AM1")}?valueInputOption=RAW`,
     {
       method: "PUT",
       headers: {
@@ -169,7 +177,7 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
   }
 
   const appendResponse = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Intake!A:AE")}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Intake!A:AM")}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
     {
       method: "POST",
       headers: {
