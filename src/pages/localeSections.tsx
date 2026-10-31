@@ -307,6 +307,8 @@ export const AboutWillemPage = ({
   const plansHref = localizedPath(locale, "trainingsschemas");
   const runnersworldPdfHref = "/pdf/Willem-in-Runnersworld.pdf";
   const embassyVideoHref = "/video/dutch-embassy-willem-luyckx.mp4";
+  const paralympicVideoHref = "https://youtu.be/zmlnNXP_F18?si=Sp4VZpr7Pj8vVH31";
+  const paralympicVideoEmbedHref = "https://www.youtube.com/embed/zmlnNXP_F18?si=Sp4VZpr7Pj8vVH31";
   const mediaIntro =
     locale === "en"
       ? "Here you can see a video about Willem's work with visually impaired runners through the embassy, plus a Runnersworld interview."
@@ -602,6 +604,37 @@ export const AboutWillemPage = ({
                   <a href={embassyVideoHref} target="_blank" rel="noreferrer">
                     <ExternalLink className="h-4 w-4" />
                     {locale === "en" ? "Open video" : "Open video"}
+                  </a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm xl:col-span-2">
+            <CardContent className="space-y-5 p-6 md:p-8">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "YouTube interview" : "YouTube-video"}</div>
+                  <h3 className="mt-2 text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{locale === "en" ? "Blind runner coached for Beijing" : "Blinde hardloper begeleid richting Beijing"}</h3>
+                </div>
+                <PlayCircle className="h-6 w-6 text-blue-600" />
+              </div>
+              <p className="text-sm leading-7 text-slate-600">{locale === "en" ? "Blind runner whom I trained and coached for the Paralympic Games in Beijing." : "Blinde hardloper die ik getraind en begeleid heb voor Para-Olympische spelen in Beijing."}</p>
+              <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-950">
+                <iframe
+                  title="Blinde hardloper begeleid richting Beijing"
+                  src={paralympicVideoEmbedHref}
+                  className="aspect-video w-full"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="heroOutline" asChild>
+                  <a href={paralympicVideoHref} target="_blank" rel="noreferrer">
+                    <ExternalLink className="h-4 w-4" />
+                    {locale === "en" ? "Open on YouTube" : "Open op YouTube"}
                   </a>
                 </Button>
               </div>
