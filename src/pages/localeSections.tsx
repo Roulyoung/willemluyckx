@@ -310,7 +310,7 @@ export const AboutWillemPage = ({
   const mediaIntro =
     locale === "en"
       ? "Here you can see a video about Willem's work with visually impaired runners through the embassy, plus a Runnersworld interview."
-      : "Hier zie je een video over Willems werk met slechtziende hardlopers via de ambassade, plus een interview met Runnersworld.";
+      : "De Nederlandse Ambassade in Israël heeft van 10 Nederlanders die een positieve bijdrage hebben geleverd aan de Israëlische maatschappij een video gemaakt. Willem werd uitgekozen voor zijn grote bijdrage in de ontwikkeling van de loopsport in Israël in al zijn facetten.";
   const videoDescription =
     locale === "en"
       ? "Willem coached visually impaired runners through the embassy."
