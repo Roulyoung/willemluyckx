@@ -1,5 +1,7 @@
 ﻿import { escapeHtml, sendBrevoEmail } from "../lib/brevo";
 
+import { getAccessToken, parseServiceAccount } from "../lib/googleSheets";
+
 type StripeSession = {
   id?: string;
   customer_email?: string | null;
@@ -24,6 +26,7 @@ type StripeEvent = {
 
 const textEncoder = new TextEncoder();
 const handledEventTypes = new Set(["checkout.session.completed", "checkout.session.async_payment_succeeded"]);
+const SHEET_ID = "1vd2rMjxAyBDn5lSWLJwBNJ1NI8FD0OlMcQ4WR-diLwA";
 
 const bytesToHex = (bytes: Uint8Array) =>
   Array.from(bytes)
@@ -92,6 +95,30 @@ const getProductLabel = (productSlug: string, locale: string) => {
   return labels[productSlug]?.[language] ?? productSlug;
 };
 
+const hasPaymentEvent = async (env: Record<string, unknown>, eventId: string) => {
+  const serviceAccount = parseServiceAccount(env);
+  if (!serviceAccount?.client_email || !serviceAccount.private_key) return false;
+  const accessToken = await getAccessToken(serviceAccount);
+  const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Payments!A2:A")}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  if (!response.ok) return false;
+  const payload = await response.json().catch(() => ({})) as { values?: string[][] };
+  return (payload.values ?? []).some((row) => row[0] === eventId);
+};
+
+const appendPaymentEvent = async (env: Record<string, unknown>, values: string[]) => {
+  const serviceAccount = parseServiceAccount(env);
+  if (!serviceAccount?.client_email || !serviceAccount.private_key) return;
+  const accessToken = await getAccessToken(serviceAccount);
+  const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent("Payments!A:N")}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ values: [values] }),
+  });
+  if (!response.ok) throw new Error(`Payment log failed (${response.status})`);
+};
+
 export const onRequestPost: PagesFunction = async ({ request, env }) => {
   const signature = request.headers.get("stripe-signature") ?? "";
   const secret = String(env.STRIPE_WEBHOOK_SECRET ?? "").trim();
@@ -128,6 +155,14 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
       { ok: true, ignored: true, pending: true, eventId: event.id, sessionId: session.id ?? null },
       { headers: { "Cache-Control": "no-store" } },
     );
+  }
+
+  try {
+    if (await hasPaymentEvent(env as Record<string, unknown>, event.id)) {
+      return Response.json({ ok: true, received: true, duplicate: true, eventId: event.id }, { headers: { "Cache-Control": "no-store" } });
+    }
+  } catch {
+    // A temporary log-read failure must not block a valid payment notification.
   }
 
   const locale = String(session.metadata?.locale ?? "nl").toLowerCase();
@@ -197,6 +232,27 @@ export const onRequestPost: PagesFunction = async ({ request, env }) => {
         tags: ["stripe-payment", productSlug, locale, "customer"],
       })
     : { ok: false as const, skipped: true as const, error: "No customer email available" };
+
+  try {
+    await appendPaymentEvent(env as Record<string, unknown>, [
+      event.id,
+      session.id ?? "",
+      event.type,
+      "completed",
+      productSlug,
+      customerName,
+      customerEmail,
+      customerPhone,
+      amount ?? "",
+      session.currency ?? "",
+      locale,
+      new Date().toISOString(),
+      "awaiting_intake",
+      intakeUrl,
+    ]);
+  } catch {
+    // Email delivery remains the primary webhook response; the payment log can be reconciled later.
+  }
 
   return Response.json(
     {

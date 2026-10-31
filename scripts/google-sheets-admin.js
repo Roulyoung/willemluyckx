@@ -221,6 +221,8 @@ const REVIEW_TABS = {
     "updated_at",
   ],
   ReviewApprovals: ["token", "version", "approved_at", "status"],
+  Payments: ["event_id", "session_id", "event_type", "status", "product", "customer_name", "customer_email", "customer_phone", "amount", "currency", "locale", "received_at", "intake_status", "intake_url"],
+  Schedules: ["schedule_id", "intake_row", "customer_name", "customer_email", "status", "private_token", "created_at", "approved_at", "published_at", "schema_json"],
 };
 
 const ALL_BOOTSTRAP_TABS = {
