@@ -306,13 +306,15 @@ export const AboutWillemPage = ({
   const packagesHref = localizedPath(locale, "abonnementen");
   const plansHref = localizedPath(locale, "trainingsschemas");
   const runnersworldPdfHref = "/pdf/Willem-in-Runnersworld.pdf";
+  const elsevierArticleHref = "/images/elsevier-artikel.png";
   const embassyVideoHref = "/video/dutch-embassy-willem-luyckx.mp4";
+  const embassyThumbnailHref = "/video/embassy-thumbnail.jpg";
   const paralympicVideoHref = "https://youtu.be/zmlnNXP_F18?si=Sp4VZpr7Pj8vVH31";
-  const paralympicVideoEmbedHref = "https://www.youtube.com/embed/zmlnNXP_F18?si=Sp4VZpr7Pj8vVH31";
+  const paralympicThumbnailHref = "/video/paralympic-thumbnail.jpg";
   const mediaIntro =
     locale === "en"
-      ? "Here you can see a video about Willem's work with visually impaired runners through the embassy, plus a Runnersworld interview."
-      : "De Nederlandse Ambassade in Israël heeft van 10 Nederlanders die een positieve bijdrage hebben geleverd aan de Israëlische maatschappij een video gemaakt. Willem werd uitgekozen voor zijn grote bijdrage in de ontwikkeling van de loopsport in Israël in al zijn facetten.";
+      ? "Here you can see Willem's work with visually impaired runners through the embassy, a Beijing Paralympic coaching video, and interviews with Runnersworld and Elsevier."
+      : "De Nederlandse Ambassade in Israël heeft van 10 Nederlanders die een positieve bijdrage hebben geleverd aan de Israëlische maatschappij een video gemaakt. Willem werd uitgekozen voor zijn grote bijdrage in de ontwikkeling van de loopsport in Israël in al zijn facetten. Ook vind je hier interviews met Runnersworld en Elsevier.";
   const videoDescription =
     locale === "en"
       ? "Willem coached visually impaired runners through the embassy."
@@ -595,7 +597,7 @@ export const AboutWillemPage = ({
               </div>
               <p className="text-sm leading-7 text-slate-600">{videoDescription}</p>
               <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-950">
-                <video controls preload="metadata" playsInline className="h-full max-h-[36rem] w-full bg-black object-contain">
+                <video controls preload="metadata" playsInline poster={embassyThumbnailHref} className="h-full max-h-[36rem] w-full bg-black object-contain">
                   <source src={embassyVideoHref} type="video/mp4" />
                 </video>
               </div>
@@ -620,15 +622,11 @@ export const AboutWillemPage = ({
                 <PlayCircle className="h-6 w-6 text-blue-600" />
               </div>
               <p className="text-sm leading-7 text-slate-600">{locale === "en" ? "Blind runner whom I trained and coached for the Paralympic Games in Beijing." : "Blinde hardloper die ik getraind en begeleid heb voor Para-Olympische spelen in Beijing."}</p>
-              <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-950">
-                <iframe
-                  title="Blinde hardloper begeleid richting Beijing"
-                  src={paralympicVideoEmbedHref}
-                  className="aspect-video w-full"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
+              <div className="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-950">
+                <a href={paralympicVideoHref} target="_blank" rel="noreferrer" aria-label={locale === "en" ? "Open the Beijing coaching video on YouTube" : "Open de Beijing-coachingsvideo op YouTube"}>
+                  <img src={paralympicThumbnailHref} alt="Beeld uit de video over de begeleiding van een blinde hardloper richting Beijing" className="aspect-video w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
+                  <span className="absolute inset-0 flex items-center justify-center bg-slate-950/15 transition group-hover:bg-slate-950/30"><span className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-blue-700 shadow-xl"><PlayCircle className="h-9 w-9" /></span></span>
+                </a>
               </div>
               <div className="flex flex-wrap gap-3">
                 <Button variant="heroOutline" asChild>
@@ -671,6 +669,30 @@ export const AboutWillemPage = ({
                   <a href={runnersworldPdfHref} download>
                     <FileText className="h-4 w-4" />
                     {locale === "en" ? "Download PDF" : "Download PDF"}
+                  </a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+            <CardContent className="space-y-5 p-6 md:p-8">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Elsevier interview" : "Elsevier-interview"}</div>
+                  <h3 className="mt-2 text-2xl font-black uppercase tracking-[0.04em] text-slate-950">Willem in Elsevier</h3>
+                </div>
+                <FileText className="h-6 w-6 text-blue-600" />
+              </div>
+              <p className="text-sm leading-7 text-slate-600">{locale === "en" ? "An Elsevier interview about Willem's Dutch background, coaching work and life in Israel." : "Een interview in Elsevier over Willems Nederlandse achtergrond, zijn werk als trainer en zijn leven in Israël."}</p>
+              <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-50">
+                <img src={elsevierArticleHref} alt="Elsevier-artikel met interview met Willem Luijckx" className="max-h-[36rem] w-full object-contain" />
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="heroOutline" asChild>
+                  <a href={elsevierArticleHref} target="_blank" rel="noreferrer">
+                    <ExternalLink className="h-4 w-4" />
+                    {locale === "en" ? "Open article" : "Open artikel"}
                   </a>
                 </Button>
               </div>
