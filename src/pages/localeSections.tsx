@@ -326,8 +326,10 @@ export const AboutWillemPage = ({
 
   return (
     <>
-      <section id="about-hero" className={`mx-auto max-w-7xl px-5 pb-10 pt-10 md:px-8 ${fadeClass(loaded)}`}>
-        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+      <section id="about-hero" className={`relative mx-auto max-w-7xl overflow-hidden rounded-[2.75rem] border border-blue-100 bg-white/75 px-5 py-6 shadow-[0_30px_90px_rgba(13,46,102,0.10)] backdrop-blur md:px-8 md:py-8 ${fadeClass(loaded)}`}>
+        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-blue-200/40 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-cyan-100/60 blur-3xl" />
+        <div className="relative grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
           <div className="space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/85 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-blue-700 shadow-sm shadow-blue-950/5">
               <Users className="h-4 w-4" />
@@ -448,8 +450,8 @@ export const AboutWillemPage = ({
         </div>
       </section>
 
-      <section id="about-why" className={`mx-auto max-w-7xl px-5 py-8 md:px-8 ${fadeClass(loaded)}`}>
-        <div className="mb-5 max-w-2xl">
+      <section id="about-why" className={`mx-auto max-w-7xl rounded-[2.5rem] border border-blue-100 bg-blue-50/55 px-5 py-8 md:px-8 ${fadeClass(loaded)}`}>
+        <div className="mb-6 max-w-2xl">
           <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
             {locale === "en" ? "Profile" : "Profiel"}
           </div>
@@ -461,9 +463,9 @@ export const AboutWillemPage = ({
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {sections.map((item) => (
-            <Card key={item.title} className="border-slate-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md">
+            <Card key={item.title} className="border-white/80 bg-white/90 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-950/10">
               <CardContent className="space-y-3 p-6">
-                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{locale === "en" ? "Profile" : "Profiel"}</div>
+                <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-600 text-sm font-black text-white">{String(sections.indexOf(item) + 1).padStart(2, "0")}</div>
                 <h2 className="text-2xl font-black uppercase tracking-[0.04em] text-slate-950">{item.title}</h2>
                 <p className="text-sm leading-7 text-slate-600">{item.text}</p>
               </CardContent>
@@ -473,16 +475,16 @@ export const AboutWillemPage = ({
       </section>
 
       <section id="about-experience" className={`mx-auto max-w-7xl px-5 py-8 md:px-8 ${fadeClass(loaded)}`}>
-        <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+        <Card className="overflow-hidden border-slate-900 bg-slate-950 text-white shadow-[0_30px_80px_rgba(8,26,58,0.22)]">
           <CardContent className="grid gap-6 p-6 md:grid-cols-[0.9fr_1.1fr] md:p-8">
             <div className="space-y-3">
-              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">
+              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-300">
                 {locale === "en" ? "Experience" : "Ervaring"}
               </div>
               <h2 className="text-3xl font-black uppercase tracking-[0.04em] md:text-5xl">
                 {locale === "en" ? "Sport and coaching background" : "Sport- en coachingsachtergrond"}
               </h2>
-              <p className="max-w-xl text-sm leading-7 text-slate-600">
+              <p className="max-w-xl text-sm leading-7 text-slate-300">
                 {locale === "en"
                   ? "These roles and achievements show the range of environments in which Willem coached: elite sport, football, para athletics and long-distance running."
                   : "Deze rollen en prestaties laten zien in hoeveel verschillende omgevingen Willem coachte: topsport, voetbal, para-atletiek en langeafstandslopen."}
@@ -490,7 +492,7 @@ export const AboutWillemPage = ({
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {experienceBullets.map((bullet) => (
-                <div key={bullet} className="rounded-3xl bg-slate-50 p-5 text-sm leading-7 text-slate-600">
+                <div key={bullet} className="rounded-3xl border border-white/10 bg-white/10 p-5 text-sm leading-7 text-slate-200 backdrop-blur-sm transition hover:bg-white/15">
                   {bullet}
                 </div>
               ))}
@@ -502,7 +504,7 @@ export const AboutWillemPage = ({
       <section id="about-education" className={`mx-auto max-w-7xl px-5 py-8 md:px-8 ${fadeClass(loaded)}`}>
         <div className="grid gap-4 lg:grid-cols-2">
           {educationCards.map((card) => (
-            <Card key={card.title} className="border-slate-200 bg-white shadow-sm">
+            <Card key={card.title} className="border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-950/10">
               <CardContent className="space-y-5 p-6 md:p-8">
                 <div className="space-y-3">
                   <div className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-700">{card.eyebrow}</div>
@@ -510,7 +512,7 @@ export const AboutWillemPage = ({
                 </div>
                 <div className="space-y-3">
                   {card.bullets.map((bullet) => (
-                    <div key={bullet} className="rounded-3xl bg-slate-50 p-5 text-sm leading-7 text-slate-600">
+                    <div key={bullet} className="rounded-3xl border border-slate-100 bg-slate-50/80 p-5 text-sm leading-7 text-slate-600 transition hover:border-blue-100 hover:bg-blue-50/60">
                       {bullet}
                     </div>
                   ))}
@@ -535,12 +537,12 @@ export const AboutWillemPage = ({
               : "Van trainingsleer tot herstel: de expertise blijft breed, zodat de coaching juist specifiek kan zijn."}
           </p>
         </div>
-        <div className="grid gap-4 md:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
           {expertiseTags.map((bullet) => (
-            <Card key={bullet} className="border-slate-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md">
-              <CardContent className="space-y-3 p-5">
-                <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">{locale === "en" ? "Expertise" : "Expertise"}</div>
-                <p className="text-sm leading-7 text-slate-700">{bullet}</p>
+            <Card key={bullet} className="border-slate-200 bg-white/85 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg">
+              <CardContent className="flex min-h-28 flex-col justify-between gap-3 p-4">
+                <div className="h-1 w-8 rounded-full bg-blue-600" />
+                <p className="text-sm font-semibold leading-6 text-slate-700">{bullet}</p>
               </CardContent>
             </Card>
           ))}
@@ -581,7 +583,7 @@ export const AboutWillemPage = ({
           <p className="max-w-2xl text-sm leading-7 text-slate-600">{mediaIntro}</p>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[1.02fr_0.98fr]">
+        <div className="grid gap-6 xl:grid-cols-2">
           <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
             <CardContent className="space-y-5 p-6 md:p-8">
               <div className="flex flex-wrap items-start justify-between gap-3">
@@ -612,7 +614,7 @@ export const AboutWillemPage = ({
             </CardContent>
           </Card>
 
-          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm xl:col-span-2">
+          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
             <CardContent className="space-y-5 p-6 md:p-8">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
@@ -621,6 +623,11 @@ export const AboutWillemPage = ({
                 </div>
                 <PlayCircle className="h-6 w-6 text-blue-600" />
               </div>
+              <nav aria-label={locale === "en" ? "On this page" : "Op deze pagina"} className="flex flex-wrap gap-2 border-t border-slate-100 pt-5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                <a className="rounded-full border border-slate-200 bg-white px-3 py-2 transition hover:border-blue-300 hover:text-blue-700" href="#about-experience">{locale === "en" ? "Experience" : "Ervaring"}</a>
+                <a className="rounded-full border border-slate-200 bg-white px-3 py-2 transition hover:border-blue-300 hover:text-blue-700" href="#about-education">{locale === "en" ? "Education" : "Opleiding"}</a>
+                <a className="rounded-full border border-slate-200 bg-white px-3 py-2 transition hover:border-blue-300 hover:text-blue-700" href="#about-media">Media</a>
+              </nav>
               <p className="text-sm leading-7 text-slate-600">{locale === "en" ? "Blind runner whom I trained and coached for the Paralympic Games in Beijing." : "Blinde hardloper die ik getraind en begeleid heb voor Para-Olympische spelen in Beijing."}</p>
               <div className="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-950">
                 <a href={paralympicVideoHref} target="_blank" rel="noreferrer" aria-label={locale === "en" ? "Open the Beijing coaching video on YouTube" : "Open de Beijing-coachingsvideo op YouTube"}>
