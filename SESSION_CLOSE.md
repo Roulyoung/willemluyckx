@@ -4,6 +4,37 @@
 
 Date: 2026-08-28
 
+## Session Update - 2026-11-04 - About-page styling refresh
+
+### Final outcome
+
+- Refreshed the Dutch and English About Willem page styling in `src/pages/localeSections.tsx`.
+- Added a more premium hero treatment with soft gradients, rounded framing and in-page navigation.
+- Improved the profile, experience, education and expertise sections with clearer hierarchy, contrast and responsive card layouts.
+- Rebalanced the media section into a cleaner responsive grid.
+- No Google Sheets tabs, rows or ranges were changed in this session.
+
+### Verification
+
+- `npm run build` passed on 2026-11-04.
+- `git diff --check` passed before commit.
+- No secrets were added or changed.
+
+### Rollback and deployment
+
+- Focused rollback commit: `fce5556` (`Refresh About Willem page styling`).
+- To roll back only this session's code, revert commit `fce5556`.
+- Changed file: `src/pages/localeSections.tsx`.
+- The code was pushed to `origin/main`.
+- No new Cloudflare Pages deployment was executed or independently verified in this session; the existing deployment pipeline should deploy the pushed commit.
+- Existing unrelated untracked files remain untouched:
+  - `CON`
+  - `Extra info/Schema en vragen voor intake.txt`
+  - `Extra info/Voorbeelschema de Vries.txt`
+  - `TopFit Running Boek.pdf`
+  - `elsevier artikel.png`
+  - `tmp/`
+
 ## Mandatory Session-Close Rollback Rule
 
 Every session close must leave an exact, named rollback point before the session is considered closed.
